@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.math.BigInteger;
 
 /**
@@ -18,23 +20,24 @@ import java.math.BigInteger;
  * | { checkpoint: bigint };
  * </pre>
  */
+@JsonDeserialize(using = SuiEventDeserializer.class)
 public interface SuiEvent {
 
-    class MoveEvent implements SuiEvent {
-        private com.github.wubuku.sui.bean.MoveEvent moveEvent;
+    class MoveEvent<F> implements SuiEvent {
+        private com.github.wubuku.sui.bean.MoveEvent<F> moveEvent;
 
         public MoveEvent() {
         }
 
-        public MoveEvent(com.github.wubuku.sui.bean.MoveEvent moveEvent) {
+        public MoveEvent(com.github.wubuku.sui.bean.MoveEvent<F> moveEvent) {
             this.moveEvent = moveEvent;
         }
 
-        public com.github.wubuku.sui.bean.MoveEvent getMoveEvent() {
+        public com.github.wubuku.sui.bean.MoveEvent<F> getMoveEvent() {
             return moveEvent;
         }
 
-        public void setMoveEvent(com.github.wubuku.sui.bean.MoveEvent moveEvent) {
+        public void setMoveEvent(com.github.wubuku.sui.bean.MoveEvent<F> moveEvent) {
             this.moveEvent = moveEvent;
         }
 

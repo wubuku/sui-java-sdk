@@ -13,6 +13,8 @@ package com.github.wubuku.sui.bean;
  * bcs: string;
  * };
  * </pre>
+ *
+ * @param <F> the type of 'fields' of MoveEvent.
  */
 public class MoveEvent<F> {
     private String packageId;

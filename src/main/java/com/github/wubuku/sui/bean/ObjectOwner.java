@@ -1,6 +1,13 @@
 package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.io.IOException;
 
 /**
  * From TypeScript definition:
@@ -13,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * | 'Immutable';
  * </pre>
  */
+@JsonDeserialize(using = ObjectOwnerDeserializer.class)
 public interface ObjectOwner {
 
     class AddressOwner implements ObjectOwner {
@@ -76,8 +84,8 @@ public interface ObjectOwner {
         public Shared() {
         }
 
-        public Shared(Long initialSharedVersion) {
-            this.shared = new SharedProperties(initialSharedVersion);
+        public Shared(SharedProperties shared) {
+            this.shared = shared;
         }
 
         public SharedProperties getShared() {
@@ -123,12 +131,20 @@ public interface ObjectOwner {
         }
     }
 
+    @JsonSerialize(using = ImmutableJsonSerializer.class)
     class Immutable implements ObjectOwner {
         public static Immutable INSTANCE = new Immutable();
 
         @Override
         public String toString() {
             return "Immutable{}";
+        }
+    }
+
+    class ImmutableJsonSerializer extends JsonSerializer<Immutable> {
+        @Override
+        public void serialize(Immutable value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeString("Immutable");
         }
     }
 }

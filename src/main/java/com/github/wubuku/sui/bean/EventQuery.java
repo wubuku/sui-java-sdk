@@ -81,6 +81,10 @@ public interface EventQuery {
             this.moveModule = new MoveModuleProperties(_package, module);
         }
 
+        public MoveModule(MoveModuleProperties moveModule) {
+            this.moveModule = moveModule;
+        }
+
         public MoveModuleProperties getMoveModule() {
             return moveModule;
         }

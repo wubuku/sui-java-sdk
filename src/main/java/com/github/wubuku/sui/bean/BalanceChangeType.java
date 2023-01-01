@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -7,6 +9,7 @@ package com.github.wubuku.sui.bean;
  * export type BalanceChangeType = "Gas" | "Pay" | "Receive"
  * </pre>
  */
+@JsonDeserialize(using = BalanceChangeTypeDeserializer.class)
 public enum BalanceChangeType {
     GAS {
         @Override

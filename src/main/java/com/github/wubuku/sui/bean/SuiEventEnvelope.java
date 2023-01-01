@@ -12,61 +12,22 @@ package com.github.wubuku.sui.bean;
  * };
  * </pre>
  */
-public class SuiEventEnvelope {
-    private Long timestamp;
-    private String txDigest;
-    private EventId id;
-    private SuiEvent event;
+public class SuiEventEnvelope extends AbstractSuiEventEnvelope<SuiEvent> {
 
     public SuiEventEnvelope() {
     }
 
     public SuiEventEnvelope(Long timestamp, String txDigest, EventId id, SuiEvent event) {
-        this.timestamp = timestamp;
-        this.txDigest = txDigest;
-        this.id = id;
-        this.event = event;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getTxDigest() {
-        return txDigest;
-    }
-
-    public void setTxDigest(String txDigest) {
-        this.txDigest = txDigest;
-    }
-
-    public EventId getId() {
-        return id;
-    }
-
-    public void setId(EventId id) {
-        this.id = id;
-    }
-
-    public SuiEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(SuiEvent event) {
-        this.event = event;
+        super(timestamp, txDigest, id, event);
     }
 
     @Override
     public String toString() {
         return "SuiEventEnvelope{" +
-                "timestamp=" + timestamp +
-                ", txDigest='" + txDigest + '\'' +
-                ", id=" + id +
-                ", event=" + event +
+                "timestamp=" + getTimestamp() +
+                ", txDigest='" + getTxDigest() + '\'' +
+                ", id=" + getId() +
+                ", event=" + getEvent() +
                 '}';
     }
 }
