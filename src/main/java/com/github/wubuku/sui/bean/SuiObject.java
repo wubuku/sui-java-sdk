@@ -19,12 +19,7 @@ package com.github.wubuku.sui.bean;
  *     };
  * </pre>
  */
-public class SuiObject {
-    private SuiData data;
-    private ObjectOwner owner;
-    private String previousTransaction;
-    private Long storageRebate;
-    private SuiObjectRef reference;
+public class SuiObject extends AbstractSuiObject<SuiData> {
 
     public SuiObject() {
     }
@@ -35,61 +30,17 @@ public class SuiObject {
                      Long storageRebate,
                      SuiObjectRef reference
     ) {
-        this.data = data;
-        this.owner = owner;
-        this.previousTransaction = previousTransaction;
-        this.storageRebate = storageRebate;
-        this.reference = reference;
-    }
-
-    public SuiData getData() {
-        return data;
-    }
-
-    public void setData(SuiData data) {
-        this.data = data;
-    }
-
-    public ObjectOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(ObjectOwner owner) {
-        this.owner = owner;
-    }
-
-    public String getPreviousTransaction() {
-        return previousTransaction;
-    }
-
-    public void setPreviousTransaction(String previousTransaction) {
-        this.previousTransaction = previousTransaction;
-    }
-
-    public Long getStorageRebate() {
-        return storageRebate;
-    }
-
-    public void setStorageRebate(Long storageRebate) {
-        this.storageRebate = storageRebate;
-    }
-
-    public SuiObjectRef getReference() {
-        return reference;
-    }
-
-    public void setReference(SuiObjectRef reference) {
-        this.reference = reference;
+        super(data, owner, previousTransaction, storageRebate, reference);
     }
 
     @Override
     public String toString() {
         return "SuiObject{" +
-                "data=" + data +
-                ", owner=" + owner +
-                ", previousTransaction='" + previousTransaction + '\'' +
-                ", storageRebate=" + storageRebate +
-                ", reference=" + reference +
+                "data=" + getData() +
+                ", owner=" + getOwner() +
+                ", previousTransaction='" + getPreviousTransaction() + '\'' +
+                ", storageRebate=" + getStorageRebate() +
+                ", reference=" + getReference() +
                 '}';
     }
 }
