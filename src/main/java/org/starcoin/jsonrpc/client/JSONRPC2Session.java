@@ -27,7 +27,10 @@ public class JSONRPC2Session {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final OkHttpClient defaultOkHttpClient = new OkHttpClient.Builder().build();
+    private final OkHttpClient defaultOkHttpClient = new OkHttpClient.Builder()
+            .readTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
+
     /**
      * The server URL, which protocol must be HTTP or HTTPS.
      *
@@ -113,9 +116,23 @@ public class JSONRPC2Session {
         return send(request, (body) -> {
             try {
                 ObjectMapper om = getObjectMapper();
-                return om.readValue(body, om.getTypeFactory().constructParametricType(
-                        JSONRPC2Response.class,
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
                         om.getTypeFactory().constructCollectionType(List.class, resultElementType)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public <R> JSONRPC2Response<R> sendAndGetParametricTypeResult(final JSONRPC2Request request,
+                                                                  final Class<?> parametrized,
+                                                                  final Class<?>... parameterClasses
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        om.getTypeFactory().constructParametricType(parametrized, parameterClasses)));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -128,10 +145,8 @@ public class JSONRPC2Session {
         return send(request, (body) -> {
             try {
                 ObjectMapper om = getObjectMapper();
-                return om.readValue(body, om.getTypeFactory().constructParametricType(
-                        JSONRPC2Response.class,
-                        om.getTypeFactory().constructType(resultTypeReference)
-                ));
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        om.getTypeFactory().constructType(resultTypeReference)));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -144,8 +159,8 @@ public class JSONRPC2Session {
         return send(request, (body) -> {
             try {
                 ObjectMapper om = getObjectMapper();
-                return om.readValue(body, om.getTypeFactory().constructParametricType(
-                        JSONRPC2Response.class, resultType));
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        resultType));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

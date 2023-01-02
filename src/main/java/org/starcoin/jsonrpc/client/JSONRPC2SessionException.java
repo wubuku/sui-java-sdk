@@ -63,7 +63,6 @@ public class JSONRPC2SessionException extends Exception {
      * @param message The message.
      */
     public JSONRPC2SessionException(final String message) {
-
         super(message);
         causeType = UNSPECIFIED;
     }
@@ -77,7 +76,6 @@ public class JSONRPC2SessionException extends Exception {
      * @param causeType The cause type, see the constants.
      */
     public JSONRPC2SessionException(final String message, final int causeType) {
-
         super(message);
         this.causeType = causeType;
     }
@@ -92,7 +90,6 @@ public class JSONRPC2SessionException extends Exception {
      * @param cause     The original exception.
      */
     public JSONRPC2SessionException(final String message, final int causeType, final Throwable cause) {
-
         super(message, cause);
         this.causeType = causeType;
     }
@@ -108,7 +105,6 @@ public class JSONRPC2SessionException extends Exception {
      * @return The cause type constant.
      */
     public int getCauseType() {
-
         return causeType;
     }
 }

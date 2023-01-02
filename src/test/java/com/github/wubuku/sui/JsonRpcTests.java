@@ -19,35 +19,37 @@ import java.util.Map;
 public class JsonRpcTests {
     ObjectMapper objectMapper = new ObjectMapper();
 
-//    public static void main(String[] args) throws MalformedURLException, JSONRPC2SessionException, JsonProcessingException {
-////        testJsonDeserialize_1();
-////        testJsonDeserialize_2();
-////        testJsonDeserialize_3();
-//        //if (true) return;
-////        testJsonRpc_1();
-//    }
-
     @Test
     void testJsonRpc_1() throws MalformedURLException, JSONRPC2SessionException, JsonProcessingException {
         String suiDevnetRpcHost = "https://fullnode.devnet.sui.io/";
         JSONRPC2Session jsonrpc2Session = new JSONRPC2Session(new URL(suiDevnetRpcHost));
-        List<Object> params = new ArrayList<>();
-        // The first parameter is EventQuery.
-        //params.add(EventQuery.All.INSTANCE);
-        params.add(new EventQuery.MoveEvent("0x2::devnet_nft::MintNFTEvent"));
-        // The second parameter is cursor : <EventID> - optional paging cursor
-        params.add(null);//cursor
-        //params.add(new EventId(1L, 0L));
-        // The third parameter is 'limit'
-        params.add(1);//limit
-        // The fourth parameter is descending_order
-        params.add(false);//descending_order
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getEvents", params, 1);
-        //JSONRPC2Response jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request);
-        //System.out.println(jsonrpc2Response);
-        //System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response));
-        JSONRPC2Response<MintNFTEvent> jsonrpc2Response2 = jsonrpc2Session.send(jsonrpc2Request, MintNFTEvent.class);
-        System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response2));
+        if (false) {
+            List<Object> params_1 = new ArrayList<>();
+            // The first parameter is EventQuery.
+            params_1.add(EventQuery.All.INSTANCE); //params.add(new EventQuery.MoveEvent("0x2::devnet_nft::MintNFTEvent"));
+            params_1.add(null); // The second parameter is cursor : <EventID> - optional paging cursor
+            //params.add(new EventId(1L, 0L)); // cursor
+            params_1.add(1);// The third parameter is 'limit'
+            params_1.add(false);// The fourth parameter is descending_order
+            JSONRPC2Request jsonrpc2Request_1 = new JSONRPC2Request("sui_getEvents", params_1, 1);
+            JSONRPC2Response<PaginatedEvents> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request_1,
+                    new TypeReference<PaginatedEvents>() {
+                    });
+            System.out.println(jsonrpc2Response);
+            System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response));
+        }
+//        List<Object> params_2 = new ArrayList<>();
+//        params_2.add(new EventQuery.MoveEvent("0x2::devnet_nft::MintNFTEvent"));// The first parameter is EventQuery.
+//        params_2.add(null);// The second parameter is cursor : <EventID> - optional paging cursor
+//        params_2.add(1);// limit
+//        params_2.add(true);// descending_order
+//        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getEvents", params_2, 1);
+//        JSONRPC2Response<PaginatedMoveEvents<MintNFTEvent>> jsonrpc2Response2 = jsonrpc2Session
+//                .sendAndGetParametricTypeResult(jsonrpc2Request,
+//                        PaginatedMoveEvents.class,
+//                        MintNFTEvent.class);
+//        System.out.println(jsonrpc2Response2);
+//        System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response2));
     }
 
     @Test
@@ -71,6 +73,73 @@ public class JsonRpcTests {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getObject", params, 1);
         JSONRPC2Response<GetObjectDataResponse> jsonrpc2Response2 = jsonrpc2Session.send(jsonrpc2Request, GetObjectDataResponse.class);
         System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response2));
+    }
+
+    @Test
+    void testJsonDeserialize_4() throws JsonProcessingException {
+        String json = "{\n" +
+                "  \"id\": 1,\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": {\n" +
+                "    \"data\": [\n" +
+                "      {\n" +
+                "        \"event\": {\n" +
+                "          \"moveEvent\": {\n" +
+                "            \"bcs\": \"xZf38IrQNqH4nYmQybDhjQDNJtliUmwY0Ii3yFV9V97t6TYrkei00wlTdWlldCBORlQ=\",\n" +
+                "            \"fields\": {\n" +
+                "              \"creator\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
+                "              \"name\": \"Suiet NFT\",\n" +
+                "              \"object_id\": \"0xc597f7f08ad036a1f89d8990c9b0e18d00cd26d9\"\n" +
+                "            },\n" +
+                "            \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "            \"sender\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
+                "            \"transactionModule\": \"devnet_nft\",\n" +
+                "            \"type\": \"0x2::devnet_nft::MintNFTEvent\"\n" +
+                "          }\n" +
+                "        },\n" +
+                "        \"id\": {\n" +
+                "          \"eventSeq\": 2,\n" +
+                "          \"txSeq\": 44\n" +
+                "        },\n" +
+                "        \"timestamp\": 1672366130490,\n" +
+                "        \"txDigest\": \"E9J1iVw2FrmdVwNqAtm4pyxdZQZZkai8oGDUS8d2PLmJ\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"event\": {\n" +
+                "          \"moveEvent\": {\n" +
+                "            \"bcs\": \"5tdxnmVFQyN2L1l8fRQOpPGQXmViUmwY0Ii3yFV9V97t6TYrkei00wlTdWlldCBORlQ=\",\n" +
+                "            \"fields\": {\n" +
+                "              \"creator\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
+                "              \"name\": \"Suiet NFT\",\n" +
+                "              \"object_id\": \"0xe6d7719e65454323762f597c7d140ea4f1905e65\"\n" +
+                "            },\n" +
+                "            \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "            \"sender\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
+                "            \"transactionModule\": \"devnet_nft\",\n" +
+                "            \"type\": \"0x2::devnet_nft::MintNFTEvent\"\n" +
+                "          }\n" +
+                "        },\n" +
+                "        \"id\": {\n" +
+                "          \"eventSeq\": 2,\n" +
+                "          \"txSeq\": 45\n" +
+                "        },\n" +
+                "        \"timestamp\": 1672366130493,\n" +
+                "        \"txDigest\": \"H1wMj9YzJB2KN7cWYyAiD6UwGdvQGMekJPYEkWXvYxJs\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"nextCursor\": {\n" +
+                "      \"eventSeq\": 2,\n" +
+                "      \"txSeq\": 51\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+        ObjectMapper om = objectMapper;
+        Class<?> parametrized = PaginatedMoveEvents.class;
+        Class<?> parameterClasses = MintNFTEvent.class;
+        JSONRPC2Response<PaginatedMoveEvents<MintNFTEvent>> paginatedMoveEventsJSONRPC2Response = om.readValue(json,
+                om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        om.getTypeFactory().constructParametricType(parametrized, parameterClasses)));
+        System.out.println(paginatedMoveEventsJSONRPC2Response);
     }
 
     @Test
@@ -215,4 +284,5 @@ public class JsonRpcTests {
                     '}';
         }
     }
+
 }

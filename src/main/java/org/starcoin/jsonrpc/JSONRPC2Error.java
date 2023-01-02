@@ -175,7 +175,6 @@ public class JSONRPC2Error {
      * @return A new JSON-RPC 2.0 error with the appended message.
      */
     public JSONRPC2Error appendMessage(final String apx) {
-
         return new JSONRPC2Error(code, getMessage() + apx, data);
     }
 

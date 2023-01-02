@@ -12,4 +12,12 @@ public class PaginatedMoveEvents<F> extends Page<SuiEventEnvelopeForMoveEvent<F>
     public PaginatedMoveEvents(List<SuiEventEnvelopeForMoveEvent<F>> data, EventId nextCursor) {
         super(data, nextCursor);
     }
+
+    @Override
+    public String toString() {
+        return "PaginatedMoveEvents{" +
+                "data=" + getData() +
+                ", nextCursor=" + getNextCursor() +
+                '}';
+    }
 }

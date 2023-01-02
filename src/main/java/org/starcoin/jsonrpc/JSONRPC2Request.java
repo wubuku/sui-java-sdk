@@ -92,7 +92,6 @@ public class JSONRPC2Request {
     public JSONRPC2Request(final String method,
                            final List<Object> positionalParams,
                            final Object id) {
-
         setMethod(method);
         setPositionalParams(positionalParams);
         setID(id);
@@ -114,7 +113,6 @@ public class JSONRPC2Request {
     public JSONRPC2Request(final String method,
                            final Map<String, Object> namedParams,
                            final Object id) {
-
         setMethod(method);
         setNamedParams(namedParams);
         setID(id);
@@ -127,7 +125,6 @@ public class JSONRPC2Request {
      * @return The method name.
      */
     public String getMethod() {
-
         return method;
     }
 
@@ -138,7 +135,6 @@ public class JSONRPC2Request {
      * @param method The method name. Must not be {@code null}.
      */
     public void setMethod(final String method) {
-
         // The method name is mandatory
         if (method == null)
             throw new IllegalArgumentException("The method name must not be null");
@@ -182,7 +178,6 @@ public class JSONRPC2Request {
     //@Deprecated
     public Object getParams() {
         switch (getParamsType()) {
-
             case ARRAY:
                 return positionalParams;
 
@@ -228,7 +223,6 @@ public class JSONRPC2Request {
      * @since 1.30
      */
     public List<Object> getPositionalParams() {
-
         return positionalParams;
     }
 

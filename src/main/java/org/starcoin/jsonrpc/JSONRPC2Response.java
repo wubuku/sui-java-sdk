@@ -109,7 +109,6 @@ public class JSONRPC2Response<R> {
      *           {@code null} though not recommended.
      */
     public JSONRPC2Response(final Object id) {
-
         setResult(null);
         setID(id);
     }
@@ -136,7 +135,7 @@ public class JSONRPC2Response<R> {
      *
      * @return The result.
      */
-    public Object getResult() {
+    public R getResult() {
         return result;
     }
 

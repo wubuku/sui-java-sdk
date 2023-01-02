@@ -23,6 +23,9 @@ import java.math.BigInteger;
 @JsonDeserialize(using = SuiEventDeserializer.class)
 public interface SuiEvent {
 
+    /**
+     * @param <F> the type of 'fields' of MoveEvent.
+     */
     class MoveEvent<F> implements SuiEvent {
         private com.github.wubuku.sui.bean.MoveEvent<F> moveEvent;
 
