@@ -22,6 +22,14 @@ public interface SuiData {
         public SuiMoveObject() {
         }
 
+        public SuiMoveObject(String type,
+                             ObjectContentFields fields,
+                             Boolean hasPublicTransfer,
+                             ObjectType dataType) {
+            super(type, fields, hasPublicTransfer);
+            this.dataType = dataType;
+        }
+
         @Override
         public ObjectType getDataType() {
             return dataType;
@@ -46,6 +54,11 @@ public interface SuiData {
         private ObjectType dataType;
 
         public SuiMovePackage() {
+        }
+
+        public SuiMovePackage(MovePackageContent disassembled, ObjectType dataType) {
+            super(disassembled);
+            this.dataType = dataType;
         }
 
         @Override

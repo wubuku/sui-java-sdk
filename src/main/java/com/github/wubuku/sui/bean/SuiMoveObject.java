@@ -21,6 +21,15 @@ public class SuiMoveObject {
     @JsonProperty("has_public_transfer")
     private Boolean hasPublicTransfer;
 
+    public SuiMoveObject() {
+    }
+
+    public SuiMoveObject(String type, ObjectContentFields fields, Boolean hasPublicTransfer) {
+        this.type = type;
+        this.fields = fields;
+        this.hasPublicTransfer = hasPublicTransfer;
+    }
+
     public String getType() {
         return type;
     }

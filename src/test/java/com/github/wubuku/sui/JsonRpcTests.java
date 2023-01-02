@@ -27,7 +27,7 @@ public class JsonRpcTests {
 ////        testJsonRpc_1();
 //    }
 
-    //@Test
+    @Test
     void testJsonRpc_1() throws MalformedURLException, JSONRPC2SessionException, JsonProcessingException {
         String suiDevnetRpcHost = "https://fullnode.devnet.sui.io/";
         JSONRPC2Session jsonrpc2Session = new JSONRPC2Session(new URL(suiDevnetRpcHost));
@@ -69,7 +69,7 @@ public class JsonRpcTests {
         List<Object> params = new ArrayList<>();
         params.add("0x0b7a32cfbfbe22b55f3ad703b1b6af130266086e");
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getObject", params, 1);
-        JSONRPC2Response<Object> jsonrpc2Response2 = jsonrpc2Session.send(jsonrpc2Request);
+        JSONRPC2Response<GetObjectDataResponse> jsonrpc2Response2 = jsonrpc2Session.send(jsonrpc2Request, GetObjectDataResponse.class);
         System.out.println(new ObjectMapper().writeValueAsString(jsonrpc2Response2));
     }
 
