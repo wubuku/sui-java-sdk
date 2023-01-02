@@ -2,6 +2,7 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -21,10 +22,11 @@ public class SuiEventDeserializer extends JsonDeserializer<SuiEvent> {
             throw new InvalidFormatException(jsonParser, "SuiEventDeserializer.deserialize() error.", currentToken, SuiEvent.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
             String fieldName = jsonParser.nextFieldName();
-            SuiEvent suiEvent = null;
+            SuiEvent suiEvent;
             if ("moveEvent".equals(fieldName)) {
                 jsonParser.nextToken();
-                suiEvent = new SuiEvent.MoveEvent(jsonParser.readValueAs(MoveEvent.class));
+                suiEvent = new SuiEvent.MoveEvent<>(jsonParser.readValueAs(new TypeReference<MoveEvent<Object>>() {
+                }));
             } else if ("publish".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiEvent = new SuiEvent.Publish(jsonParser.readValueAs(PublishEvent.class));

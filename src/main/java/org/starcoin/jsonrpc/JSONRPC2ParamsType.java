@@ -14,6 +14,7 @@ package org.starcoin.jsonrpc;
  * </ul>
  *
  * @author Vladimir Dzhuvinov
+ * @author Yang Jiefeng
  */
 public enum JSONRPC2ParamsType {
 

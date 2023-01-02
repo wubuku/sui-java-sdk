@@ -47,6 +47,7 @@ package org.starcoin.jsonrpc;
  * </pre>
  *
  * @author Vladimir Dzhuvinov
+ * @author Yang Jiefeng
  */
 public class JSONRPC2Error {
 

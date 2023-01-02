@@ -6,6 +6,7 @@ package org.starcoin.jsonrpc.client;
  * cause type to be specified to ease diagnostics and exception reporting.
  *
  * @author Vladimir Dzhuvinov
+ * @author Yang Jiefeng
  */
 public class JSONRPC2SessionException extends Exception {
 

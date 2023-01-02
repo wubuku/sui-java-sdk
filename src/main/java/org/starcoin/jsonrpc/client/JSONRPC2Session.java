@@ -1,5 +1,7 @@
 package org.starcoin.jsonrpc.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.starcoin.jsonrpc.JSONRPC2Request;
@@ -7,9 +9,8 @@ import org.starcoin.jsonrpc.JSONRPC2Response;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 
 /**
@@ -19,14 +20,14 @@ import java.util.UUID;
  *
  * @author Vladimir Dzhuvinov
  * @author Mike Outland
+ * @author Yang Jiefeng
  */
 public class JSONRPC2Session {
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-
+    private final OkHttpClient defaultOkHttpClient = new OkHttpClient.Builder().build();
     /**
      * The server URL, which protocol must be HTTP or HTTPS.
      *
@@ -34,9 +35,7 @@ public class JSONRPC2Session {
      */
     private URL url;
 
-
     public JSONRPC2Session(final URL url) {
-
         if (!url.getProtocol().equalsIgnoreCase("http") &&
                 !url.getProtocol().equalsIgnoreCase("https"))
             throw new IllegalArgumentException("The URL protocol must be HTTP or HTTPS");
@@ -44,6 +43,13 @@ public class JSONRPC2Session {
         this.url = url;
     }
 
+    public ObjectMapper getObjectMapper() {
+        return this.objectMapper;
+    }
+
+    protected OkHttpClient getOkHttpClient() {
+        return this.defaultOkHttpClient;
+    }
 
     /**
      * Gets the JSON-RPC 2.0 server URL.
@@ -51,7 +57,6 @@ public class JSONRPC2Session {
      * @return The server URL.
      */
     public URL getURL() {
-
         return url;
     }
 
@@ -61,7 +66,6 @@ public class JSONRPC2Session {
      * @param url The server URL. Must not be {@code null}.
      */
     public void setURL(final URL url) {
-
         if (url == null)
             throw new IllegalArgumentException("The server URL must not be null");
 
@@ -80,7 +84,77 @@ public class JSONRPC2Session {
      *                                  response content type or invalid
      *                                  JSON-RPC 2.0 response.
      */
-    public JSONRPC2Response send(final JSONRPC2Request request) throws JSONRPC2SessionException {
+    public JSONRPC2Response<Object> send(final JSONRPC2Request request) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                return getObjectMapper().readValue(body, new TypeReference<JSONRPC2Response<Object>>() {
+                });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public <R> JSONRPC2Response<R> send(final JSONRPC2Request request, final Class<R> resultType) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(
+                        JSONRPC2Response.class, resultType));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public <E> JSONRPC2Response<List<E>> sendAndGetListResult(final JSONRPC2Request request,
+                                                              final Class<E> resultElementType
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(
+                        JSONRPC2Response.class,
+                        om.getTypeFactory().constructCollectionType(List.class, resultElementType)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public <R> JSONRPC2Response<R> send(final JSONRPC2Request request,
+                                        final TypeReference<R> resultTypeReference
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(
+                        JSONRPC2Response.class,
+                        om.getTypeFactory().constructType(resultTypeReference)
+                ));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public <R> JSONRPC2Response<R> send(final JSONRPC2Request request,
+                                        final JavaType resultType
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(
+                        JSONRPC2Response.class, resultType));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private <R> JSONRPC2Response<R> send(final JSONRPC2Request request,
+                                         final Function<String, JSONRPC2Response<R>> bodyConvertor
+    ) throws JSONRPC2SessionException {
         Map<String, Object> bodyMap = new HashMap<>();
         bodyMap.put("jsonrpc", "2.0");
         bodyMap.put("method", request.getMethod());
@@ -88,23 +162,23 @@ public class JSONRPC2Session {
         bodyMap.put("params", request.getParams());
         try {
             RequestBody body = RequestBody.create(getObjectMapper().writeValueAsString(bodyMap), JSON_MEDIA_TYPE);
-            System.out.println(getObjectMapper().writeValueAsString(bodyMap));
-            Request okRequest = new Request.Builder().post(body).url(this.url).build();
-            Response response = okHttpClient.newCall(okRequest).execute();
-            if (!response.isSuccessful()) {
-                throw new RuntimeException("JSON RPC error. Response is NOT successful." + response);
+            //System.out.println(getObjectMapper().writeValueAsString(bodyMap));
+            Request okRequest = new Request.Builder()
+                    .post(body)
+                    .url(this.url)
+                    .build();
+            try (Response response = getOkHttpClient().newCall(okRequest).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new RuntimeException("JSON RPC error. Response is NOT successful." + response);
+                }
+                if (response.body() == null) {
+                    throw new JSONRPC2SessionException("Response body is null.");
+                }
+                return bodyConvertor.apply(Objects.requireNonNull(response.body()).string());
             }
-            if (response.body() == null) {
-                throw new JSONRPC2SessionException("Response body is null.");
-            }
-            return getObjectMapper().readValue(response.body().string(), JSONRPC2Response.class);
         } catch (IOException ioException) {
             throw new JSONRPC2SessionException("Send JSON RPC IO error.", ioException);
         }
-    }
-
-    private ObjectMapper getObjectMapper() {
-        return this.objectMapper;
     }
 
 //    /**

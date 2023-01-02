@@ -21,15 +21,15 @@ public class BalanceChangeTypeDeserializer extends JsonDeserializer<BalanceChang
             } else if ("RECEIVE".equals(code)) {
                 return BalanceChangeType.RECEIVE;
             }
-            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", currentToken, SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", currentToken, BalanceChangeType.class);
         } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
             return null;
         } else if (currentToken.isScalarValue()) {
-            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", currentToken, SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", currentToken, BalanceChangeType.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
-            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", jsonParser.currentToken(), SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", jsonParser.currentToken(), BalanceChangeType.class);
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {
-            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", jsonParser.currentToken(), SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", jsonParser.currentToken(), BalanceChangeType.class);
         }
         return null;
     }

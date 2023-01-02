@@ -61,8 +61,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * </pre>
  *
  * @author Vladimir Dzhuvinov
+ * @author Yang Jiefeng
  */
-public class JSONRPC2Response {
+public class JSONRPC2Response<R> {
 
     @JsonProperty("jsonrpc")
     private String jsonRPCVersion;
@@ -70,7 +71,7 @@ public class JSONRPC2Response {
     /**
      * The result.
      */
-    private Object result = null;
+    private R result = null;
 
     /**
      * The error.
@@ -83,7 +84,6 @@ public class JSONRPC2Response {
     private Object id = null;
 
     public JSONRPC2Response() {
-
     }
 
 
@@ -95,8 +95,7 @@ public class JSONRPC2Response {
      * @param id     The request identifier echoed back to the caller. May
      *               be {@code null} though not recommended.
      */
-    public JSONRPC2Response(final Object result, final Object id) {
-
+    public JSONRPC2Response(final R result, final Object id) {
         setResult(result);
         setID(id);
     }
@@ -126,7 +125,6 @@ public class JSONRPC2Response {
      *              be determined (e.g. due to a parse error).
      */
     public JSONRPC2Response(final JSONRPC2Error error, final Object id) {
-
         setError(error);
         setID(id);
     }
@@ -139,7 +137,6 @@ public class JSONRPC2Response {
      * @return The result.
      */
     public Object getResult() {
-
         return result;
     }
 
@@ -152,8 +149,7 @@ public class JSONRPC2Response {
      * @param result The result. The value can <a href="#map">map</a> to
      *               any JSON type. May be {@code null}.
      */
-    public void setResult(final Object result) {
-
+    public void setResult(final R result) {
         // result and error are mutually exclusive
         this.result = result;
         this.error = null;
@@ -168,7 +164,6 @@ public class JSONRPC2Response {
      * indicates success.
      */
     public JSONRPC2Error getError() {
-
         return error;
     }
 
@@ -182,10 +177,8 @@ public class JSONRPC2Response {
      *              the failure. Must not be {@code null}.
      */
     public void setError(final JSONRPC2Error error) {
-
         if (error == null)
             throw new IllegalArgumentException("The error object cannot be null");
-
         // result and error are mutually exclusive
         this.error = error;
         this.result = null;
@@ -200,7 +193,6 @@ public class JSONRPC2Response {
      * there was an error.
      */
     public boolean indicatesSuccess() {
-
         return error == null;
     }
 
@@ -212,7 +204,6 @@ public class JSONRPC2Response {
      * couldn't be determined, the value will be {@code null}.
      */
     public Object getID() {
-
         return id;
     }
 
@@ -224,7 +215,6 @@ public class JSONRPC2Response {
      *           be determined (e.g. due to a parse error).
      */
     public void setID(final Object id) {
-
         if (id == null ||
                 id instanceof Boolean ||
                 id instanceof Number ||

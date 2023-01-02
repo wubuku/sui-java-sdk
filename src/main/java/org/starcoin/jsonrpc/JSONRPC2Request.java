@@ -31,6 +31,7 @@ import java.util.Map;
  * </pre>
  *
  * @author Vladimir Dzhuvinov
+ * @author Yang Jiefeng
  */
 public class JSONRPC2Request {
 
@@ -70,7 +71,6 @@ public class JSONRPC2Request {
      *               be avoided).
      */
     public JSONRPC2Request(final String method, final Object id) {
-
         setMethod(method);
         setID(id);
     }
@@ -155,7 +155,6 @@ public class JSONRPC2Request {
      * @return The parameters type.
      */
     public JSONRPC2ParamsType getParamsType() {
-
         if (positionalParams == null && namedParams == null)
             return JSONRPC2ParamsType.NO_PARAMS;
 
@@ -182,7 +181,6 @@ public class JSONRPC2Request {
      */
     //@Deprecated
     public Object getParams() {
-
         switch (getParamsType()) {
 
             case ARRAY:
@@ -210,7 +208,6 @@ public class JSONRPC2Request {
     @Deprecated
     @SuppressWarnings("unchecked")
     public void setParams(final Object params) {
-
         if (params == null) {
             positionalParams = null;
             namedParams = null;
@@ -243,7 +240,6 @@ public class JSONRPC2Request {
      * @since 1.30
      */
     public void setPositionalParams(final List<Object> positionalParams) {
-
         if (positionalParams == null)
             return;
 
@@ -258,7 +254,6 @@ public class JSONRPC2Request {
      * @since 1.30
      */
     public Map<String, Object> getNamedParams() {
-
         return namedParams;
     }
 
@@ -270,7 +265,6 @@ public class JSONRPC2Request {
      * @since 1.30
      */
     public void setNamedParams(final Map<String, Object> namedParams) {
-
         if (namedParams == null)
             return;
 
@@ -285,7 +279,6 @@ public class JSONRPC2Request {
      * {@code String}) or {@code null}.
      */
     public Object getID() {
-
         return id;
     }
 
@@ -299,7 +292,6 @@ public class JSONRPC2Request {
      *           be avoided).
      */
     public void setID(final Object id) {
-
         if (id == null ||
                 id instanceof Boolean ||
                 id instanceof Number ||

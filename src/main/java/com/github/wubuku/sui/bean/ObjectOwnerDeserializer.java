@@ -17,11 +17,11 @@ public class ObjectOwnerDeserializer extends JsonDeserializer<ObjectOwner> {
             if ("Immutable".equals(text)) {
                 return ObjectOwner.Immutable.INSTANCE;
             }
-            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", currentToken, SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", currentToken, ObjectOwner.class);
         } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
             return null;
         } else if (currentToken.isScalarValue()) {
-            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", currentToken, SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", currentToken, ObjectOwner.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
             String fieldName = jsonParser.nextFieldName();
             ObjectOwner objectOwner = null;
@@ -35,12 +35,12 @@ public class ObjectOwnerDeserializer extends JsonDeserializer<ObjectOwner> {
                 jsonParser.nextToken();
                 objectOwner = new ObjectOwner.Shared(jsonParser.readValueAs(ObjectOwner.Shared.SharedProperties.class));
             } else {
-                throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), SuiEvent.class);
+                throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), ObjectOwner.class);
             }
             jsonParser.nextToken();
             return objectOwner;
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {
-            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), SuiEvent.class);
+            throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), ObjectOwner.class);
         }
         return null;
     }
