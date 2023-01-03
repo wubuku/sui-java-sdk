@@ -137,7 +137,7 @@ public class SuiJsonRpcClientTests {
 //    }
 
     @Test
-    void testMoveCall() throws MalformedURLException, JsonProcessingException {
+    void testMoveCall_1() throws MalformedURLException, JsonProcessingException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
