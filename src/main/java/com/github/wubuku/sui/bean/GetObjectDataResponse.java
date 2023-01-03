@@ -1,10 +1,14 @@
 package com.github.wubuku.sui.bean;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.IOException;
@@ -68,6 +72,7 @@ public class GetObjectDataResponse {
             }
         }
 
+        @JsonSerialize(using = ObjectIdSerializer.class)
         class ObjectId implements Details {
             private String id;
 
@@ -94,6 +99,13 @@ public class GetObjectDataResponse {
             }
         }
 
+        class ObjectIdSerializer extends JsonSerializer<ObjectId> {
+            @Override
+            public void serialize(ObjectId value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+                gen.writeString(value.getId());
+            }
+        }
+
         class SuiObjectRef extends com.github.wubuku.sui.bean.SuiObjectRef implements Details {
             public SuiObjectRef() {
             }
@@ -113,7 +125,7 @@ public class GetObjectDataResponse {
             } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
                 return null;
             } else if (currentToken.isScalarValue()) {
-                throw new InvalidFormatException(jsonParser, "DetailsDeserializer.deserialize() error.", currentToken, Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", currentToken, Details.class);
             } else if (JsonToken.START_OBJECT.equals(currentToken)) {
                 String fieldName = jsonParser.nextFieldName();
                 /*
@@ -170,12 +182,12 @@ public class GetObjectDataResponse {
                         jsonParser.nextToken();
                         version = jsonParser.getLongValue();
                     } else {
-                        throw new InvalidFormatException(jsonParser, "DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                        throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
                     }
                     fieldName = jsonParser.nextFieldName();
                 }
                 if (!JsonToken.END_OBJECT.equals(jsonParser.currentToken())) {
-                    throw new InvalidFormatException(jsonParser, "DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                    throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
                 }
                 if (data != null) {
                     return new Details.SuiObject(data, owner, previousTransaction, storageRebate, reference);
@@ -183,9 +195,9 @@ public class GetObjectDataResponse {
                 if (digest != null) {
                     return new Details.SuiObjectRef(digest, objectId, version);
                 }
-                throw new InvalidFormatException(jsonParser, "DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
             } else if (JsonToken.START_ARRAY.equals(currentToken)) {
-                throw new InvalidFormatException(jsonParser, "DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
             }
             return null;
         }
