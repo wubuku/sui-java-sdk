@@ -294,7 +294,7 @@ public class SuiJsonRpcClient {
      */
     public TransactionBytes moveCall(String signerAddress,
                                      String packageObjectId, String module, String function,
-                                     String[] typeArguments, // TypeTag[] typeArguments
+                                     String[] typeArguments, // TypeTag[] typeArguments,
                                      SuiJsonValue[] arguments,
                                      String gasPayment, long gasBudget
     ) {
@@ -307,7 +307,12 @@ public class SuiJsonRpcClient {
         params.add(arguments);
         params.add(gasPayment);
         params.add(gasBudget);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_moveCall", params, System.currentTimeMillis());
+        return moveCall(params);
+    }
+
+    private TransactionBytes moveCall(List<Object> params) {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_moveCall", params,
+                System.currentTimeMillis());
         try {
             JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     TransactionBytes.class);
@@ -316,7 +321,6 @@ public class SuiJsonRpcClient {
         } catch (JSONRPC2SessionException e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }
