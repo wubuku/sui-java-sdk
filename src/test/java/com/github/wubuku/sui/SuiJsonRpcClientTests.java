@@ -135,4 +135,28 @@ public class SuiJsonRpcClientTests {
 //                );
 //        System.out.println(balance);
 //    }
+
+    @Test
+    void testMoveCall() throws MalformedURLException, JsonProcessingException {
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String packageObjectId = "0x2";
+        String module = "devnet_nft";
+        String function = "mint";
+        String[] typeArguments = new String[0]; // TypeTag[] typeArguments
+        SuiJsonValue[] arguments = new SuiJsonValue[]{
+                new SuiJsonValue.String_("Test NFT"),
+                new SuiJsonValue.String_("..."),
+                new SuiJsonValue.String_("http://test.com/test-nft.png")
+        };
+        String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
+        long gasBudget = 1000000;
+        TransactionBytes result = client.moveCall(signerAddress,
+                packageObjectId, module, function,
+                typeArguments, arguments,
+                gasPayment, gasBudget);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
 }

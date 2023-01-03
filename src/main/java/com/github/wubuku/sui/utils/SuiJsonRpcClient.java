@@ -248,7 +248,7 @@ public class SuiJsonRpcClient {
             throw new RuntimeException(e);
         }
     }
-    
+
 //    public List<Balance> getAllBalances(String owner) {
 //        List<Object> params = new ArrayList<>();
 //        params.add(owner);
@@ -262,5 +262,61 @@ public class SuiJsonRpcClient {
 //            throw new RuntimeException(e);
 //        }
 //    }
+
+    /**
+     * From TypeScript code:
+     * <p>
+     * <pre>
+     *       case 'moveCall':
+     *         const moveCall = unserializedTxn.data as MoveCallTransaction;
+     *         endpoint = 'sui_moveCall';
+     *         args = [
+     *           signerAddress,
+     *           moveCall.packageObjectId,
+     *           moveCall.module,
+     *           moveCall.function,
+     *           moveCall.typeArguments,
+     *           moveCall.arguments,
+     *           moveCall.gasPayment,
+     *           moveCall.gasBudget,
+     *         ];
+     *
+     * export interface MoveCallTransaction {
+     *   packageObjectId: ObjectId;
+     *   module: string;
+     *   function: string;
+     *   typeArguments: string[] | TypeTag[];
+     *   arguments: SuiJsonValue[];
+     *   gasPayment?: ObjectId;
+     *   gasBudget: number;
+     * }
+     * </pre>
+     */
+    public TransactionBytes moveCall(String signerAddress,
+                                     String packageObjectId, String module, String function,
+                                     String[] typeArguments, // TypeTag[] typeArguments
+                                     SuiJsonValue[] arguments,
+                                     String gasPayment, long gasBudget
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(signerAddress);
+        params.add(packageObjectId);
+        params.add(module);
+        params.add(function);
+        params.add(typeArguments);
+        params.add(arguments);
+        params.add(gasPayment);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_moveCall", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }
