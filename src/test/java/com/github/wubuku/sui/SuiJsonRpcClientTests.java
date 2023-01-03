@@ -33,6 +33,21 @@ public class SuiJsonRpcClientTests {
 //    }
 
     @Test
+    void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        TransactionQuery.MoveFunction moveFunction = new TransactionQuery.MoveFunction(
+                "0x0000000000000000000000000000000000000002",
+                "devnet_nft",
+                "mint");
+        //TransactionQuery transactionQuery = TransactionQuery.All.INSTANCE;
+        TransactionsPage transactionsPage = client.getTransactions(//transactionQuery,
+                moveFunction,
+                null, 1, true);
+        System.out.println(transactionsPage);
+        System.out.println(objectMapper.writeValueAsString(transactionsPage));
+    }
+
+    @Test
     void testGetTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiTransactionResponse suiTransactionResponse = client.getTransaction("FJTkcJRV3sxn5GuG4PVJuT5U2qP2ZnfDgcFWdASiBgjU");
