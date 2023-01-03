@@ -12,25 +12,30 @@ import java.util.List;
 public class SuiJsonRpcClientTests {
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
+    //@Test
     void testGetMoveEvents_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String url = "http://localhost:9000";
+        //String url = "https://fullnode.devnet.sui.io/";
+        SuiJsonRpcClient client = new SuiJsonRpcClient(url);
         PaginatedMoveEvents<JsonRpcTests.MintNFTEvent> moveEvents = client.getMoveEvents(
                 "0x2::devnet_nft::MintNFTEvent",
-                null, 1, true, JsonRpcTests.MintNFTEvent.class);
+                null, 2, true, JsonRpcTests.MintNFTEvent.class);
         System.out.println(moveEvents);
         System.out.println(objectMapper.writeValueAsString(moveEvents));
     }
 
-//    @Test
-//    void testGetMoveEvents_2() throws MalformedURLException, JsonProcessingException {
-//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-//        PaginatedEvents events = client.getEvents(
-//                new EventQuery.Transaction("7ZgBRkqQbbZNJB7AoKUfagYUucc8ZQPmqrTdk2G13SQP"),
-//                null, 10, false);
-//        System.out.println(events);
-//        System.out.println(objectMapper.writeValueAsString(events));
-//    }
+    //@Test
+    void testGetMoveEvents_2() throws MalformedURLException, JsonProcessingException {
+        //String url = "https://fullnode.devnet.sui.io/";
+        String url = "http://localhost:9000";
+        String transactionDigest = "3LBcVgGGXvKzRoQeNGvZZv64d5fWLrYmW78h2pU4Fw7n";
+        SuiJsonRpcClient client = new SuiJsonRpcClient(url);
+        PaginatedEvents events = client.getEvents(
+                new EventQuery.Transaction(transactionDigest),
+                null, 10, false);
+        System.out.println(events);
+        System.out.println(objectMapper.writeValueAsString(events));
+    }
 
     @Test
     void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
@@ -45,6 +50,13 @@ public class SuiJsonRpcClientTests {
                 null, 1, true);
         System.out.println(transactionsPage);
         System.out.println(objectMapper.writeValueAsString(transactionsPage));
+    }
+
+    @Test
+    void testGetTransactionsInRange_1() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        List<String> transactions = client.getTransactionsInRange(0, 100);
+        System.out.println(transactions);
     }
 
     @Test

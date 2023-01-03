@@ -51,7 +51,6 @@ public class SuiJsonRpcClient {
                                             String cursor,
                                             int limit,
                                             boolean descendingOrder) {
-
         List<Object> params = new ArrayList<>();
         params.add(query);
         params.add(cursor);
@@ -62,6 +61,23 @@ public class SuiJsonRpcClient {
         try {
             JSONRPC2Response<TransactionsPage> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,
                     TransactionsPage.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getTransactionsInRange(long start, long end) {
+        List<Object> params = new ArrayList<>();
+        params.add(start);
+        params.add(end);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getTransactionsInRange", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<List<String>> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,
+                    new TypeReference<List<String>>() {
+                    });
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
