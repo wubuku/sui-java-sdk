@@ -139,4 +139,20 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public CoinPage getCoins(String owner, String coinType, String cursor, int limit) {
+        List<Object> params = new ArrayList<>();
+        params.add(owner);
+        params.add(coinType);
+        params.add(cursor);
+        params.add(limit);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getCoins", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<CoinPage> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request, CoinPage.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

@@ -2,10 +2,7 @@ package com.github.wubuku.sui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wubuku.sui.bean.GetObjectDataResponse;
-import com.github.wubuku.sui.bean.PaginatedMoveEvents;
-import com.github.wubuku.sui.bean.SuiObjectInfo;
-import com.github.wubuku.sui.bean.SuiTransactionResponse;
+import com.github.wubuku.sui.bean.*;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
@@ -47,5 +44,14 @@ public class SuiJsonRpcClientTests {
         GetObjectDataResponse getObjectDataResponse = client.getObject("0x0b7a32cfbfbe22b55f3ad703b1b6af130266086e");
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetCoins_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        CoinPage coinPage = client.getCoins("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
+                "0x2::sui::SUI", null, 1);
+        System.out.println(coinPage);
+        System.out.println(objectMapper.writeValueAsString(coinPage));
     }
 }
