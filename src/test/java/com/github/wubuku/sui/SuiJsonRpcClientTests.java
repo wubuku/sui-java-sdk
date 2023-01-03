@@ -74,6 +74,12 @@ public class SuiJsonRpcClientTests {
 //        System.out.println(objectMapper.writeValueAsString(coinPage));
 //    }
 
+    @Test
+    void testGetCoinMetadata_1() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiCoinMetadata coinMetadata = client.getCoinMetadata("0x2::sui::SUI");
+        System.out.println(coinMetadata);
+    }
 
     @Test
     void testGetTotalSupply_1() throws MalformedURLException {
