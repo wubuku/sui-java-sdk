@@ -1,6 +1,7 @@
 package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * From TypeScript definition:
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * </pre>
  */
 @JsonDeserialize(using = ExecutionStatusTypeDeserializer.class)
+@JsonSerialize(using = ExecutionStatusTypeSerializer.class)
 public enum ExecutionStatusType {
     SUCCESS {
         @Override

@@ -32,6 +32,21 @@ public class SuiJsonRpcClient {
         return jsonrpc2Session;
     }
 
+    public SuiTransactionResponse getTransaction(String digest) {
+        List<Object> params = new ArrayList<>();
+        params.add(digest);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getTransaction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiTransactionResponse> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,
+                    SuiTransactionResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public <F> PaginatedMoveEvents<F> getMoveEvents(String moveEvent,
                                                     EventId cursor, int limit, boolean descendingOrder,
                                                     Class<F> moveEventFieldsType) {

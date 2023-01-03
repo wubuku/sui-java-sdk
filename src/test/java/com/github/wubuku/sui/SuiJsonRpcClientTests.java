@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.GetObjectDataResponse;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiObjectInfo;
+import com.github.wubuku.sui.bean.SuiTransactionResponse;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,14 @@ import java.util.List;
 
 public class SuiJsonRpcClientTests {
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Test
+    void testGetTransaction() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiTransactionResponse suiTransactionResponse = client.getTransaction("FJTkcJRV3sxn5GuG4PVJuT5U2qP2ZnfDgcFWdASiBgjU");
+        System.out.println(suiTransactionResponse);
+        System.out.println(objectMapper.writeValueAsString(suiTransactionResponse));
+    }
 
     @Test
     void testGetMoveEvents_1() throws MalformedURLException, JsonProcessingException {
