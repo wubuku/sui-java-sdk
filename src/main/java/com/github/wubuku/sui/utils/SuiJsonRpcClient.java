@@ -145,7 +145,19 @@ public class SuiJsonRpcClient {
         params.add(coinType);
         params.add(cursor);
         params.add(limit);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getCoins", params, System.currentTimeMillis());
+        return getCoins("sui_getCoins", params);
+    }
+
+//    public CoinPage getAllCoins(String owner, String cursor, int limit) {
+//        List<Object> params = new ArrayList<>();
+//        params.add(owner);
+//        params.add(cursor);
+//        params.add(limit);
+//        return getCoins("sui_getAllCoins", params);
+//    }
+
+    private CoinPage getCoins(String method, List<Object> params) {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());
         try {
             JSONRPC2Response<CoinPage> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request, CoinPage.class);
             assertSuccess(jsonrpc2Response);
@@ -153,6 +165,19 @@ public class SuiJsonRpcClient {
         } catch (JSONRPC2SessionException e) {
             throw new RuntimeException(e);
         }
+    }
 
+
+    public Supply getTotalSupply(String coinType) {
+        List<Object> params = new ArrayList<>();
+        params.add(coinType);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getTotalSupply", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<Supply> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request, Supply.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
