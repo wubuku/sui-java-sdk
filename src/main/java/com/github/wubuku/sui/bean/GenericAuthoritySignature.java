@@ -1,6 +1,7 @@
 package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Arrays;
 
@@ -16,6 +17,7 @@ import java.util.Arrays;
  * </pre>
  */
 @JsonDeserialize(using = GenericAuthoritySignatureDeserializer.class)
+@JsonSerialize(using = GenericAuthoritySignatureSerializer.class)
 public interface GenericAuthoritySignature {
 
     class AuthoritySignatureArray implements GenericAuthoritySignature {
