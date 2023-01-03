@@ -1,6 +1,7 @@
 package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * From TypeScript definition:
@@ -10,19 +11,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * </pre>
  */
 @JsonDeserialize(using = SuiJsonValueDeserializer.class)
+@JsonSerialize(using = SuiJsonValueSerializer.class)
 public interface SuiJsonValue {
 
-    class Boolean implements SuiJsonValue {
+    class Boolean_ implements SuiJsonValue {
         private boolean value;
 
-        public Boolean() {
+        public Boolean_() {
         }
 
-        public Boolean(boolean value) {
+        public Boolean_(boolean value) {
             this.value = value;
         }
 
-        public boolean isValue() {
+        public boolean getValue() {
             return value;
         }
 

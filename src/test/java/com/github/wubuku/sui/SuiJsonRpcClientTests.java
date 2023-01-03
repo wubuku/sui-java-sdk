@@ -16,7 +16,7 @@ public class SuiJsonRpcClientTests {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void testGetTransaction() throws MalformedURLException, JsonProcessingException {
+    void testGetTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiTransactionResponse suiTransactionResponse = client.getTransaction("FJTkcJRV3sxn5GuG4PVJuT5U2qP2ZnfDgcFWdASiBgjU");
         System.out.println(suiTransactionResponse);

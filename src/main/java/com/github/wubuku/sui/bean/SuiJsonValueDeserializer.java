@@ -18,7 +18,7 @@ public class SuiJsonValueDeserializer extends JsonDeserializer<SuiJsonValue> {
             throw new InvalidFormatException(jsonParser, "SuiJsonValueDeserializer.deserialize() error.", currentToken, SuiJsonValue.class);
         } else if (currentToken.isScalarValue()) {
             if (currentToken.isBoolean()) {
-                return new SuiJsonValue.Boolean(jsonParser.getBooleanValue());
+                return new SuiJsonValue.Boolean_(jsonParser.getBooleanValue());
             } else if (currentToken.isNumeric()) {
                 return new SuiJsonValue.Number(jsonParser.getLongValue());
             }
