@@ -114,4 +114,25 @@ public class SuiJsonRpcClientTests {
         Supply totalSupply = client.getTotalSupply("0x2::sui::SUI");
         System.out.println(totalSupply);
     }
+
+    @Test
+    void testGetBalance_1() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        List<Balance> balance = client.getBalance(
+                "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
+                null//"0x2::sui::SUI"
+        );
+        System.out.println(balance);
+    }
+
+//    @Test
+//    void testGetAllBalance_1() throws MalformedURLException {
+//        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+//        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+//        List<Balance> balance = client.getAllBalances(
+//                "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"//,//"0x2::sui::SUI"
+//                );
+//        System.out.println(balance);
+//    }
 }
