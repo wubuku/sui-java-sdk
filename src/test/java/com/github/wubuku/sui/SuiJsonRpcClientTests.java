@@ -168,8 +168,35 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testDryRunTransaction() throws MalformedURLException, JsonProcessingException {
-        String txBytes = "AAIAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAICyXnyhkSXG4AijYaMLP4gE4QyDu3lQY+Nz/5PbG/u7OCmRldm5ldF9uZnQEbWludAADAAkIVGVzdCBORlQABAMuLi4AHRxodHRwOi8vdGVzdC5jb20vdGVzdC1uZnQucG5nPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwgAAAAAAAAAIHPmBAVvqy2ZINnuDjPcjyuCCbNWixbmw35oU/EqF03uAQAAAAAAAABAQg8AAAAAAA==";
+    void testBatchTransaction_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String packageObjectId = "0x2";
+        String module = "devnet_nft";
+        String function = "mint";
+        String[] typeArguments = new String[0]; // TypeTag[] typeArguments
+        SuiJsonValue[] arguments = new SuiJsonValue[]{
+                new SuiJsonValue.String_("Test NFT"),
+                new SuiJsonValue.String_("..."),
+                new SuiJsonValue.String_("http://test.com/test-nft.png")
+        };
+        String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
+        long gasBudget = 1000000;
+        RPCTransactionRequestParams transactionRequestParams = new RPCTransactionRequestParams.MoveCallRequestParams(
+                new MoveCallParams(packageObjectId, module, function, typeArguments, arguments)
+        );
+        RPCTransactionRequestParams[] transactionRequestParamsList = new RPCTransactionRequestParams[]{
+                transactionRequestParams
+        };
+        TransactionBytes result = client.batchTransaction(signerAddress, transactionRequestParamsList, gasPayment, gasBudget);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+        System.out.println(result.getTxBytes());
+    }
+
+    @Test
+    void testDryRunTransaction_1() throws MalformedURLException, JsonProcessingException {
+        String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACAsl58oZElxuAIo2GjCz+IBOEMg7t5UGPjc/+T2xv7uzgtsb2NrZWRfY29pbglsb2NrX2NvaW4BBwAAAAAAAAAAAAAAAAAAAAAAAAACA3N1aQNTVUkAAwEAL7WBWtgXCvMuHZ1+DWUmwBP8lzcBAAAAAAAAACArk/jbO5ZDr9GpkvlJdaXr9DtEILIXCX3FXCiiley2AgAUPCzzWg1NKd2dH2NDpur+AxMb+voACACgck4YCQAAPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwgAAAAAAAAAIHPmBAVvqy2ZINnuDjPcjyuCCbNWixbmw35oU/EqF03uAQAAAAAAAABAQg8AAAAAAA==";
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         TransactionEffects transactionEffects = client.dryRunTransaction(txBytes);
         System.out.println(transactionEffects);
@@ -226,4 +253,35 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(result));
     }
 
+    @Test
+    void testBatchTransaction_2() throws MalformedURLException, JsonProcessingException {
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String packageObjectId = "0x2";
+        String module = "locked_coin";
+        String function = "lock_coin";
+//        TypeTag[] typeArguments = new TypeTag[]{
+//                new TypeTag.Struct(new StructTag("0x2", "sui", "SUI", null))
+//        };
+        String[] typeArguments = new String[]{"0x2::sui::SUI"};
+        SuiJsonValue[] arguments = new SuiJsonValue[]{
+                new SuiJsonValue.String_("0x2fb5815ad8170af32e1d9d7e0d6526c013fc9737"),
+                new SuiJsonValue.String_("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"),
+                new SuiJsonValue.Number(10000000000000L)
+        };
+        String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
+        long gasBudget = 1000000;
+
+        RPCTransactionRequestParams transactionRequestParams = new RPCTransactionRequestParams.MoveCallRequestParams(
+                new MoveCallParams(packageObjectId, module, function, typeArguments, arguments)
+        );
+        RPCTransactionRequestParams[] transactionRequestParamsList = new RPCTransactionRequestParams[]{
+                transactionRequestParams
+        };
+        TransactionBytes result = client.batchTransaction(signerAddress, transactionRequestParamsList, gasPayment, gasBudget);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+        System.out.println(result.getTxBytes());
+    }
 }

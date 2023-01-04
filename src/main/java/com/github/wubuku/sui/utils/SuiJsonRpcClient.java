@@ -309,6 +309,36 @@ public class SuiJsonRpcClient {
         }
     }
 
+    /**
+     * @param signer                      the transaction signer's Sui address
+     * @param rpcTransactionRequestParams list of transaction request parameters
+     * @param gas                         gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget                   the gas budget, the transaction will fail if the gas cost exceed the budget
+     * @return
+     */
+    public TransactionBytes batchTransaction(
+            String signer,
+            RPCTransactionRequestParams[] transactionRequestParamsList,
+            String gas,
+            long gasBudget
+    ) {
+        //txn_builder_mode : <SuiTransactionBuilderMode> - Whether this is a regular transaction or a Dev Inspect Transaction
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(transactionRequestParamsList);
+        params.add(gas);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_batchTransaction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * @param txBytes     BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
