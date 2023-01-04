@@ -323,4 +323,22 @@ public class SuiJsonRpcClient {
         }
     }
 
+
+    /**
+     * @param txBytes     BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
+     * @param sigScheme   Flag of the signature scheme that is used.
+     * @param signature   Signature committed to the intent message of the transaction data, as base-64 encoded string.
+     * @param pubKey      Signer's public key, as base-64 encoded string.
+     * @param requestType The request type.
+     */
+    public SuiExecuteTransactionResponse executeTransaction(
+            String txBytes,
+            String sigScheme,
+            String signature,
+            String pubKey,
+            String requestType
+    ) {
+        return null;//todo
+    }
+
 }

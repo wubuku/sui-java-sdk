@@ -24,7 +24,7 @@ public class ObjectOwnerDeserializer extends JsonDeserializer<ObjectOwner> {
             throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", currentToken, ObjectOwner.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
             String fieldName = jsonParser.nextFieldName();
-            ObjectOwner objectOwner = null;
+            ObjectOwner objectOwner;
             if ("AddressOwner".equals(fieldName)) {
                 jsonParser.nextToken();
                 objectOwner = new ObjectOwner.AddressOwner(jsonParser.getValueAsString());
