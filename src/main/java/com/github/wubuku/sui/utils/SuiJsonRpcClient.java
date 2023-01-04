@@ -263,34 +263,19 @@ public class SuiJsonRpcClient {
 //        }
 //    }
 
+
     /**
-     * From TypeScript code:
-     * <p>
-     * <pre>
-     *       case 'moveCall':
-     *         const moveCall = unserializedTxn.data as MoveCallTransaction;
-     *         endpoint = 'sui_moveCall';
-     *         args = [
-     *           signerAddress,
-     *           moveCall.packageObjectId,
-     *           moveCall.module,
-     *           moveCall.function,
-     *           moveCall.typeArguments,
-     *           moveCall.arguments,
-     *           moveCall.gasPayment,
-     *           moveCall.gasBudget,
-     *         ];
+     * Create an unsigned transaction to execute a Move call on the network, by calling the specified function in the module of a given package.
      *
-     * export interface MoveCallTransaction {
-     *   packageObjectId: ObjectId;
-     *   module: string;
-     *   function: string;
-     *   typeArguments: string[] | TypeTag[];
-     *   arguments: SuiJsonValue[];
-     *   gasPayment?: ObjectId;
-     *   gasBudget: number;
-     * }
-     * </pre>
+     * @param signerAddress   the transaction signer's Sui address
+     * @param packageObjectId the Move package ID, e.g. `0x2`
+     * @param module          the Move module name, e.g. `devnet_nft`
+     * @param function        the move function name, e.g. `mint`
+     * @param typeArguments   the type arguments of the Move function
+     * @param arguments       the arguments to be passed into the Move function, in <a href="https://docs.sui.io/build/sui-json">SuiJson</a> format
+     * @param gasPayment      gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget       the gas budget, the transaction will fail if the gas cost exceed the budget
+     * @return
      */
     public TransactionBytes moveCall(String signerAddress,
                                      String packageObjectId, String module, String function,
@@ -307,6 +292,7 @@ public class SuiJsonRpcClient {
         params.add(arguments);
         params.add(gasPayment);
         params.add(gasBudget);
+        //execution_mode : <SuiTransactionBuilderMode> - Whether this is a Normal transaction or a Dev Inspect Transaction. Default to be `SuiTransactionBuilderMode::Commit` when it's None.
         return moveCall(params);
     }
 
