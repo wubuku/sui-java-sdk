@@ -342,4 +342,21 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public TransactionEffects dryRunTransaction(
+            String txBytes
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(txBytes);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_dryRunTransaction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionEffects> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionEffects.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

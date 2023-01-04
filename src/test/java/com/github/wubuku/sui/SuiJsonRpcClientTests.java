@@ -167,6 +167,14 @@ public class SuiJsonRpcClientTests {
         System.out.println(result.getTxBytes());
     }
 
+    @Test
+    void testDryRunTransaction() throws MalformedURLException, JsonProcessingException {
+        String txBytes = "AAIAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAICyXnyhkSXG4AijYaMLP4gE4QyDu3lQY+Nz/5PbG/u7OCmRldm5ldF9uZnQEbWludAADAAkIVGVzdCBORlQABAMuLi4AHRxodHRwOi8vdGVzdC5jb20vdGVzdC1uZnQucG5nPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwgAAAAAAAAAIHPmBAVvqy2ZINnuDjPcjyuCCbNWixbmw35oU/EqF03uAQAAAAAAAABAQg8AAAAAAA==";
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        TransactionEffects transactionEffects = client.dryRunTransaction(txBytes);
+        System.out.println(transactionEffects);
+        System.out.println(objectMapper.writeValueAsString(transactionEffects));
+    }
 
     //@Test
     void testExecuteTransaction_1() throws MalformedURLException, JsonProcessingException {
