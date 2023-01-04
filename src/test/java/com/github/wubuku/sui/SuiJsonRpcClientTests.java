@@ -207,10 +207,10 @@ public class SuiJsonRpcClientTests {
     void testExecuteTransaction_1() throws MalformedURLException, JsonProcessingException {
         String txBytes = "AAIAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAICyXnyhkSXG4AijYaMLP4gE4QyDu3lQY+Nz/5PbG/u7OCmRldm5ldF9uZnQEbWludAADAAkIVGVzdCBORlQABAMuLi4AHRxodHRwOi8vdGVzdC5jb20vdGVzdC1uZnQucG5nPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwcAAAAAAAAAIHJbUQYzaH8WMDVXoHuHaSqnLY+3tpxw9oz2r+QNrTl4AQAAAAAAAABAQg8AAAAAAA==";
         String sigScheme = SignatureScheme.ED25519;
-        //String pubKeyHex = "cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e";
-        String pubKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
-        String priKeyHex = "";//todo fill in your private key here
-        byte[] signature = ed25519SignTransactionBytes(HexUtils.hexToByteArray(priKeyHex), txBytes);
+        //String publicKeyHex = "cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e";
+        String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+        String privateKeyHex = "";//todo fill in your private key here
+        byte[] signature = ed25519SignTransactionBytes(HexUtils.hexToByteArray(privateKeyHex), txBytes);
         String signatureBase64 = Base64.getEncoder().encodeToString(signature);
         String requestType = ExecuteTransactionRequestType.WAIT_FOR_EFFECTS_CERT;
 
@@ -218,7 +218,7 @@ public class SuiJsonRpcClientTests {
         SuiExecuteTransactionResponse response = client.executeTransaction(
                 txBytes,
                 sigScheme, signatureBase64,
-                pubKeyBase64,
+                publicKeyBase64,
                 requestType
         );
         System.out.println(response);
