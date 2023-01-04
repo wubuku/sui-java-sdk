@@ -30,6 +30,7 @@ public interface SuiExecuteTransactionResponse {
 
         public ImmediateReturn() {
         }
+
         public ImmediateReturn(ImmediateReturnProperties immediateReturn) {
             this.immediateReturn = immediateReturn;
         }
@@ -83,6 +84,7 @@ public interface SuiExecuteTransactionResponse {
 
         public TxCert() {
         }
+
         public TxCert(TxCertProperties txCert) {
             this.txCert = txCert;
         }
@@ -136,6 +138,7 @@ public interface SuiExecuteTransactionResponse {
 
         public EffectsCert() {
         }
+
         public EffectsCert(EffectsCertProperties effectsCert) {
             this.effectsCert = effectsCert;
         }
@@ -161,12 +164,10 @@ public interface SuiExecuteTransactionResponse {
             @JsonProperty("effects")
             private SuiCertifiedTransactionEffects effects;
 
-            public EffectsCertProperties() {
-            }
+            @JsonProperty("confirmed_local_execution")
+            private Boolean confirmedLocalExecution;
 
-            public EffectsCertProperties(CertifiedTransaction certificate, SuiCertifiedTransactionEffects effects) {
-                this.certificate = certificate;
-                this.effects = effects;
+            public EffectsCertProperties() {
             }
 
             public CertifiedTransaction getCertificate() {
@@ -185,11 +186,20 @@ public interface SuiExecuteTransactionResponse {
                 this.effects = effects;
             }
 
+            public Boolean getConfirmedLocalExecution() {
+                return confirmedLocalExecution;
+            }
+
+            public void setConfirmedLocalExecution(Boolean confirmedLocalExecution) {
+                this.confirmedLocalExecution = confirmedLocalExecution;
+            }
+
             @Override
             public String toString() {
                 return "EffectsCertProperties{" +
                         "certificate=" + certificate +
                         ", effects=" + effects +
+                        ", confirmedLocalExecution=" + confirmedLocalExecution +
                         '}';
             }
         }

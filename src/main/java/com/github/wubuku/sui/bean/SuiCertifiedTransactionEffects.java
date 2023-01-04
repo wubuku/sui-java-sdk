@@ -1,23 +1,25 @@
 package com.github.wubuku.sui.bean;
 
-/**
- * From TypeScript definition:
- * <p>
- * <pre>
- * // TODO: this is likely to go away after https://github.com/MystenLabs/sui/issues/4207
- * export type SuiCertifiedTransactionEffects = {
- *   effects: TransactionEffects;
- * };
- * </pre>
- */
-public class SuiCertifiedTransactionEffects {
+public class SuiCertifiedTransactionEffects { //extends LinkedHashMap<String, Object> {
+    private String transactionEffectsDigest;
     private TransactionEffects effects;
+    private AuthorityQuorumSignInfo authSignInfo;
 
     public SuiCertifiedTransactionEffects() {
     }
 
-    public SuiCertifiedTransactionEffects(TransactionEffects effects) {
+    public SuiCertifiedTransactionEffects(String transactionEffectsDigest, TransactionEffects effects, AuthorityQuorumSignInfo authSignInfo) {
+        this.transactionEffectsDigest = transactionEffectsDigest;
         this.effects = effects;
+        this.authSignInfo = authSignInfo;
+    }
+
+    public String getTransactionEffectsDigest() {
+        return transactionEffectsDigest;
+    }
+
+    public void setTransactionEffectsDigest(String transactionEffectsDigest) {
+        this.transactionEffectsDigest = transactionEffectsDigest;
     }
 
     public TransactionEffects getEffects() {
@@ -28,10 +30,20 @@ public class SuiCertifiedTransactionEffects {
         this.effects = effects;
     }
 
+    public AuthorityQuorumSignInfo getAuthSignInfo() {
+        return authSignInfo;
+    }
+
+    public void setAuthSignInfo(AuthorityQuorumSignInfo authSignInfo) {
+        this.authSignInfo = authSignInfo;
+    }
+
     @Override
     public String toString() {
         return "SuiCertifiedTransactionEffects{" +
-                "effects=" + effects +
+                "transactionEffectsDigest='" + transactionEffectsDigest + '\'' +
+                ", effects=" + effects +
+                ", authSignInfo=" + authSignInfo +
                 '}';
     }
 }

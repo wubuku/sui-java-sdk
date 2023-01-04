@@ -3,11 +3,15 @@ package com.github.wubuku.sui;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.*;
+import com.github.wubuku.sui.utils.HexUtils;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
+import java.util.Base64;
 import java.util.List;
+
+import static com.github.wubuku.sui.utils.TransactionUtils.ed25519SignTransactionBytes;
 
 public class SuiJsonRpcClientTests {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -160,6 +164,30 @@ public class SuiJsonRpcClientTests {
                 gasPayment, gasBudget);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
+        System.out.println(result.getTxBytes());
+    }
+
+
+    //@Test
+    void testExecuteTransaction_1() throws MalformedURLException, JsonProcessingException {
+        String txBytes = "AAIAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAICyXnyhkSXG4AijYaMLP4gE4QyDu3lQY+Nz/5PbG/u7OCmRldm5ldF9uZnQEbWludAADAAkIVGVzdCBORlQABAMuLi4AHRxodHRwOi8vdGVzdC5jb20vdGVzdC1uZnQucG5nPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwcAAAAAAAAAIHJbUQYzaH8WMDVXoHuHaSqnLY+3tpxw9oz2r+QNrTl4AQAAAAAAAABAQg8AAAAAAA==";
+        String sigScheme = SignatureScheme.ED25519;
+        //String pubKeyHex = "cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e";
+        String pubKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+        String priKeyHex = "";//todo fill in your private key here
+        byte[] signature = ed25519SignTransactionBytes(HexUtils.hexToByteArray(priKeyHex), txBytes);
+        String signatureBase64 = Base64.getEncoder().encodeToString(signature);
+        String requestType = ExecuteTransactionRequestType.WAIT_FOR_EFFECTS_CERT;
+
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiExecuteTransactionResponse response = client.executeTransaction(
+                txBytes,
+                sigScheme, signatureBase64,
+                pubKeyBase64,
+                requestType
+        );
+        System.out.println(response);
+        System.out.println(objectMapper.writeValueAsString(response));
     }
 
 

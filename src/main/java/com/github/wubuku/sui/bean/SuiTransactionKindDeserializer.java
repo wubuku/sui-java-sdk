@@ -33,16 +33,16 @@ public class SuiTransactionKindDeserializer extends JsonDeserializer<SuiTransact
             } else if ("TransferSui".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiTransactionKind = new SuiTransactionKind.TransferSui(jsonParser.readValueAs(SuiTransferSui.class));
-            }  else if ("ChangeEpoch".equals(fieldName)) {
+            } else if ("ChangeEpoch".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiTransactionKind = new SuiTransactionKind.ChangeEpoch(jsonParser.readValueAs(SuiChangeEpoch.class));
-            }  else if ("Pay".equals(fieldName)) {
+            } else if ("Pay".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiTransactionKind = new SuiTransactionKind.Pay(jsonParser.readValueAs(Pay.class));
-            }  else if ("PaySui".equals(fieldName)) {
+            } else if ("PaySui".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiTransactionKind = new SuiTransactionKind.PaySui(jsonParser.readValueAs(PaySui.class));
-            }  else if ("PayAllSui".equals(fieldName)) {
+            } else if ("PayAllSui".equals(fieldName)) {
                 jsonParser.nextToken();
                 suiTransactionKind = new SuiTransactionKind.PayAllSui(jsonParser.readValueAs(PayAllSui.class));
             } else {

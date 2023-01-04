@@ -324,7 +324,22 @@ public class SuiJsonRpcClient {
             String pubKey,
             String requestType
     ) {
-        return null;//todo
+        List<Object> params = new ArrayList<>();
+        params.add(txBytes);
+        params.add(sigScheme);
+        params.add(signature);
+        params.add(pubKey);
+        params.add(requestType);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_executeTransaction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiExecuteTransactionResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiExecuteTransactionResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

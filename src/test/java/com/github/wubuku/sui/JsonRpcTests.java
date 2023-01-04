@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.starcoin.jsonrpc.JSONRPC2Request;
 import org.starcoin.jsonrpc.JSONRPC2Response;
@@ -13,6 +14,7 @@ import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -268,6 +270,19 @@ public class JsonRpcTests {
 
         SuiEventEnvelope suiEventEnvelope = objectMapper.readValue(json_1, SuiEventEnvelope.class);
         System.out.println(suiEventEnvelope);
+        Assertions.assertEquals("E9J1iVw2FrmdVwNqAtm4pyxdZQZZkai8oGDUS8d2PLmJ",
+                suiEventEnvelope.getTxDigest());
+    }
+
+    @Test
+    void testBase64() {
+        String originalInput = "test input";
+        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        String decodedString = new String(decodedBytes);
+//        System.out.println(originalInput);
+//        System.out.println(decodedString);
+        Assertions.assertEquals(originalInput, decodedString);
     }
 
     public static class MintNFTEvent {
