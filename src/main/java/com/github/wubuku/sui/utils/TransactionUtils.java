@@ -19,10 +19,20 @@ public class TransactionUtils {
     private TransactionUtils() {
     }
 
+    /**
+     * @param privateKey private key
+     * @param txBytes    BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
+     */
     public static byte[] ed25519SignTransactionBytes(byte[] privateKey, String txBytes) {
-        return SignatureUtils.ed25519Sign(privateKey,
-                Bytes.concat(TransactionUtils.INTENT_BYTES, Base64.getDecoder().decode(txBytes))
-        );
+        return ed25519SignTransactionBytes(privateKey, Base64.getDecoder().decode(txBytes));
+    }
+
+    /**
+     * @param privateKey private key
+     * @param txBytes    BCS serialized transaction data bytes without its type tag.
+     */
+    public static byte[] ed25519SignTransactionBytes(byte[] privateKey, byte[] txBytes) {
+        return SignatureUtils.ed25519Sign(privateKey, Bytes.concat(TransactionUtils.INTENT_BYTES, txBytes));
     }
 
 }

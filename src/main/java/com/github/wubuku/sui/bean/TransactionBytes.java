@@ -14,8 +14,17 @@ import java.util.Arrays;
  * </pre>
  */
 public class TransactionBytes {
+    /**
+     * BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
+     */
     private String txBytes;
+    /**
+     * the gas object to be used
+     */
     private SuiObjectRef gas;
+    /**
+     * objects to be used in this transaction
+     */
     private InputObjectKind[] inputObjects;
 
     public TransactionBytes() {

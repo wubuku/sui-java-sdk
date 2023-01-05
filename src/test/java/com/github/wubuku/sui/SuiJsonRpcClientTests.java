@@ -205,7 +205,7 @@ public class SuiJsonRpcClientTests {
 
     //@Test
     void testExecuteTransaction_1() throws MalformedURLException, JsonProcessingException {
-        String txBytes = "AAIAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAAAAAAICyXnyhkSXG4AijYaMLP4gE4QyDu3lQY+Nz/5PbG/u7OCmRldm5ldF9uZnQEbWludAADAAkIVGVzdCBORlQABAMuLi4AHRxodHRwOi8vdGVzdC5jb20vdGVzdC1uZnQucG5nPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwcAAAAAAAAAIHJbUQYzaH8WMDVXoHuHaSqnLY+3tpxw9oz2r+QNrTl4AQAAAAAAAABAQg8AAAAAAA==";
+        String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACAsl58oZElxuAIo2GjCz+IBOEMg7t5UGPjc/+T2xv7uzgpkZXZuZXRfbmZ0BG1pbnQAAwAJCFRlc3QgTkZUAAQDLi4uAB0caHR0cDovL3Rlc3QuY29tL3Rlc3QtbmZ0LnBuZzws81oNTSndnR9jQ6bq/gMTG/r6KUwSWYQEVXeVFlsMouRHab0GyVMaAAAAAAAAACArYETjuL36KUj/wGTbwxDs7waB9PP3vyc7Zfc4r5qiXgEAAAAAAAAAQEIPAAAAAAA=";
         String sigScheme = SignatureScheme.ED25519;
         //String publicKeyHex = "cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e";
         String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
