@@ -5,11 +5,11 @@ import java.util.List;
 /**
  * @param <F> the type of 'fields' of MoveEvent.
  */
-public class PaginatedMoveEvents<F> extends Page<SuiEventEnvelopeForMoveEvent<F>, EventId> {
+public class PaginatedMoveEvents<F> extends Page<SuiMoveEventEnvelope<F>, EventId> {
     public PaginatedMoveEvents() {
     }
 
-    public PaginatedMoveEvents(List<SuiEventEnvelopeForMoveEvent<F>> data, EventId nextCursor) {
+    public PaginatedMoveEvents(List<SuiMoveEventEnvelope<F>> data, EventId nextCursor) {
         super(data, nextCursor);
     }
 

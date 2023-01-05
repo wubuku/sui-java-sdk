@@ -310,10 +310,10 @@ public class SuiJsonRpcClient {
     }
 
     /**
-     * @param signer                      the transaction signer's Sui address
-     * @param rpcTransactionRequestParams list of transaction request parameters
-     * @param gas                         gas object to be used in this transaction, node will pick one from the signer's possession if not provided
-     * @param gasBudget                   the gas budget, the transaction will fail if the gas cost exceed the budget
+     * @param signer                       the transaction signer's Sui address
+     * @param transactionRequestParamsList list of transaction request parameters
+     * @param gas                          gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget                    the gas budget, the transaction will fail if the gas cost exceed the budget
      * @return
      */
     public TransactionBytes batchTransaction(
