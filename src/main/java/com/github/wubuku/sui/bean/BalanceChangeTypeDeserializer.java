@@ -18,7 +18,7 @@ public class BalanceChangeTypeDeserializer extends JsonDeserializer<BalanceChang
                 return BalanceChangeType.GAS;
             } else if ("Pay".equals(code)) {
                 return BalanceChangeType.PAY;
-            } else if ("RECEIVE".equals(code)) {
+            } else if ("Receive".equals(code)) {
                 return BalanceChangeType.RECEIVE;
             }
             throw new InvalidFormatException(jsonParser, "BalanceChangeTypeDeserializer.deserialize() error.", currentToken, BalanceChangeType.class);

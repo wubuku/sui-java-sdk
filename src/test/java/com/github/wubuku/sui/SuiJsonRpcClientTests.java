@@ -68,7 +68,7 @@ public class SuiJsonRpcClientTests {
     void testGetTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiTransactionResponse suiTransactionResponse = client.getTransaction(
-                "Bq9pBUCvLbmhVCCT3XkBhDpVCNaVgwk3DBinpYtyVVUh"
+                "6dGPGAvezUjEPjNitEaFwzzJwJQxcyJhfrZd8NpXbR4A"
         );
         System.out.println(suiTransactionResponse);
         System.out.println(objectMapper.writeValueAsString(suiTransactionResponse));
@@ -136,7 +136,7 @@ public class SuiJsonRpcClientTests {
     void testGetBalance_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
-        List<Balance> balance = client.getBalance(
+        CoinBalance balance = client.getBalance(
                 "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
                 null//"0x2::sui::SUI"
         );
@@ -305,5 +305,14 @@ public class SuiJsonRpcClientTests {
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
+    }
+
+    @Test
+    void testGetSuiSystemState() throws JsonProcessingException, MalformedURLException {
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiSystemState result = client.getSuiSystemState();
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
     }
 }

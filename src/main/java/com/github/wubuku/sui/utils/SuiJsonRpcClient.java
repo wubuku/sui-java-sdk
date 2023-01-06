@@ -10,6 +10,7 @@ import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SuiJsonRpcClient {
@@ -249,15 +250,15 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public List<Balance> getBalance(String owner, String coinType) {
+    public CoinBalance getBalance(String owner, String coinType) {
         List<Object> params = new ArrayList<>();
         params.add(owner);
         params.add(coinType);
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getBalance", params,
                 System.currentTimeMillis());
         try {
-            JSONRPC2Response<List<Balance>> jsonrpc2Response = jsonrpc2Session
-                    .sendAndGetListResult(jsonrpc2Request, Balance.class);
+            JSONRPC2Response<CoinBalance> jsonrpc2Response = jsonrpc2Session
+                    .send(jsonrpc2Request, CoinBalance.class);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
@@ -398,6 +399,19 @@ public class SuiJsonRpcClient {
         try {
             JSONRPC2Response<TransactionEffects> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     TransactionEffects.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SuiSystemState getSuiSystemState() {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getSuiSystemState", Collections.emptyList(),
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiSystemState> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiSystemState.class);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
