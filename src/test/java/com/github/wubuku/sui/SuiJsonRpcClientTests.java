@@ -8,6 +8,7 @@ import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -174,7 +175,18 @@ public class SuiJsonRpcClientTests {
                 gasPayment, gasBudget);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
-        System.out.println(result.getTxBytes());
+        String txBytes = result.getTxBytes();
+        System.out.println(txBytes);
+        System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(txBytes)));
+        Arrays.stream(result.getInputObjects())
+                .filter(i -> i instanceof InputObjectKind.ImmOrOwnedMoveObject)
+                .forEach(i -> {
+                    InputObjectKind.ImmOrOwnedMoveObject immOrOwnedMoveObject = (InputObjectKind.ImmOrOwnedMoveObject) i;
+                    System.out.println(immOrOwnedMoveObject.getImmOrOwnedMoveObject());
+                    System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(
+                            immOrOwnedMoveObject.getImmOrOwnedMoveObject().getDigest()
+                    )));
+                });
     }
 
     @Test
