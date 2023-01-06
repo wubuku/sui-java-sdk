@@ -38,6 +38,9 @@ public class ObjectOwnerDeserializer extends JsonDeserializer<ObjectOwner> {
                 throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), ObjectOwner.class);
             }
             jsonParser.nextToken();
+            if (!JsonToken.END_OBJECT.equals(jsonParser.getCurrentToken())) {
+                throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), ObjectOwner.class);
+            }
             return objectOwner;
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {
             throw new InvalidFormatException(jsonParser, "ObjectOwnerDeserializer.deserialize() error.", jsonParser.currentToken(), ObjectOwner.class);

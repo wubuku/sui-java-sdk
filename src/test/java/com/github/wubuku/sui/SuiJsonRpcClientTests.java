@@ -76,7 +76,7 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetObjectsOwnedByAddress_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        List<SuiObjectInfo> suiObjectInfoList = client.getObjectsOwnedByAddress("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa");
+        List<SuiObjectInfo> suiObjectInfoList = client.getObjectsOwnedByAddress("0xc890473abafb24a19e2f77e1d407fc1c468a71b4");
         System.out.println(suiObjectInfoList);
         System.out.println(objectMapper.writeValueAsString(suiObjectInfoList));
     }
@@ -84,7 +84,17 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetObjectDataResponse getObjectDataResponse = client.getObject("0x0b7a32cfbfbe22b55f3ad703b1b6af130266086e");
+        GetObjectDataResponse getObjectDataResponse = client.getObject("0x1a8e812a50899e9356044b99b1195771082e9197");
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void tryGetPastObject_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetPastObjectDataResponse getObjectDataResponse = client.tryGetPastObject(
+                "0x1a8e812a50899e9356044b99b1195771082e9197",
+                392L);
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }

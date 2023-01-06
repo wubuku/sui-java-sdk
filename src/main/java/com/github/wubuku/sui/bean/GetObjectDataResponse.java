@@ -23,6 +23,7 @@ import java.io.IOException;
  * };
  * </pre>
  */
+@JsonDeserialize(using = GetObjectDataResponseDeserializer.class)
 public class GetObjectDataResponse {
     private ObjectStatus status;
     private Details details;
@@ -125,7 +126,7 @@ public class GetObjectDataResponse {
             } else if (JsonToken.VALUE_NULL.equals(currentToken)) {
                 return null;
             } else if (currentToken.isScalarValue()) {
-                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", currentToken, Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", currentToken, GetObjectDataResponse.Details.class);
             } else if (JsonToken.START_OBJECT.equals(currentToken)) {
                 String fieldName = jsonParser.nextFieldName();
                 /*
@@ -182,12 +183,12 @@ public class GetObjectDataResponse {
                         jsonParser.nextToken();
                         version = jsonParser.getLongValue();
                     } else {
-                        throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                        throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), GetObjectDataResponse.Details.class);
                     }
                     fieldName = jsonParser.nextFieldName();
                 }
                 if (!JsonToken.END_OBJECT.equals(jsonParser.currentToken())) {
-                    throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                    throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), GetObjectDataResponse.Details.class);
                 }
                 if (data != null) {
                     return new Details.SuiObject(data, owner, previousTransaction, storageRebate, reference);
@@ -195,9 +196,9 @@ public class GetObjectDataResponse {
                 if (digest != null) {
                     return new Details.SuiObjectRef(digest, objectId, version);
                 }
-                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), GetObjectDataResponse.Details.class);
             } else if (JsonToken.START_ARRAY.equals(currentToken)) {
-                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), Details.class);
+                throw new InvalidFormatException(jsonParser, "GetObjectDataResponse.DetailsDeserializer.deserialize() error.", jsonParser.currentToken(), GetObjectDataResponse.Details.class);
             }
             return null;
         }

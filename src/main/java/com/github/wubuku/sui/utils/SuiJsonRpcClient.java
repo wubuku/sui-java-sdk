@@ -177,6 +177,22 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public GetPastObjectDataResponse tryGetPastObject(String objectId, Long version) {
+        List<Object> params = new ArrayList<>();
+        params.add(objectId);
+        params.add(version);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_tryGetPastObject", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<GetPastObjectDataResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    GetPastObjectDataResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public CoinPage getCoins(String owner, String coinType, String cursor, int limit) {
         List<Object> params = new ArrayList<>();
         params.add(owner);
