@@ -284,19 +284,19 @@ public class SuiJsonRpcClient {
         }
     }
 
-//    public List<Balance> getAllBalances(String owner) {
-//        List<Object> params = new ArrayList<>();
-//        params.add(owner);
-//        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getAllBalances", params, System.currentTimeMillis());
-//        try {
-//            JSONRPC2Response<List<Balance>> jsonrpc2Response = jsonrpc2Session
-//                    .sendAndGetListResult(jsonrpc2Request, Balance.class);
-//            assertSuccess(jsonrpc2Response);
-//            return jsonrpc2Response.getResult();
-//        } catch (JSONRPC2SessionException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public List<CoinBalance> getAllBalances(String owner) {
+        List<Object> params = new ArrayList<>();
+        params.add(owner);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getAllBalances", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<List<CoinBalance>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetListResult(jsonrpc2Request, CoinBalance.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     /**
