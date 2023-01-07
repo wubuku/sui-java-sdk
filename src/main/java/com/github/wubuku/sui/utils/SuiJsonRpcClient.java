@@ -178,6 +178,24 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public GetRawObjectDataResponse getRawObject(String objectId) {
+        List<Object> params = new ArrayList<>();
+        params.add(objectId);
+        return getRawObject("sui_getRawObject", params);
+    }
+
+    private GetRawObjectDataResponse getRawObject(String method, List<Object> params) {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<GetRawObjectDataResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    GetRawObjectDataResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public GetPastObjectDataResponse tryGetPastObject(String objectId, Long version) {
         List<Object> params = new ArrayList<>();
         params.add(objectId);

@@ -12,6 +12,7 @@ import java.util.Arrays;
  *     contents: Vec<T>,
  * }
  * </pre>
+ *
  * @param <T>
  */
 public class VecSet<T> {

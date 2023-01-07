@@ -11,6 +11,7 @@ package com.github.wubuku.sui.bean;
  *     value: V,
  * }
  * </pre>
+ *
  * @param <K> key type
  * @param <V> value type
  */

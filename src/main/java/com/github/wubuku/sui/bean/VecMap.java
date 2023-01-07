@@ -12,6 +12,7 @@ import java.util.Arrays;
  *     pub contents: Vec<Entry<K, V>>,
  * }
  * </pre>
+ *
  * @param <K> key type
  * @param <V> value type
  */

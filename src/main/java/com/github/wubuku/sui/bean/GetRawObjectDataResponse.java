@@ -8,22 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.IOException;
 
-/**
- * From TypeScript definition:
- * <p>
- * <pre>
- * export type GetObjectDataResponse = {
- *   status: ObjectStatus;
- *   details: SuiObject | ObjectId | SuiObjectRef;
- * };
- * </pre>
- */
-@JsonDeserialize(using = GetObjectDataResponseDeserializer.class)
-public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObjectDataResponse.Details> {
-    public GetObjectDataResponse() {
+@JsonDeserialize(using = GetRawObjectDataResponseDeserializer.class)
+public class GetRawObjectDataResponse extends AbstractGetObjectDataResponse<GetRawObjectDataResponse.Details> {
+    public GetRawObjectDataResponse() {
     }
 
-    public GetObjectDataResponse(ObjectStatus status, Details details) {
+    public GetRawObjectDataResponse(ObjectStatus status, Details details) {
         super(status, details);
     }
 
@@ -37,11 +27,11 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
 
     @JsonDeserialize(using = DetailsDeserializer.class)
     public interface Details {
-        class SuiObject extends com.github.wubuku.sui.bean.SuiObject implements Details {
+        class SuiObject extends com.github.wubuku.sui.bean.SuiRawObject implements Details {
             public SuiObject() {
             }
 
-            public SuiObject(SuiData data, ObjectOwner owner,
+            public SuiObject(SuiRawData data, ObjectOwner owner,
                              String previousTransaction, Long storageRebate,
                              com.github.wubuku.sui.bean.SuiObjectRef reference) {
                 super(data, owner, previousTransaction, storageRebate, reference);
@@ -93,7 +83,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
     }
 
     public static class DetailsDeserializer extends GetObjectDataResponseDetailsDeserializer<
-            Details, Details.ObjectId, Details.SuiObject, Details.SuiObjectRef, SuiData> {
+            Details, Details.ObjectId, Details.SuiObject, Details.SuiObjectRef, SuiRawData> {
 
         @Override
         protected Details.ObjectId newObjectId(String text) {
@@ -101,7 +91,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
         }
 
         @Override
-        protected Details.SuiObject newSuiObject(SuiData data, ObjectOwner owner,
+        protected Details.SuiObject newSuiObject(SuiRawData data, ObjectOwner owner,
                                                  String previousTransaction,
                                                  Long storageRebate,
                                                  Details.SuiObjectRef reference) {
@@ -119,8 +109,8 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
         }
 
         @Override
-        protected Class<SuiData> getSuiDataClass() {
-            return SuiData.class;
+        protected Class<SuiRawData> getSuiDataClass() {
+            return SuiRawData.class;
         }
     }
 }

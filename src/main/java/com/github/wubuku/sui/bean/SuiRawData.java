@@ -2,42 +2,37 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.Map;
+
 /**
- * From TypeScript definition:
- * <p>
- * <pre>
- * export type SuiData = { dataType: ObjectType } & (
- *   | SuiMoveObject
- *   | SuiMovePackage
- * );
- * </pre>
  * From Rust definition:
  * <p>
  * <pre>
  * #[derive(Debug, Deserialize, Serialize, JsonSchema, Clone, Eq, PartialEq)]
  * #[serde(tag = "dataType", rename_all = "camelCase", rename = "Data")]
- * pub enum SuiParsedData {
+ * pub enum SuiRawData {
  *     // Manually handle generic schema generation
- *     MoveObject(SuiParsedMoveObject),
- *     Package(SuiMovePackage),
+ *     MoveObject(SuiRawMoveObject),
+ *     Package(SuiRawMovePackage),
  * }
  * </pre>
  */
-@JsonDeserialize(using = SuiDataDeserializer.class)
-public interface SuiData {
+@JsonDeserialize(using = SuiRawDataDeserializer.class)
+public interface SuiRawData {
     ObjectType getDataType();
 
-    class SuiMoveObject extends com.github.wubuku.sui.bean.SuiMoveObject implements SuiData {
+    class SuiMoveObject extends com.github.wubuku.sui.bean.SuiRawMoveObject implements SuiRawData {
         private ObjectType dataType;
 
         public SuiMoveObject() {
         }
 
-        public SuiMoveObject(String type,
-                             ObjectContentFields fields,
-                             Boolean hasPublicTransfer,
-                             ObjectType dataType) {
-            super(type, fields, hasPublicTransfer);
+        public SuiMoveObject(ObjectType dataType) {
+            this.dataType = dataType;
+        }
+
+        public SuiMoveObject(String type, Boolean hasPublicTransfer, Long version, String bcsBytes, ObjectType dataType) {
+            super(type, hasPublicTransfer, version, bcsBytes);
             this.dataType = dataType;
         }
 
@@ -53,22 +48,24 @@ public interface SuiData {
         @Override
         public String toString() {
             return "SuiMoveObject{" +
-                    "dataType=" + dataType +
+                    "dataType=" + dataType + '\'' +
                     ", type='" + getType() + '\'' +
-                    ", fields=" + getFields() +
                     ", hasPublicTransfer=" + getHasPublicTransfer() +
+                    ", version=" + getVersion() +
+                    ", bcsBytes='" + getBcsBytes() + '\'' +
                     '}';
         }
     }
 
-    class SuiMovePackage extends com.github.wubuku.sui.bean.SuiMovePackage implements SuiData {
+    class SuiMovePackage extends com.github.wubuku.sui.bean.SuiRawMovePackage implements SuiRawData {
         private ObjectType dataType;
 
-        public SuiMovePackage() {
+        public SuiMovePackage(ObjectType dataType) {
+            this.dataType = dataType;
         }
 
-        public SuiMovePackage(MovePackageContent disassembled, ObjectType dataType) {
-            super(disassembled);
+        public SuiMovePackage(String id, Map<String, String> moduleMap, ObjectType dataType) {
+            super(id, moduleMap);
             this.dataType = dataType;
         }
 
@@ -84,8 +81,9 @@ public interface SuiData {
         @Override
         public String toString() {
             return "SuiMovePackage{" +
-                    "dataType=" + dataType +
-                    ", disassembled=" + getDisassembled() +
+                    "dataType=" + dataType + '\'' +
+                    ", id='" + getId() + '\'' +
+                    ", moduleMap=" + getModuleMap() +
                     '}';
         }
     }
