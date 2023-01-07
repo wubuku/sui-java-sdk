@@ -221,13 +221,13 @@ public class SuiJsonRpcClient {
         return getCoins("sui_getCoins", params);
     }
 
-//    public CoinPage getAllCoins(String owner, String cursor, int limit) {
-//        List<Object> params = new ArrayList<>();
-//        params.add(owner);
-//        params.add(cursor);
-//        params.add(limit);
-//        return getCoins("sui_getAllCoins", params);
-//    }
+    public CoinPage getAllCoins(String owner, String cursor, int limit) {
+        List<Object> params = new ArrayList<>();
+        params.add(owner);
+        params.add(cursor);
+        params.add(limit);
+        return getCoins("sui_getAllCoins", params);
+    }
 
     private CoinPage getCoins(String method, List<Object> params) {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());

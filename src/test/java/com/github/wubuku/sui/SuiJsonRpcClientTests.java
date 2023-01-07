@@ -121,14 +121,14 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(coinPage));
     }
 
-//    @Test
-//    void testGetCoins_2() throws MalformedURLException, JsonProcessingException {
-//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-//        CoinPage coinPage = client.getAllCoins("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
-//                null, 1);
-//        System.out.println(coinPage);
-//        System.out.println(objectMapper.writeValueAsString(coinPage));
-//    }
+    @Test
+    void testGetAllCoins_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        CoinPage coinPage = client.getAllCoins("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
+                null, 1);
+        System.out.println(coinPage);
+        System.out.println(objectMapper.writeValueAsString(coinPage));
+    }
 
     @Test
     void testGetCoinMetadata_1() throws MalformedURLException {
