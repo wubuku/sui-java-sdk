@@ -310,13 +310,14 @@ public class SuiJsonRpcClient {
      * @param arguments       the arguments to be passed into the Move function, in <a href="https://docs.sui.io/build/sui-json">SuiJson</a> format
      * @param gasPayment      gas object to be used in this transaction, node will pick one from the signer's possession if not provided
      * @param gasBudget       the gas budget, the transaction will fail if the gas cost exceed the budget
-     * @return
+     * @param executionMode   Whether this is a Normal transaction or a Dev Inspect Transaction. Default to be `SuiTransactionBuilderMode::Commit` when it's None.
      */
     public TransactionBytes moveCall(String signerAddress,
                                      String packageObjectId, String module, String function,
                                      String[] typeArguments, // TypeTag[] typeArguments,
                                      SuiJsonValue[] arguments,
-                                     String gasPayment, long gasBudget
+                                     String gasPayment, long gasBudget,
+                                     String executionMode
     ) {
         List<Object> params = new ArrayList<>();
         params.add(signerAddress);
@@ -327,7 +328,9 @@ public class SuiJsonRpcClient {
         params.add(arguments);
         params.add(gasPayment);
         params.add(gasBudget);
-        //execution_mode : <SuiTransactionBuilderMode> - Whether this is a Normal transaction or a Dev Inspect Transaction. Default to be `SuiTransactionBuilderMode::Commit` when it's None.
+        if (executionMode != null) {
+            params.add(executionMode);
+        }
         return moveCall(params);
     }
 
@@ -349,20 +352,23 @@ public class SuiJsonRpcClient {
      * @param transactionRequestParamsList list of transaction request parameters
      * @param gas                          gas object to be used in this transaction, node will pick one from the signer's possession if not provided
      * @param gasBudget                    the gas budget, the transaction will fail if the gas cost exceed the budget
-     * @return
+     * @param txnBuilderMode               Whether this is a regular transaction or a Dev Inspect Transaction
      */
     public TransactionBytes batchTransaction(
             String signer,
             RPCTransactionRequestParams[] transactionRequestParamsList,
             String gas,
-            long gasBudget
+            long gasBudget,
+            String txnBuilderMode
     ) {
-        //txn_builder_mode : <SuiTransactionBuilderMode> - Whether this is a regular transaction or a Dev Inspect Transaction
         List<Object> params = new ArrayList<>();
         params.add(signer);
         params.add(transactionRequestParamsList);
         params.add(gas);
         params.add(gasBudget);
+        if (txnBuilderMode != null) {
+            params.add(txnBuilderMode);
+        }
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_batchTransaction", params,
                 System.currentTimeMillis());
         try {
@@ -417,6 +423,21 @@ public class SuiJsonRpcClient {
         try {
             JSONRPC2Response<TransactionEffects> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     TransactionEffects.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public DevInspectResults devInspectTransaction(String txBytes) {
+        List<Object> params = new ArrayList<>();
+        params.add(txBytes);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_devInspectTransaction", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<DevInspectResults> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    DevInspectResults.class);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {

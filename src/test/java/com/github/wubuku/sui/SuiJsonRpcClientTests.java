@@ -184,7 +184,7 @@ public class SuiJsonRpcClientTests {
         TransactionBytes result = client.moveCall(signerAddress,
                 packageObjectId, module, function,
                 typeArguments, arguments,
-                gasPayment, gasBudget);
+                gasPayment, gasBudget, null);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         String txBytes = result.getTxBytes();
@@ -222,7 +222,9 @@ public class SuiJsonRpcClientTests {
         RPCTransactionRequestParams[] transactionRequestParamsList = new RPCTransactionRequestParams[]{
                 transactionRequestParams
         };
-        TransactionBytes result = client.batchTransaction(signerAddress, transactionRequestParamsList, gasPayment, gasBudget);
+        TransactionBytes result = client.batchTransaction(signerAddress,
+                transactionRequestParamsList,
+                gasPayment, gasBudget, SuiTransactionBuilderMode.COMMIT);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
@@ -282,15 +284,16 @@ public class SuiJsonRpcClientTests {
         TransactionBytes result = client.moveCall(signerAddress,
                 packageObjectId, module, function,
                 typeArguments, arguments,
-                gasPayment, gasBudget);
+                gasPayment, gasBudget, SuiTransactionBuilderMode.DEV_INSPECT);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
+        System.out.println(result.getTxBytes());
     }
 
     @Test
     void testBatchTransaction_2() throws MalformedURLException, JsonProcessingException {
-        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String packageObjectId = "0x2";
         String module = "locked_coin";
@@ -300,11 +303,11 @@ public class SuiJsonRpcClientTests {
 //        };
         String[] typeArguments = new String[]{"0x2::sui::SUI"};
         SuiJsonValue[] arguments = new SuiJsonValue[]{
-                new SuiJsonValue.String_("0x2fb5815ad8170af32e1d9d7e0d6526c013fc9737"),
+                new SuiJsonValue.String_("0x72c6a7df69b25c0eb89eb50bc5abec93ea80e17a"),
                 new SuiJsonValue.String_("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"),
-                new SuiJsonValue.Number(10000000000000L)
+                new SuiJsonValue.U64(10000L)
         };
-        String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
+        String gasPayment = "0x4ce8778751c9efc6ced31d5005afabaab870c1de";
         long gasBudget = 1000000;
 
         RPCTransactionRequestParams transactionRequestParams = new RPCTransactionRequestParams.MoveCallRequestParams(
@@ -313,10 +316,21 @@ public class SuiJsonRpcClientTests {
         RPCTransactionRequestParams[] transactionRequestParamsList = new RPCTransactionRequestParams[]{
                 transactionRequestParams
         };
-        TransactionBytes result = client.batchTransaction(signerAddress, transactionRequestParamsList, gasPayment, gasBudget);
+        TransactionBytes result = client.batchTransaction(signerAddress,
+                transactionRequestParamsList, gasPayment, gasBudget, SuiTransactionBuilderMode.DEV_INSPECT);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
+    }
+
+    @Test
+    void testDevInspectTransaction_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACD9Ib41F5sMx2kwW9SdHSvDoPgb8bJxcqqEXGym2e0Q6Qtsb2NrZWRfY29pbglsb2NrX2NvaW4BBwAAAAAAAAAAAAAAAAAAAAAAAAACA3N1aQNTVUkAAwEAcsan32myXA64nrULxavsk+qA4XrGAgAAAAAAACDFQZG8302FqmO5RiUtt3azjuqIZGnPGp+XHPS0z72g0AAUPCzzWg1NKd2dH2NDpur+AxMb+voACBAnAAAAAAAAPCzzWg1NKd2dH2NDpur+AxMb+vpM6HeHUcnvxs7THVAFr6uquHDB3sUCAAAAAAAAIJlYQmDTupgm+CNfVr2uEdLNj32ayN/qm57eh3wptDq1AQAAAAAAAABAQg8AAAAAAA==";
+        DevInspectResults result = client.devInspectTransaction(txBytes);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
     }
 
     @Test

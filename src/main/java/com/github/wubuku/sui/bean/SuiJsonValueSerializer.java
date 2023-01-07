@@ -13,6 +13,8 @@ public class SuiJsonValueSerializer extends JsonSerializer<SuiJsonValue> {
             gen.writeString(((SuiJsonValue.String_) value).getValue());
         } else if (value instanceof SuiJsonValue.Number) {
             gen.writeNumber(((SuiJsonValue.Number) value).getValue());
+        } else if (value instanceof SuiJsonValue.U64) {
+            gen.writeString(((SuiJsonValue.U64) value).getValue().toString());
         } else if (value instanceof SuiJsonValue.Boolean_) {
             gen.writeBoolean(((SuiJsonValue.Boolean_) value).getValue());
         } else if (value instanceof SuiJsonValue.Array) {

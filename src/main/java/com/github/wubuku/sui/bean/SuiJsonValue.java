@@ -3,6 +3,8 @@ package com.github.wubuku.sui.bean;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.math.BigInteger;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -61,6 +63,36 @@ public interface SuiJsonValue {
         @Override
         public java.lang.String toString() {
             return "Number{" +
+                    "value=" + value +
+                    '}';
+        }
+    }
+
+    class U64 implements SuiJsonValue {
+        private BigInteger value;
+
+        public U64() {
+        }
+
+        public U64(long value) {
+            this.value = BigInteger.valueOf(value);
+        }
+
+        public U64(BigInteger value) {
+            this.value = value;
+        }
+
+        public BigInteger getValue() {
+            return value;
+        }
+
+        public void setValue(BigInteger value) {
+            this.value = value;
+        }
+
+        @Override
+        public java.lang.String toString() {
+            return "U64{" +
                     "value=" + value +
                     '}';
         }
