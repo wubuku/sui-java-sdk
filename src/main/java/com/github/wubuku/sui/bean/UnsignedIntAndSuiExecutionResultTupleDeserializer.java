@@ -15,7 +15,7 @@ public class UnsignedIntAndSuiExecutionResultTupleDeserializer extends JsonDeser
         JsonToken currentToken = jsonParser.getCurrentToken();
         if (JsonToken.START_ARRAY.equals(currentToken)) {
             jsonParser.nextToken();
-            Long usize = jsonParser.getLongValue();
+            Long uint = jsonParser.getLongValue();
             jsonParser.nextToken();
             SuiExecutionResult suiExecutionResult = jsonParser.readValueAs(SuiExecutionResult.class);
             jsonParser.nextToken();
@@ -23,7 +23,7 @@ public class UnsignedIntAndSuiExecutionResultTupleDeserializer extends JsonDeser
                 throw new InvalidFormatException(jsonParser, "UsizeAndSuiExecutionResultTupleDeserializer.deserialize() error.",
                         jsonParser.currentToken(), UnsignedIntAndSuiExecutionResultTuple.class);
             }
-            return new UnsignedIntAndSuiExecutionResultTuple(usize, suiExecutionResult);
+            return new UnsignedIntAndSuiExecutionResultTuple(uint, suiExecutionResult);
         } else {
             throw new InvalidFormatException(jsonParser, "UsizeAndSuiExecutionResultTupleDeserializer.deserialize() error.",
                     jsonParser.currentToken(), UnsignedIntAndSuiExecutionResultTuple.class);

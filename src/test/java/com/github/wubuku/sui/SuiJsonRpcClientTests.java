@@ -342,6 +342,14 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testGetCommitteeInfo() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        CommitteeInfoResponse result = client.getCommitteeInfo(0L);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
     void testGetSuiSystemState() throws JsonProcessingException, MalformedURLException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");

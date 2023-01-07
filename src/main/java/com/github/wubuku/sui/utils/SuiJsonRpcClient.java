@@ -7,6 +7,7 @@ import org.starcoin.jsonrpc.JSONRPC2Response;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -451,6 +452,21 @@ public class SuiJsonRpcClient {
         try {
             JSONRPC2Response<Long> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     Long.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public CommitteeInfoResponse getCommitteeInfo(Long epoch) {
+        List<Object> params = new ArrayList<>();
+        params.add(epoch);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getCommitteeInfo", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<CommitteeInfoResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    CommitteeInfoResponse.class);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
