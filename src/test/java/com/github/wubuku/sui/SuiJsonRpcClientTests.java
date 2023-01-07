@@ -291,6 +291,21 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testTransferSui() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String suiObjectId = "0x4ce8778751c9efc6ced31d5005afabaab870c1de";
+        long gasBudget = 1000000;
+        String recipient = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        long amount = 1L;
+        TransactionBytes result = client.transferSui(signerAddress, suiObjectId, gasBudget, recipient, amount);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+        System.out.println(result.getTxBytes());
+    }
+
+    @Test
     void testBatchTransaction_2() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");

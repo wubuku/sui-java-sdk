@@ -7,7 +7,6 @@ import org.starcoin.jsonrpc.JSONRPC2Response;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
 import org.starcoin.jsonrpc.client.JSONRPC2SessionException;
 
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -337,6 +336,41 @@ public class SuiJsonRpcClient {
 
     private TransactionBytes moveCall(List<Object> params) {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_moveCall", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
+     *
+     * @param signer      the transaction signer's Sui address
+     * @param suiObjectId the Sui coin object to be used in this transaction
+     * @param gasBudget   the gas budget, the transaction will fail if the gas cost exceed the budget
+     * @param recipient   the recipient's Sui address
+     * @param amount      the amount to be split out and transferred
+     */
+    public TransactionBytes transferSui(
+            String signer,
+            String suiObjectId,
+            long gasBudget,
+            String recipient,
+            long amount
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(suiObjectId);
+        params.add(gasBudget);
+        params.add(recipient);
+        params.add(amount);
+
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_transferSui", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
