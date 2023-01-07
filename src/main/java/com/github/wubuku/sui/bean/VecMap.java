@@ -3,7 +3,7 @@ package com.github.wubuku.sui.bean;
 import java.util.Arrays;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
  * /// Rust version of the Move sui::vec_map::VecMap type

@@ -424,6 +424,19 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public Long getTotalTransactionNumber() {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getTotalTransactionNumber", Collections.emptyList(),
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<Long> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    Long.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public SuiSystemState getSuiSystemState() {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getSuiSystemState", Collections.emptyList(),
                 System.currentTimeMillis());

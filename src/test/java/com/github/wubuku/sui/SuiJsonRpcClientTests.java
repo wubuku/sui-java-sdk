@@ -320,6 +320,14 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testGetTotalTransactionNumber() throws MalformedURLException {
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        long result = client.getTotalTransactionNumber();
+        System.out.println(result);
+    }
+
+    @Test
     void testGetSuiSystemState() throws JsonProcessingException, MalformedURLException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
