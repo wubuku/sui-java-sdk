@@ -11,7 +11,6 @@ import org.web3j.protocol.websocket.events.Notification;
 import java.util.Collections;
 
 public class SuiEventSubscriber {
-
     public static final String SUBSCRIBE_EVENT_METHOD = "sui_subscribeEvent";
     public static final String UNSUBSCRIBE_EVENT_METHOD = "sui_unsubscribeEvent";
 
@@ -21,27 +20,18 @@ public class SuiEventSubscriber {
         this.web3jService = web3jService;
     }
 
-    public Flowable<EventNotification> eventNotificationFlowable(SuiEventFilter eventFilter) {
+    public Flowable<EventNotification> subscribe(SuiEventFilter eventFilter) {
         return web3jService.subscribe(
-                new Request<>(
-                        SUBSCRIBE_EVENT_METHOD,
-                        Collections.singletonList(eventFilter),
-                        web3jService,
+                new Request<>(SUBSCRIBE_EVENT_METHOD, Collections.singletonList(eventFilter), web3jService,
                         EthSubscribe.class),
-                UNSUBSCRIBE_EVENT_METHOD,
-                EventNotification.class);
+                UNSUBSCRIBE_EVENT_METHOD, EventNotification.class);
     }
 
-    public <T extends Notification<?>> Flowable<T> eventNotificationFlowable(SuiEventFilter eventFilter, Class<T> responseType) {
+    public <T extends Notification<?>> Flowable<T> subscribe(SuiEventFilter eventFilter, Class<T> responseType) {
         return web3jService.subscribe(
-                new Request<>(
-                        SUBSCRIBE_EVENT_METHOD,
-                        Collections.singletonList(eventFilter),
-                        web3jService,
+                new Request<>(SUBSCRIBE_EVENT_METHOD, Collections.singletonList(eventFilter), web3jService,
                         EthSubscribe.class),
-                UNSUBSCRIBE_EVENT_METHOD,
-                responseType);
+                UNSUBSCRIBE_EVENT_METHOD, responseType);
     }
-
 
 }

@@ -38,7 +38,7 @@ public class SuiEventSubscriberExample {
         SuiEventSubscriber subscriber = new SuiEventSubscriber(service);
 
         Flowable<MintNFTEventNotification> moveEventNotificationFlowable
-                = subscriber.eventNotificationFlowable(eventFilter, MintNFTEventNotification.class);
+                = subscriber.subscribe(eventFilter, MintNFTEventNotification.class);
 
         Disposable disposable = moveEventNotificationFlowable
 //                .timeout(10, TimeUnit.SECONDS)

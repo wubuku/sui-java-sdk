@@ -315,6 +315,21 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testPayAllSui() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String signer = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String coinObjectId_1 = selectSuiCoinObjectBut(client, signer, new String[]{});
+        String coinObjectId_2 = selectSuiCoinObjectBut(client, signer, new String[]{coinObjectId_1});
+
+        String[] inputCoins = new String[]{coinObjectId_1, coinObjectId_2};
+        String recipient = signer;
+        long gasBudget = 100000;
+        TransactionBytes transactionBytes = client.payAllSui(signer, inputCoins, recipient, gasBudget);
+        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        System.out.println(transactionEffects);
+    }
+
+    @Test
     void testDryRunTransaction_1() throws MalformedURLException, JsonProcessingException {
         String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACAsl58oZElxuAIo2GjCz+IBOEMg7t5UGPjc/+T2xv7uzgtsb2NrZWRfY29pbglsb2NrX2NvaW4BBwAAAAAAAAAAAAAAAAAAAAAAAAACA3N1aQNTVUkAAwEAL7WBWtgXCvMuHZ1+DWUmwBP8lzcBAAAAAAAAACArk/jbO5ZDr9GpkvlJdaXr9DtEILIXCX3FXCiiley2AgAUPCzzWg1NKd2dH2NDpur+AxMb+voACACgck4YCQAAPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwgAAAAAAAAAIHPmBAVvqy2ZINnuDjPcjyuCCbNWixbmw35oU/EqF03uAQAAAAAAAABAQg8AAAAAAA==";
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
