@@ -438,6 +438,28 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testGetMoveFunctionArgTypes_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageObjectId = "0x2";
+        String module = "devnet_nft";
+        String function = "mint";
+        List<MoveFunctionArgType> result = client.getMoveFunctionArgTypes(packageObjectId, module, function);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
+    void testGetMoveFunctionArgTypes_2() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageObjectId = "0x2";
+        String module = "locked_coin";
+        String function = "lock_coin";
+        List<MoveFunctionArgType> result = client.getMoveFunctionArgTypes(packageObjectId, module, function);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
     void testGetNormalizedMoveStruct_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String packageObjectId = "0x2";

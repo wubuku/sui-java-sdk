@@ -553,6 +553,27 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public List<MoveFunctionArgType> getMoveFunctionArgTypes(
+            String package_,
+            String moduleName,
+            String functionName
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(package_);
+        params.add(moduleName);
+        params.add(functionName);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getMoveFunctionArgTypes", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<List<MoveFunctionArgType>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(
+                    jsonrpc2Request, MoveFunctionArgType.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public SuiMoveNormalizedStruct getNormalizedMoveStruct(
             String package_,
             String moduleName,
