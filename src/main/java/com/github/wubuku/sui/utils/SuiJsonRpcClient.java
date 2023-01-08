@@ -413,7 +413,6 @@ public class SuiJsonRpcClient {
         }
     }
 
-
     /**
      * Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
      *
@@ -438,6 +437,37 @@ public class SuiJsonRpcClient {
         params.add(amount);
 
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_transferSui", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Create an unsigned transaction to publish Move module.
+     *
+     * @param sender          the transaction signer's Sui address
+     * @param compiledModules the compiled bytes of a move module, the
+     * @param gas             gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget       the gas budget, the transaction will fail if the gas cost exceed the budget
+     */
+    public TransactionBytes publish(String sender,
+                                    String[] compiledModules,
+                                    String gas,
+                                    long gasBudget
+    ) {
+
+        List<Object> params = new ArrayList<>();
+        params.add(sender);
+        params.add(compiledModules);
+        params.add(gas);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_publish", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
