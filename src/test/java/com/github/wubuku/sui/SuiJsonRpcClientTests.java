@@ -290,7 +290,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testSplitCoin() throws MalformedURLException {
+    void testSplitCoin_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String gasObjectId = selectGasPayment(client, signerAddress, 100000);
@@ -302,7 +302,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testMergeCoins() throws MalformedURLException {
+    void testMergeCoins_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
@@ -315,7 +315,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testPayAllSui() throws MalformedURLException {
+    void testPayAllSui_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String signer = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String coinObjectId_1 = selectSuiCoinObjectBut(client, signer, new String[]{});
@@ -330,7 +330,25 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testPaySui() throws MalformedURLException {
+    void testPaySui_1() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String signer = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String gasObjectId = selectGasPayment(client, signer, 100000);
+        String coinObjectId_1 = selectSuiCoinObjectBut(client, signer, new String[]{gasObjectId});
+        String coinObjectId_2 = selectSuiCoinObjectBut(client, signer, new String[]{gasObjectId, coinObjectId_1});
+        String[] inputCoins = new String[]{coinObjectId_1, coinObjectId_2};
+        String recipient_1 = signer;
+        String recipient_2 = signer;
+        String[] recipients = new String[]{recipient_1, recipient_2};
+        BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
+        long gasBudget = 100000;
+        TransactionBytes transactionBytes = client.pay(signer, inputCoins, recipients, amounts, gasObjectId, gasBudget);
+        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        System.out.println(transactionEffects);
+    }
+
+    @Test
+    void testPay_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String signer = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String coinObjectId_1 = selectSuiCoinObjectBut(client, signer, new String[]{});
@@ -513,7 +531,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetNormalizedMoveModulesByPackage() throws MalformedURLException, JsonProcessingException {
+    void testGetNormalizedMoveModulesByPackage_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String packageObjectId = "0x2";
         Map<String, SuiMoveNormalizedModule> result = client.getNormalizedMoveModulesByPackage(packageObjectId);
@@ -532,7 +550,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetTotalTransactionNumber() throws MalformedURLException {
+    void testGetTotalTransactionNumber_1() throws MalformedURLException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         long result = client.getTotalTransactionNumber();
@@ -540,7 +558,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetCommitteeInfo() throws MalformedURLException, JsonProcessingException {
+    void testGetCommitteeInfo_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         CommitteeInfoResponse result = client.getCommitteeInfo(0L);
         System.out.println(result);
@@ -556,7 +574,7 @@ public class SuiJsonRpcClientTests {
 //    }
 
     @Test
-    void testGetSuiSystemState() throws JsonProcessingException, MalformedURLException {
+    void testGetSuiSystemState_1() throws JsonProcessingException, MalformedURLException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiSystemState result = client.getSuiSystemState();

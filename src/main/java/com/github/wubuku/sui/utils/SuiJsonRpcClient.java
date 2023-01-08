@@ -476,6 +476,44 @@ public class SuiJsonRpcClient {
     }
 
     /**
+     * Send Coin&lt;T> to a list of addresses, where `T` can be any coin type, following a list of amounts.
+     * The object specified in the `gas` field will be used to pay the gas fee for the transaction.
+     * The gas object can not appear in `input_coins`.
+     * If the gas object is not specified, the RPC server will auto-select one.
+     *
+     * @param signer     the transaction signer's Sui address
+     * @param inputCoins the Sui coins to be used in this transaction
+     * @param recipients the recipients' addresses, the length of this vector must be the same as amounts.
+     * @param amounts    the amounts to be transferred to recipients, following the same order
+     * @param gas        gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget  the gas budget, the transaction will fail if the gas cost exceed the budget
+     */
+    public TransactionBytes pay(String signer,
+                                String[] inputCoins,
+                                String[] recipients,
+                                BigInteger[] amounts,
+                                String gas,
+                                long gasBudget) {
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(inputCoins);
+        params.add(recipients);
+        params.add(amounts);
+        params.add(gas);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_pay", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
      *
      * @param signer      the transaction signer's Sui address
