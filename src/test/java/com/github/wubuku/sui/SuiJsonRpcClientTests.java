@@ -248,6 +248,16 @@ public class SuiJsonRpcClientTests {
         throw new RuntimeException("No enough gas payment");
     }
 
+    private String selectSuiCoinObjectBut(SuiJsonRpcClient client, String owner, String excludedCoinObjectId) {
+        CoinPage coinPage = client.getCoins(owner, SUI_COIN_TYPE, null, 100);
+        for (Coin c : coinPage.getData()) {
+            if (!c.getCoinObjectId().equals(excludedCoinObjectId)) {
+                return c.getCoinObjectId();
+            }
+        }
+        throw new RuntimeException("No enough gas payment");
+    }
+
     @Test
     void testBatchTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
@@ -275,6 +285,18 @@ public class SuiJsonRpcClientTests {
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
+    }
+
+    @Test
+    void testSplitCoin() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String gasObjectId = selectGasPayment(client, signerAddress, 100000);
+        String coinObjectId = selectSuiCoinObjectBut(client, signerAddress, gasObjectId);
+        BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
+        TransactionBytes transactionBytes = client.splitCoin(signerAddress, coinObjectId, amounts, gasObjectId, 100000L);
+        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        System.out.println(transactionEffects);
     }
 
     @Test
@@ -425,6 +447,14 @@ public class SuiJsonRpcClientTests {
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
     }
+
+//    @Test
+//    void testGetValidators() throws MalformedURLException, JsonProcessingException {
+//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+//        List<ValidatorMetadata> result = client.getValidators();
+//        System.out.println(result);
+//        System.out.println(objectMapper.writeValueAsString(result));
+//    }
 
     @Test
     void testGetSuiSystemState() throws JsonProcessingException, MalformedURLException {
