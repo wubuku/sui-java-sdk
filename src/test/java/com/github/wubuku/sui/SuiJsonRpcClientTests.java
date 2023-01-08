@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -248,10 +249,10 @@ public class SuiJsonRpcClientTests {
         throw new RuntimeException("No enough gas payment");
     }
 
-    private String selectSuiCoinObjectBut(SuiJsonRpcClient client, String owner, String excludedCoinObjectId) {
+    private String selectSuiCoinObjectBut(SuiJsonRpcClient client, String owner, String[] excludedCoinObjects) {
         CoinPage coinPage = client.getCoins(owner, SUI_COIN_TYPE, null, 100);
         for (Coin c : coinPage.getData()) {
-            if (!c.getCoinObjectId().equals(excludedCoinObjectId)) {
+            if (Arrays.stream(excludedCoinObjects).noneMatch(c.getCoinObjectId()::equals)) {
                 return c.getCoinObjectId();
             }
         }
@@ -292,9 +293,22 @@ public class SuiJsonRpcClientTests {
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String gasObjectId = selectGasPayment(client, signerAddress, 100000);
-        String coinObjectId = selectSuiCoinObjectBut(client, signerAddress, gasObjectId);
+        String coinObjectId = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId});
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
         TransactionBytes transactionBytes = client.splitCoin(signerAddress, coinObjectId, amounts, gasObjectId, 100000L);
+        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        System.out.println(transactionEffects);
+    }
+
+    @Test
+    void testMergeCoins() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String gasObjectId = selectGasPayment(client, signerAddress, 100000);
+        String coinObjectId_1 = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId});
+        String coinObjectId_2 = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId, coinObjectId_1});
+        TransactionBytes transactionBytes = client.mergeCoins(signerAddress, coinObjectId_1, coinObjectId_2, gasObjectId, 100000L);
         TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }

@@ -349,6 +349,8 @@ public class SuiJsonRpcClient {
     }
 
     /**
+     * Create an unsigned transaction to split a coin object into multiple coins.
+     *
      * @param signer       the transaction signer's Sui address
      * @param coinObjectId the coin object to be spilt
      * @param splitAmounts the amounts to split out from the coin
@@ -377,6 +379,39 @@ public class SuiJsonRpcClient {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Create an unsigned transaction to merge multiple coins into one coin.
+     *
+     * @param signer      the transaction signer's Sui address
+     * @param primaryCoin the coin object to merge into, this coin will remain after the transaction
+     * @param coinToMerge - the coin object to be merged, this coin will be destroyed, the balance will be added to `primary_coin`
+     * @param gas         gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget   the gas budget, the transaction will fail if the gas cost exceed the budget
+     */
+    public TransactionBytes mergeCoins(String signer,
+                                       String primaryCoin,
+                                       String coinToMerge,
+                                       String gas,
+                                       long gasBudget) {
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(primaryCoin);
+        params.add(coinToMerge);
+        params.add(gas);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_mergeCoins", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
