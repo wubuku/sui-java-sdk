@@ -552,6 +552,26 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public SuiMoveNormalizedStruct getNormalizedMoveStruct(
+            String package_,
+            String moduleName,
+            String structName) {
+        List<Object> params = new ArrayList<>();
+        params.add(package_);
+        params.add(moduleName);
+        params.add(structName);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getNormalizedMoveStruct", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiMoveNormalizedStruct> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiMoveNormalizedStruct.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public DevInspectResults devInspectTransaction(String txBytes) {
         List<Object> params = new ArrayList<>();
         params.add(txBytes);

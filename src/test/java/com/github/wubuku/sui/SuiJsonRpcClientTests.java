@@ -437,6 +437,17 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
+    void testGetNormalizedMoveStruct() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageObjectId = "0x2";
+        String module = "devnet_nft";
+        String struct = "DevNetNFT";
+        SuiMoveNormalizedStruct result = client.getNormalizedMoveStruct(packageObjectId, module, struct);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
     void testDevInspectTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
