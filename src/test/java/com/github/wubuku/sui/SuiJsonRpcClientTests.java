@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public class SuiJsonRpcClientTests {
 
@@ -437,12 +438,31 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetNormalizedMoveStruct() throws MalformedURLException, JsonProcessingException {
+    void testGetNormalizedMoveStruct_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String packageObjectId = "0x2";
         String module = "devnet_nft";
         String struct = "DevNetNFT";
         SuiMoveNormalizedStruct result = client.getNormalizedMoveStruct(packageObjectId, module, struct);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
+    void testGetNormalizedMoveModule_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageObjectId = "0x2";
+        String module = "devnet_nft";
+        SuiMoveNormalizedModule result = client.getNormalizedMoveModule(packageObjectId, module);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
+    void testGetNormalizedMoveModulesByPackage() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageObjectId = "0x2";
+        Map<String, SuiMoveNormalizedModule> result = client.getNormalizedMoveModulesByPackage(packageObjectId);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
     }

@@ -124,6 +124,21 @@ public class JSONRPC2Session {
         });
     }
 
+    public <K, V> JSONRPC2Response<Map<K, V>> sendAndGetMapResult(final JSONRPC2Request request,
+                                                              final Class<K> resultKeyType,
+                                                              final Class<V> resultValueType
+    ) throws JSONRPC2SessionException {
+        return send(request, (body) -> {
+            try {
+                ObjectMapper om = getObjectMapper();
+                return om.readValue(body, om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        om.getTypeFactory().constructMapType(Map.class, resultKeyType, resultValueType)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public <R> JSONRPC2Response<R> sendAndGetParametricTypeResult(final JSONRPC2Request request,
                                                                   final Class<?> parametrized,
                                                                   final Class<?>... parameterClasses

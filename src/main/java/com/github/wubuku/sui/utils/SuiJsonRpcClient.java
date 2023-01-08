@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class SuiJsonRpcClient {
     private final JSONRPC2Session jsonrpc2Session;
@@ -565,6 +566,37 @@ public class SuiJsonRpcClient {
         try {
             JSONRPC2Response<SuiMoveNormalizedStruct> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
                     SuiMoveNormalizedStruct.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public SuiMoveNormalizedModule getNormalizedMoveModule(String package_, String moduleName) {
+        List<Object> params = new ArrayList<>();
+        params.add(package_);
+        params.add(moduleName);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getNormalizedMoveModule", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiMoveNormalizedModule> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiMoveNormalizedModule.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, SuiMoveNormalizedModule> getNormalizedMoveModulesByPackage(String package_) {
+        List<Object> params = new ArrayList<>();
+        params.add(package_);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getNormalizedMoveModulesByPackage", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<Map<String, SuiMoveNormalizedModule>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetMapResult(jsonrpc2Request, String.class, SuiMoveNormalizedModule.class);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
