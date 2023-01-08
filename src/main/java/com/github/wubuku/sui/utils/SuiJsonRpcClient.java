@@ -414,6 +414,39 @@ public class SuiJsonRpcClient {
     }
 
     /**
+     * Send SUI coins to a list of addresses, following a list of amounts.
+     * This is for SUI coin only and does not require a separate gas coin object.
+     *
+     * @param signer     the transaction signer's Sui address
+     * @param inputCoins the Sui coins to be used in this transaction, including the coin for gas payment.
+     * @param recipients the recipients' addresses, the length of this vector must be the same as amounts.
+     * @param amounts    the amounts to be transferred to recipients, following the same order
+     * @param gasBudget  the gas budget, the transaction will fail if the gas cost exceed the budget
+     */
+    public TransactionBytes paySui(String signer,
+                                   String[] inputCoins,
+                                   String[] recipients,
+                                   BigInteger[] amounts,
+                                   long gasBudget) {
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(inputCoins);
+        params.add(recipients);
+        params.add(amounts);
+        params.add(gasBudget);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_paySui", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Send all SUI coins to one recipient. This is for SUI coin only and does not require a separate gas coin object.
      *
      * @param signer     the transaction signer's Sui address
