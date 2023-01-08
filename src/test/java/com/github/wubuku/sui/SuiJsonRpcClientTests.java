@@ -5,17 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.*;
 import com.github.wubuku.sui.utils.HexUtils;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
+import com.github.wubuku.sui.utils.TransactionUtils;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-import static com.github.wubuku.sui.utils.TransactionUtils.ed25519SignTransactionBytes;
-
 public class SuiJsonRpcClientTests {
+
+    static final String SUI_COIN_TYPE = "0x2::sui::SUI";
+
     ObjectMapper objectMapper = new ObjectMapper();
+
 
     //@Test
     void testGetMoveEvents_1() throws MalformedURLException, JsonProcessingException {
@@ -116,7 +119,7 @@ public class SuiJsonRpcClientTests {
     void testGetCoins_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         CoinPage coinPage = client.getCoins("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
-                "0x2::sui::SUI", null, 1);
+                SUI_COIN_TYPE, null, 1);
         System.out.println(coinPage);
         System.out.println(objectMapper.writeValueAsString(coinPage));
     }
@@ -133,14 +136,14 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetCoinMetadata_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        SuiCoinMetadata coinMetadata = client.getCoinMetadata("0x2::sui::SUI");
+        SuiCoinMetadata coinMetadata = client.getCoinMetadata(SUI_COIN_TYPE);
         System.out.println(coinMetadata);
     }
 
     @Test
     void testGetTotalSupply_1() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        Supply totalSupply = client.getTotalSupply("0x2::sui::SUI");
+        Supply totalSupply = client.getTotalSupply(SUI_COIN_TYPE);
         System.out.println(totalSupply);
     }
 
@@ -150,7 +153,7 @@ public class SuiJsonRpcClientTests {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         CoinBalance balance = client.getBalance(
                 "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa",
-                null//"0x2::sui::SUI"
+                null//SUI_COIN_TYPE
         );
         System.out.println(balance);
     }
@@ -166,39 +169,83 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testMoveCall_1() throws MalformedURLException, JsonProcessingException {
+    void testExecuteMoveCall_1() throws MalformedURLException, JsonProcessingException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        TransactionBytes encodeResult = encodeATestMoveCallTransaction(client, signerAddress);
+        System.out.println(encodeResult);
+        //System.out.println(objectMapper.writeValueAsString(result));
+        String txBytes = encodeResult.getTxBytes();
+        String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+        String sigScheme = SignatureScheme.ED25519;
+        String privateKeyHex = "";//todo fill in the private key here
+        SuiExecuteTransactionResponse response = executeTransaction(client, txBytes,
+                publicKeyBase64, sigScheme, HexUtils.hexToByteArray(privateKeyHex));
+        System.out.println(response);
+//        System.out.println(txBytes);
+//        System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(txBytes)));
+//        Arrays.stream(result.getInputObjects())
+//                .filter(i -> i instanceof InputObjectKind.ImmOrOwnedMoveObject)
+//                .forEach(i -> {
+//                    InputObjectKind.ImmOrOwnedMoveObject immOrOwnedMoveObject = (InputObjectKind.ImmOrOwnedMoveObject) i;
+//                    System.out.println(immOrOwnedMoveObject.getImmOrOwnedMoveObject());
+//                    System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(
+//                            immOrOwnedMoveObject.getImmOrOwnedMoveObject().getDigest()
+//                    )));
+//                });
+    }
+
+
+    private SuiExecuteTransactionResponse executeTransaction(SuiJsonRpcClient client,
+                                                             String txBytes,
+                                                             String publicKeyBase64, String sigScheme,
+                                                             byte[] privateKey) {
+        byte[] signature = TransactionUtils.ed25519SignTransactionBytes(privateKey, txBytes);
+        String signatureBase64 = Base64.getEncoder().encodeToString(signature);
+        String requestType = ExecuteTransactionRequestType.WAIT_FOR_EFFECTS_CERT;
+
+        SuiExecuteTransactionResponse response = client.executeTransaction(
+                txBytes,
+                sigScheme, signatureBase64,
+                publicKeyBase64,
+                requestType
+        );
+        return response;
+    }
+
+    private TransactionBytes encodeATestMoveCallTransaction(SuiJsonRpcClient client, String signerAddress) {
         String packageObjectId = "0x2";
         String module = "devnet_nft";
         String function = "mint";
-        String[] typeArguments = new String[0]; // TypeTag[] typeArguments
+        String[] typeArguments = new String[0];
         SuiJsonValue[] arguments = new SuiJsonValue[]{
                 new SuiJsonValue.String_("Test NFT"),
                 new SuiJsonValue.String_("..."),
-                new SuiJsonValue.String_("http://test.com/test-nft.png")
+                new SuiJsonValue.String_("http://test.org/test-nft.png")
         };
-        String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
         long gasBudget = 1000000;
+        String gasPayment = selectGasPayment(client, signerAddress, gasBudget);
         TransactionBytes result = client.moveCall(signerAddress,
                 packageObjectId, module, function,
                 typeArguments, arguments,
                 gasPayment, gasBudget, null);
-        System.out.println(result);
-        System.out.println(objectMapper.writeValueAsString(result));
-        String txBytes = result.getTxBytes();
-        System.out.println(txBytes);
-        System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(txBytes)));
-        Arrays.stream(result.getInputObjects())
-                .filter(i -> i instanceof InputObjectKind.ImmOrOwnedMoveObject)
-                .forEach(i -> {
-                    InputObjectKind.ImmOrOwnedMoveObject immOrOwnedMoveObject = (InputObjectKind.ImmOrOwnedMoveObject) i;
-                    System.out.println(immOrOwnedMoveObject.getImmOrOwnedMoveObject());
-                    System.out.println(HexUtils.byteArrayToHex(Base64.getDecoder().decode(
-                            immOrOwnedMoveObject.getImmOrOwnedMoveObject().getDigest()
-                    )));
-                });
+        return result;
+    }
+
+    /**
+     * Select a gas payment object.
+     *
+     * @return the gas payment object id
+     */
+    private String selectGasPayment(SuiJsonRpcClient client, String owner, long gasBudget) {
+        CoinPage coinPage = client.getCoins(owner, SUI_COIN_TYPE, null, 100);
+        for (Coin c : coinPage.getData()) {
+            if (c.getBalance().compareTo(BigInteger.valueOf(gasBudget)) >= 0) {
+                return c.getCoinObjectId();
+            }
+        }
+        throw new RuntimeException("No enough gas payment");
     }
 
     @Test
@@ -241,22 +288,14 @@ public class SuiJsonRpcClientTests {
 
     //@Test
     void testExecuteTransaction_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACAsl58oZElxuAIo2GjCz+IBOEMg7t5UGPjc/+T2xv7uzgpkZXZuZXRfbmZ0BG1pbnQAAwAJCFRlc3QgTkZUAAQDLi4uAB0caHR0cDovL3Rlc3QuY29tL3Rlc3QtbmZ0LnBuZzws81oNTSndnR9jQ6bq/gMTG/r6KUwSWYQEVXeVFlsMouRHab0GyVMaAAAAAAAAACArYETjuL36KUj/wGTbwxDs7waB9PP3vyc7Zfc4r5qiXgEAAAAAAAAAQEIPAAAAAAA=";
-        String sigScheme = SignatureScheme.ED25519;
         //String publicKeyHex = "cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e";
         String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+        String sigScheme = SignatureScheme.ED25519;
         String privateKeyHex = "";//todo fill in your private key here
-        byte[] signature = ed25519SignTransactionBytes(HexUtils.hexToByteArray(privateKeyHex), txBytes);
-        String signatureBase64 = Base64.getEncoder().encodeToString(signature);
-        String requestType = ExecuteTransactionRequestType.WAIT_FOR_EFFECTS_CERT;
-
-        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
-        SuiExecuteTransactionResponse response = client.executeTransaction(
-                txBytes,
-                sigScheme, signatureBase64,
-                publicKeyBase64,
-                requestType
-        );
+        SuiExecuteTransactionResponse response = executeTransaction(client,
+                txBytes, publicKeyBase64, sigScheme, HexUtils.hexToByteArray(privateKeyHex));
         System.out.println(response);
         System.out.println(objectMapper.writeValueAsString(response));
     }
@@ -273,7 +312,7 @@ public class SuiJsonRpcClientTests {
 //        TypeTag[] typeArguments = new TypeTag[]{
 //                new TypeTag.Struct(new StructTag("0x2", "sui", "SUI", null))
 //        };
-        String[] typeArguments = new String[]{"0x2::sui::SUI"};
+        String[] typeArguments = new String[]{SUI_COIN_TYPE};
         SuiJsonValue[] arguments = new SuiJsonValue[]{
                 new SuiJsonValue.String_("0x2fb5815ad8170af32e1d9d7e0d6526c013fc9737"),
                 new SuiJsonValue.String_("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"),
@@ -290,8 +329,9 @@ public class SuiJsonRpcClientTests {
         System.out.println(result.getTxBytes());
     }
 
+
     @Test
-    void testTransferSui() throws MalformedURLException, JsonProcessingException {
+    void testTransferSui_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
@@ -316,7 +356,7 @@ public class SuiJsonRpcClientTests {
 //        TypeTag[] typeArguments = new TypeTag[]{
 //                new TypeTag.Struct(new StructTag("0x2", "sui", "SUI", null))
 //        };
-        String[] typeArguments = new String[]{"0x2::sui::SUI"};
+        String[] typeArguments = new String[]{SUI_COIN_TYPE};
         SuiJsonValue[] arguments = new SuiJsonValue[]{
                 new SuiJsonValue.String_("0x72c6a7df69b25c0eb89eb50bc5abec93ea80e17a"),
                 new SuiJsonValue.String_("0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"),
