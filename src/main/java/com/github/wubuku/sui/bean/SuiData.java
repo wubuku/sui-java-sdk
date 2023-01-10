@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface SuiData {
     ObjectType getDataType();
 
-    class SuiMoveObject extends com.github.wubuku.sui.bean.SuiMoveObject implements SuiData {
+    class SuiMoveObject extends com.github.wubuku.sui.bean.SuiMoveObject<ObjectContentFields> implements SuiData {
         private ObjectType dataType;
 
         public SuiMoveObject() {

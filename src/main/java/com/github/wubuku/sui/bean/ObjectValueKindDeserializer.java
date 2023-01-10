@@ -1,6 +1,5 @@
 package com.github.wubuku.sui.bean;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 public class ObjectValueKindDeserializer extends JsonDeserializer<ObjectValueKind> {
     @Override
-    public ObjectValueKind deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JacksonException {
+    public ObjectValueKind deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException {
         String code = jsonParser.getText();
         switch (code) {
             case "ByImmutableReference":

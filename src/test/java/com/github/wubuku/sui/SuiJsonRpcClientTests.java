@@ -47,6 +47,17 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(events));
     }
 
+    //@Test
+    void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
+        String url = "https://fullnode.devnet.sui.io/";
+        SuiJsonRpcClient client = new SuiJsonRpcClient(url);
+        PaginatedEvents events = client.getEvents(
+                new EventQuery.MoveEvent("0xcf827c62221d338834091d8d4549861acfede3fb::product::ProductCreated"),
+                null, 10, false);
+        System.out.println(events);
+        System.out.println(objectMapper.writeValueAsString(events));
+    }
+
     @Test
     void testGetTransactions_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
@@ -92,6 +103,27 @@ public class SuiJsonRpcClientTests {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         GetObjectDataResponse getObjectDataResponse = client.getObject(
                 "0x1a8e812a50899e9356044b99b1195771082e9197"
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetObject_2() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetObjectDataResponse getObjectDataResponse = client.getObject(
+                "0x595e185525f2a9bb892dc634ba95a10f78010c1e"
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetMoveObjectDataResponse<TestOrder> getObjectDataResponse = client.getMoveObject(
+                "0x595e185525f2a9bb892dc634ba95a10f78010c1e",
+                TestOrder.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
@@ -197,7 +229,6 @@ public class SuiJsonRpcClientTests {
 //                    )));
 //                });
     }
-
 
     private SuiExecuteTransactionResponse executeTransaction(SuiJsonRpcClient client,
                                                              String txBytes,
@@ -387,7 +418,6 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(response));
     }
 
-
     @Test
     void testMoveCall_2() throws MalformedURLException, JsonProcessingException {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
@@ -415,7 +445,6 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
     }
-
 
     @Test
     void testTransferSui_1() throws MalformedURLException, JsonProcessingException {
@@ -565,6 +594,15 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(result));
     }
 
+    @Test
+    void testGetSuiSystemState_1() throws JsonProcessingException, MalformedURLException {
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiSystemState result = client.getSuiSystemState();
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
 //    @Test
 //    void testGetValidators() throws MalformedURLException, JsonProcessingException {
 //        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
@@ -573,12 +611,20 @@ public class SuiJsonRpcClientTests {
 //        System.out.println(objectMapper.writeValueAsString(result));
 //    }
 
-    @Test
-    void testGetSuiSystemState_1() throws JsonProcessingException, MalformedURLException {
-        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        SuiSystemState result = client.getSuiSystemState();
-        System.out.println(result);
-        System.out.println(objectMapper.writeValueAsString(result));
+    public static class TestOrder {
+        public UID id;
+        public Long total_amount;
+        public Long version;
+        public Table items; //OrderItem table
+
+        @Override
+        public String toString() {
+            return "TestOrder{" +
+                    "id=" + id +
+                    ", total_amount=" + total_amount +
+                    ", version=" + version +
+                    ", items=" + items +
+                    '}';
+        }
     }
 }

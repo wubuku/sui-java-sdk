@@ -14,17 +14,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *         has_public_transfer?: boolean;
  *     };
  * </pre>
+ *
+ * @param <T> type of ObjectContentFields
  */
-public class SuiMoveObject {
+public class SuiMoveObject<T> {
     private String type;
-    private ObjectContentFields fields;
+    private T fields;
     @JsonProperty("has_public_transfer")
     private Boolean hasPublicTransfer;
 
     public SuiMoveObject() {
     }
 
-    public SuiMoveObject(String type, ObjectContentFields fields, Boolean hasPublicTransfer) {
+    public SuiMoveObject(String type, T fields, Boolean hasPublicTransfer) {
         this.type = type;
         this.fields = fields;
         this.hasPublicTransfer = hasPublicTransfer;
@@ -38,11 +40,11 @@ public class SuiMoveObject {
         this.type = type;
     }
 
-    public ObjectContentFields getFields() {
+    public T getFields() {
         return fields;
     }
 
-    public void setFields(ObjectContentFields fields) {
+    public void setFields(T fields) {
         this.fields = fields;
     }
 

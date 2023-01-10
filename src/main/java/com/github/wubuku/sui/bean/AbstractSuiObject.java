@@ -63,4 +63,14 @@ public abstract class AbstractSuiObject<T> {
         this.reference = reference;
     }
 
+    @Override
+    public String toString() {
+        return "AbstractSuiObject{" +
+                "data=" + data +
+                ", owner=" + owner +
+                ", previousTransaction='" + previousTransaction + '\'' +
+                ", storageRebate=" + storageRebate +
+                ", reference=" + reference +
+                '}';
+    }
 }

@@ -180,6 +180,31 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public <T> GetMoveObjectDataResponse<T> getMoveObject(String objectId, Class<T> objectType) {
+        List<Object> params = new ArrayList<>();
+        params.add(objectId);
+        return getMoveObject("sui_getObject", params, objectType);
+    }
+
+    public <T> GetMoveObjectDataResponse<T> getDynamicFieldMoveObject(String parentObjectId, String field, Class<T> objectType) {
+        List<Object> params = new ArrayList<>();
+        params.add(parentObjectId);
+        params.add(field);
+        return getMoveObject("sui_getDynamicFieldObject", params, objectType);
+    }
+
+    private <T> GetMoveObjectDataResponse<T> getMoveObject(String method, List<Object> params, Class<T> objectType) {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<GetMoveObjectDataResponse<T>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetParametricTypeResult(jsonrpc2Request, GetMoveObjectDataResponse.class, objectType);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public GetRawObjectDataResponse getRawObject(String objectId) {
         List<Object> params = new ArrayList<>();
         params.add(objectId);
