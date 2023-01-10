@@ -2,6 +2,8 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -205,7 +207,7 @@ public interface SuiEventFilter {
         @Override
         public String toString() {
             return "All{" +
-                    "all=" + all +
+                    "all=" + Arrays.toString(all) +
                     '}';
         }
     }
@@ -232,7 +234,7 @@ public interface SuiEventFilter {
         @Override
         public String toString() {
             return "Any{" +
-                    "any=" + any +
+                    "any=" + Arrays.toString(any) +
                     '}';
         }
     }
@@ -259,7 +261,7 @@ public interface SuiEventFilter {
         @Override
         public String toString() {
             return "And{" +
-                    "and=" + and +
+                    "and=" + Arrays.toString(and) +
                     '}';
         }
     }
@@ -286,7 +288,7 @@ public interface SuiEventFilter {
         @Override
         public String toString() {
             return "Or{" +
-                    "or=" + or +
+                    "or=" + Arrays.toString(or) +
                     '}';
         }
     }

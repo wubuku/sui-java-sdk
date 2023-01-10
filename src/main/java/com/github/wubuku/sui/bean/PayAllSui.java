@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.util.Arrays;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -41,7 +43,7 @@ public class PayAllSui {
     @Override
     public String toString() {
         return "PayAllSui{" +
-                "coins=" + java.util.Arrays.toString(coins) +
+                "coins=" + Arrays.toString(coins) +
                 ", recipient='" + recipient + '\'' +
                 '}';
     }

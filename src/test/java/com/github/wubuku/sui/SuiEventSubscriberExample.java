@@ -1,5 +1,6 @@
 package com.github.wubuku.sui;
 
+import com.github.wubuku.sui.bean.EventType;
 import com.github.wubuku.sui.bean.MoveEventNotification;
 import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiEventSubscriber;
@@ -13,13 +14,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SuiEventSubscriberExample {
 
     public static void main(String[] args) throws IOException {
-        SuiEventFilter eventFilter = new SuiEventFilter.All(new SuiEventFilter[]{
-                new SuiEventFilter.EventType("MoveEvent"),
-                new SuiEventFilter.Package("0x2"),
-                new SuiEventFilter.Module("devnet_nft")
-        });
+//        SuiEventFilter eventFilter = new SuiEventFilter.All(new SuiEventFilter[]{
+//               new SuiEventFilter.EventType(EventType.MOVE_EVENT),
+//                new SuiEventFilter.Package("0x2"),
+//                new SuiEventFilter.Module("devnet_nft")
+//        });
+        SuiEventFilter eventFilter = new SuiEventFilter.MoveEventType("0x2::devnet_nft::MintNFTEvent");
 
-        String serverUrl = "ws://localhost:9000";
+        //String serverUrl = "ws://localhost:9000";
+        String serverUrl = "wss://fullnode.devnet.sui.io";
         WebSocketService service = new WebSocketService(serverUrl, false);
         AtomicReference<Boolean> isClosed = new AtomicReference<>(false);
 
