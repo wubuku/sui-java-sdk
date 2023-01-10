@@ -1,40 +1,18 @@
 package com.github.wubuku.sui.bean;
 
-public class Table {
-    private String type;
-    private Fields fields;
-
-
+public class Table extends MoveObject<Table.Fields> {
     public Table() {
     }
 
     public Table(String type, Fields fields) {
-        this.type = type;
-        this.fields = fields;
+        super(type, fields);
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Fields getFields() {
-        return fields;
-    }
-
-    public void setFields(Fields fields) {
-        this.fields = fields;
-    }
-
 
     @Override
     public String toString() {
         return "Table{" +
-                "type='" + type + '\'' +
-                ", fields=" + fields +
+                "type='" + getType() + '\'' +
+                ", fields=" + getFields() +
                 '}';
     }
 

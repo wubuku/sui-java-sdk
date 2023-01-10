@@ -118,12 +118,34 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
+
     @Test
     void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         GetMoveObjectDataResponse<TestOrder> getObjectDataResponse = client.getMoveObject(
                 "0x595e185525f2a9bb892dc634ba95a10f78010c1e",
                 TestOrder.class
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetObjectOwnedByObject_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        List<SuiObjectInfo> objectsOwnedByObject = client.getObjectsOwnedByObject(
+                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10"
+        );
+        System.out.println(objectsOwnedByObject);
+        System.out.println(objectMapper.writeValueAsString(objectsOwnedByObject));
+    }
+
+    @Test
+    void testGetMoveObject_2() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetMoveObjectDataResponse<TestOrder.OrderItemField> getObjectDataResponse = client.getMoveObject(
+                "0x90c40b57ba0f4cdf060f6b387229e0de232c407a",
+                TestOrder.OrderItemField.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
@@ -603,6 +625,7 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(result));
     }
 
+
 //    @Test
 //    void testGetValidators() throws MalformedURLException, JsonProcessingException {
 //        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
@@ -625,6 +648,25 @@ public class SuiJsonRpcClientTests {
                     ", version=" + version +
                     ", items=" + items +
                     '}';
+        }
+
+        public static class OrderItemField extends DynamicField<String, TestOrder.OrderItem> {
+
+        }
+
+        public static class OrderItem {
+            public String product_id;
+            public Long quantity;
+            public Long item_amount;
+
+            @Override
+            public String toString() {
+                return "OrderItem{" +
+                        "product_id='" + product_id + '\'' +
+                        ", quantity=" + quantity +
+                        ", item_amount=" + item_amount +
+                        '}';
+            }
         }
     }
 }
