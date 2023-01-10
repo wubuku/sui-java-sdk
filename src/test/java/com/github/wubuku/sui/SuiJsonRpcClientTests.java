@@ -151,6 +151,19 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
+
+//    @Test
+//    void testGetDynamicFieldObject_1() throws MalformedURLException, JsonProcessingException {
+//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+//        GetObjectDataResponse getObjectDataResponse = client.getDynamicFieldObject(
+//                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10",
+//                "01000000000000000000000000000000"
+//        );
+//        System.out.println(getObjectDataResponse);
+//        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+//    }
+
+
     @Test
     void testGetRawObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");

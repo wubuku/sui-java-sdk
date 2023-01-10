@@ -161,10 +161,10 @@ public class SuiJsonRpcClient {
         return getObject("sui_getObject", params);
     }
 
-    public GetObjectDataResponse getDynamicFieldObject(String parentObjectId, String field) {
+    public GetObjectDataResponse getDynamicFieldObject(String parentObjectId, String name) {
         List<Object> params = new ArrayList<>();
         params.add(parentObjectId);
-        params.add(field);
+        params.add(name);
         return getObject("sui_getDynamicFieldObject", params);
     }
 
