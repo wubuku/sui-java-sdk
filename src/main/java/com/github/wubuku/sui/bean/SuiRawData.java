@@ -47,7 +47,7 @@ public interface SuiRawData {
 
         @Override
         public String toString() {
-            return "SuiMoveObject{" +
+            return "SuiRawData.SuiMoveObject{" +
                     "dataType=" + dataType + '\'' +
                     ", type='" + getType() + '\'' +
                     ", hasPublicTransfer=" + getHasPublicTransfer() +
@@ -80,7 +80,7 @@ public interface SuiRawData {
 
         @Override
         public String toString() {
-            return "SuiMovePackage{" +
+            return "SuiRawData.SuiMovePackage{" +
                     "dataType=" + dataType + '\'' +
                     ", id='" + getId() + '\'' +
                     ", moduleMap=" + getModuleMap() +

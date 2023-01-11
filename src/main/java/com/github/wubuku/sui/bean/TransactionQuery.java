@@ -34,7 +34,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "All{}";
+            return "TransactionQuery.All{}";
         }
     }
 
@@ -70,7 +70,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "MoveFunction{" +
+            return "TransactionQuery.MoveFunction{" +
                     "moveFunction=" + moveFunction +
                     '}';
         }
@@ -116,7 +116,7 @@ public interface TransactionQuery {
 
             @Override
             public String toString() {
-                return "MoveFunctionProperties{" +
+                return "TransactionQuery.MoveFunction.MoveFunctionProperties{" +
                         "package='" + package_ + '\'' +
                         ", module='" + module + '\'' +
                         ", function='" + function + '\'' +
@@ -146,7 +146,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "InputObject{" +
+            return "TransactionQuery.InputObject{" +
                     "inputObject='" + inputObject + '\'' +
                     '}';
         }
@@ -173,7 +173,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "MutatedObject{" +
+            return "TransactionQuery.MutatedObject{" +
                     "mutatedObject='" + mutatedObject + '\'' +
                     '}';
         }
@@ -200,7 +200,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "FromAddress{" +
+            return "TransactionQuery.FromAddress{" +
                     "fromAddress='" + fromAddress + '\'' +
                     '}';
         }
@@ -227,7 +227,7 @@ public interface TransactionQuery {
 
         @Override
         public String toString() {
-            return "ToAddress{" +
+            return "TransactionQuery.ToAddress{" +
                     "toAddress='" + toAddress + '\'' +
                     '}';
         }

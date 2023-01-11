@@ -105,6 +105,11 @@ public interface SuiMoveNormalizedType {
         };
 
         public abstract String getCode();
+
+        @Override
+        public String toString() {
+            return "Primitive." + getCode() + "{}";
+        }
     }
 
     class PrimitiveDeserializer extends JsonDeserializer<Primitive> {
@@ -149,7 +154,7 @@ public interface SuiMoveNormalizedType {
 
         @Override
         public String toString() {
-            return "Struct{" +
+            return "SuiMoveNormalizedType.Struct{" +
                     "struct=" + struct +
                     '}';
         }
@@ -205,7 +210,7 @@ public interface SuiMoveNormalizedType {
 
             @Override
             public String toString() {
-                return "StructProperties{" +
+                return "SuiMoveNormalizedType.Struct.StructProperties{" +
                         "address='" + address + '\'' +
                         ", module='" + module + '\'' +
                         ", name='" + name + '\'' +
@@ -236,7 +241,7 @@ public interface SuiMoveNormalizedType {
 
         @Override
         public String toString() {
-            return "Vector{" +
+            return "SuiMoveNormalizedType.Vector{" +
                     "vector=" + vector +
                     '}';
         }
@@ -263,7 +268,7 @@ public interface SuiMoveNormalizedType {
 
         @Override
         public String toString() {
-            return "TypeParameter{" +
+            return "SuiMoveNormalizedType.TypeParameter{" +
                     "typeParameter=" + typeParameter +
                     '}';
         }
@@ -290,7 +295,7 @@ public interface SuiMoveNormalizedType {
 
         @Override
         public String toString() {
-            return "Reference{" +
+            return "SuiMoveNormalizedType.Reference{" +
                     "reference=" + reference +
                     '}';
         }
@@ -317,7 +322,7 @@ public interface SuiMoveNormalizedType {
 
         @Override
         public String toString() {
-            return "MutableReference{" +
+            return "SuiMoveNormalizedType.MutableReference{" +
                     "mutableReference=" + mutableReference +
                     '}';
         }

@@ -28,7 +28,7 @@ public interface MoveFunctionArgType {
 
         @Override
         public String toString() {
-            return "Pure{}";
+            return "InputObjectKind.Pure{}";
         }
     }
 
@@ -60,7 +60,7 @@ public interface MoveFunctionArgType {
 
         @Override
         public String toString() {
-            return "Object{" +
+            return "InputObjectKind.Object{" +
                     "objectValueKind=" + objectValueKind +
                     '}';
         }

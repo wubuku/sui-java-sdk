@@ -22,10 +22,10 @@ public class SuiJsonRpcClientTests {
     ObjectMapper objectMapper = new ObjectMapper();
 
 
-    //@Test
+    @Test
     void testGetMoveEvents_1() throws MalformedURLException, JsonProcessingException {
-        String url = "http://localhost:9000";
-        //String url = "https://fullnode.devnet.sui.io/";
+        //String url = "http://localhost:9000";
+        String url = "https://fullnode.devnet.sui.io/";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
         PaginatedMoveEvents<JsonRpcTests.MintNFTEvent> moveEvents = client.getMoveEvents(
                 "0x2::devnet_nft::MintNFTEvent",
@@ -118,6 +118,25 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
+    @Test
+    void testGetMoveEvents_3() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String packageId = "0x7b07e7ba1f0902d589202277c65c59fc55f25085";
+        PaginatedMoveEvents<OnlyIdFields> events_1 = client.getMoveEvents(
+                packageId + "::domain_name::DomainNameIdTableCreated",
+                null, 10, false, OnlyIdFields.class);
+        System.out.println(events_1);
+        if (events_1.getData() != null && !events_1.getData().isEmpty()) {
+            System.out.println(events_1.getData().get(0).getEvent().getMoveEvent().getFields().getId());
+        }
+        PaginatedMoveEvents<OnlyIdFields> events_2 = client.getMoveEvents(
+                packageId + "::product::ProductIdGeneratorCreated",
+                null, 10, false, OnlyIdFields.class);
+        System.out.println(events_2);
+        if (events_1.getData() != null && !events_1.getData().isEmpty()) {
+            System.out.println(events_2.getData().get(0).getEvent().getMoveEvent().getFields().getId());
+        }
+    }
 
     @Test
     void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {

@@ -44,7 +44,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "Package{" +
+            return "SuiEventFilter.Package{" +
                     "package_=" + package_ +
                     '}';
         }
@@ -71,7 +71,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "Module{" +
+            return "SuiEventFilter.Module{" +
                     "module=" + module +
                     '}';
         }
@@ -98,7 +98,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "MoveEventType{" +
+            return "SuiEventFilter.MoveEventType{" +
                     "moveEventType=" + moveEventType +
                     '}';
         }
@@ -125,7 +125,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "MoveEventField{" +
+            return "SuiEventFilter.MoveEventField{" +
                     "moveEventField=" + moveEventField +
                     '}';
         }
@@ -152,7 +152,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "Sender{" +
+            return "SuiEventFilter.Sender{" +
                     "sender='" + senderAddress + '\'' +
                     '}';
         }
@@ -179,7 +179,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "EventType{" +
+            return "SuiEventFilter.EventType{" +
                     "eventType='" + eventType + '\'' +
                     '}';
         }
@@ -206,7 +206,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "All{" +
+            return "SuiEventFilter.All{" +
                     "all=" + Arrays.toString(all) +
                     '}';
         }
@@ -233,7 +233,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "Any{" +
+            return "SuiEventFilter.Any{" +
                     "any=" + Arrays.toString(any) +
                     '}';
         }
@@ -260,7 +260,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "And{" +
+            return "SuiEventFilter.And{" +
                     "and=" + Arrays.toString(and) +
                     '}';
         }
@@ -287,7 +287,7 @@ public interface SuiEventFilter {
 
         @Override
         public String toString() {
-            return "Or{" +
+            return "SuiEventFilter.Or{" +
                     "or=" + Arrays.toString(or) +
                     '}';
         }

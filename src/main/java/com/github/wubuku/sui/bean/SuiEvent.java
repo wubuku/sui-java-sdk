@@ -46,7 +46,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "MoveEvent{" +
+            return "SuiEvent.MoveEvent{" +
                     "moveEvent='" + moveEvent + '\'' +
                     '}';
         }
@@ -72,7 +72,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "Publish{" +
+            return "SuiEvent.Publish{" +
                     "publish=" + publish +
                     '}';
         }
@@ -98,7 +98,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "CoinBalanceChange{" +
+            return "SuiEvent.CoinBalanceChange{" +
                     "coinBalanceChange=" + coinBalanceChange +
                     '}';
         }
@@ -124,7 +124,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "TransferObject{" +
+            return "SuiEvent.TransferObject{" +
                     "transferObject=" + transferObject +
                     '}';
         }
@@ -150,7 +150,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "MutateObject{" +
+            return "SuiEvent.MutateObject{" +
                     "mutateObject=" + mutateObject +
                     '}';
         }
@@ -176,7 +176,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "DeleteObject{" +
+            return "SuiEvent.DeleteObject{" +
                     "deleteObject=" + deleteObject +
                     '}';
         }
@@ -202,7 +202,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "NewObject{" +
+            return "SuiEvent.NewObject{" +
                     "newObject=" + newObject +
                     '}';
         }
@@ -228,7 +228,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "EpochChange{" +
+            return "SuiEvent.EpochChange{" +
                     "epochChange=" + epochChange +
                     '}';
         }
@@ -254,7 +254,7 @@ public interface SuiEvent {
 
         @Override
         public String toString() {
-            return "Checkpoint{" +
+            return "SuiEvent.Checkpoint{" +
                     "checkpoint=" + checkpoint +
                     '}';
         }

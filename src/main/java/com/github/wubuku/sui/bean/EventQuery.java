@@ -32,7 +32,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "All{}";
+            return "EventQuery.All{}";
         }
     }
 
@@ -64,7 +64,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "Transaction{" +
+            return "EventQuery.Transaction{" +
                     "transaction='" + transaction + '\'' +
                     '}';
         }
@@ -95,7 +95,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "MoveModule{" +
+            return "EventQuery.MoveModule{" +
                     "moveModule=" + moveModule +
                     '}';
         }
@@ -160,7 +160,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "MoveEvent{" +
+            return "EventQuery.MoveEvent{" +
                     "moveEvent='" + moveEvent + '\'' +
                     '}';
         }
@@ -203,7 +203,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "EventType{" +
+            return "EventQuery.EventType{" +
                     "eventType='" + eventType + '\'' +
                     '}';
         }
@@ -230,7 +230,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "Sender{" +
+            return "EventQuery.Sender{" +
                     "sender='" + sender + '\'' +
                     '}';
         }
@@ -257,7 +257,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "Recipient{" +
+            return "EventQuery.Recipient{" +
                     "recipient=" + recipient +
                     '}';
         }
@@ -284,7 +284,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "Object{" +
+            return "EventQuery.Object{" +
                     "objectId='" + objectId + '\'' +
                     '}';
         }
@@ -311,7 +311,7 @@ public interface EventQuery {
 
         @Override
         public String toString() {
-            return "TimeRange{" +
+            return "EventQuery.TimeRange{" +
                     "timeRange=" + timeRange +
                     '}';
         }
@@ -348,7 +348,7 @@ public interface EventQuery {
 
             @Override
             public String toString() {
-                return "TimeRangeProperties{" +
+                return "EventQuery.TimeRangeProperties{" +
                         "startTime=" + startTime +
                         ", endTime=" + endTime +
                         '}';

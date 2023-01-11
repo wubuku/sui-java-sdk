@@ -87,7 +87,7 @@ public interface TypeTag {
 
         @Override
         public String toString() {
-            return "Vector{" +
+            return "TypeTag.Vector{" +
                     "vector=" + vector +
                     '}';
         }
@@ -113,7 +113,7 @@ public interface TypeTag {
 
         @Override
         public String toString() {
-            return "Struct{" +
+            return "TypeTag.Struct{" +
                     "struct=" + struct +
                     '}';
         }

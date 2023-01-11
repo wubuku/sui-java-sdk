@@ -34,7 +34,7 @@ public interface RPCTransactionRequestParams {
 
         @Override
         public String toString() {
-            return "TransferObjectRequestParams{" +
+            return "RPCTransactionRequestParams.TransferObjectRequestParams{" +
                     "transferObjectRequestParams=" + transferObjectRequestParams +
                     '}';
         }
@@ -60,7 +60,7 @@ public interface RPCTransactionRequestParams {
 
         @Override
         public String toString() {
-            return "MoveCallRequestParams{" +
+            return "RPCTransactionRequestParams.MoveCallRequestParams{" +
                     "moveCallRequestParams=" + moveCallRequestParams +
                     '}';
         }

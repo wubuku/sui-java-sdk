@@ -40,7 +40,7 @@ public interface GenericAuthoritySignature {
 
         @Override
         public String toString() {
-            return "AuthoritySignatureArray{" +
+            return "GenericAuthoritySignature.AuthoritySignatureArray{" +
                     "signatures=" + Arrays.toString(signatures) +
                     '}';
         }
@@ -66,7 +66,7 @@ public interface GenericAuthoritySignature {
 
         @Override
         public String toString() {
-            return "AuthoritySignature{" +
+            return "GenericAuthoritySignature.AuthoritySignature{" +
                     "signature='" + signature + '\'' +
                     '}';
         }

@@ -42,7 +42,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "TransferObject{" +
+            return "SuiTransactionKind.TransferObject{" +
                     "transferObject=" + transferObject +
                     '}';
         }
@@ -69,7 +69,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "Publish{" +
+            return "SuiTransactionKind.Publish{" +
                     "publish=" + publish +
                     '}';
         }
@@ -96,7 +96,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "Call{" +
+            return "SuiTransactionKind.Call{" +
                     "call=" + call +
                     '}';
         }
@@ -123,7 +123,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "TransferSui{" +
+            return "SuiTransactionKind.TransferSui{" +
                     "transferSui=" + transferSui +
                     '}';
         }
@@ -150,7 +150,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "ChangeEpoch{" +
+            return "SuiTransactionKind.ChangeEpoch{" +
                     "changeEpoch=" + changeEpoch +
                     '}';
         }
@@ -177,7 +177,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "Pay{" +
+            return "SuiTransactionKind.Pay{" +
                     "pay=" + pay +
                     '}';
         }
@@ -204,7 +204,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "PaySui{" +
+            return "SuiTransactionKind.PaySui{" +
                     "paySui=" + paySui +
                     '}';
         }
@@ -231,7 +231,7 @@ public interface SuiTransactionKind {
 
         @Override
         public String toString() {
-            return "PayAllSui{" +
+            return "SuiTransactionKind.PayAllSui{" +
                     "payAllSui=" + payAllSui +
                     '}';
         }

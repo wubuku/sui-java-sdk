@@ -52,7 +52,7 @@ public interface SuiData {
 
         @Override
         public String toString() {
-            return "SuiMoveObject{" +
+            return "SuiData.SuiMoveObject{" +
                     "dataType=" + dataType +
                     ", type='" + getType() + '\'' +
                     ", fields=" + getFields() +
@@ -83,7 +83,7 @@ public interface SuiData {
 
         @Override
         public String toString() {
-            return "SuiMovePackage{" +
+            return "SuiData.SuiMovePackage{" +
                     "dataType=" + dataType +
                     ", disassembled=" + getDisassembled() +
                     '}';

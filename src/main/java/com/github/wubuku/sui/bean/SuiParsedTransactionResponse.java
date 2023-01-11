@@ -43,7 +43,7 @@ public interface SuiParsedTransactionResponse {
 
         @Override
         public String toString() {
-            return "SplitCoin{" +
+            return "SuiParsedTransactionResponse.SplitCoin{" +
                     "splitCoin=" + splitCoin +
                     '}';
         }
@@ -70,7 +70,7 @@ public interface SuiParsedTransactionResponse {
 
         @Override
         public String toString() {
-            return "MergeCoin{" +
+            return "SuiParsedTransactionResponse.MergeCoin{" +
                     "mergeCoin=" + mergeCoin +
                     '}';
         }
@@ -97,7 +97,7 @@ public interface SuiParsedTransactionResponse {
 
         @Override
         public String toString() {
-            return "Publish{" +
+            return "SuiParsedTransactionResponse.Publish{" +
                     "publish=" + publish +
                     '}';
         }

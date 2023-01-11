@@ -44,7 +44,7 @@ public interface InputObjectKind {
 
         @Override
         public String toString() {
-            return "MovePackage{" +
+            return "InputObjectKind.MovePackage{" +
                     "movePackage=" + movePackage +
                     '}';
         }
@@ -71,7 +71,7 @@ public interface InputObjectKind {
 
         @Override
         public String toString() {
-            return "ImmOrOwnedMoveObject{" +
+            return "InputObjectKind.ImmOrOwnedMoveObject{" +
                     "immOrOwnedMoveObject=" + immOrOwnedMoveObject +
                     '}';
         }
@@ -102,7 +102,7 @@ public interface InputObjectKind {
 
         @Override
         public String toString() {
-            return "SharedMoveObject{" +
+            return "InputObjectKind.SharedMoveObject{" +
                     "sharedMoveObject=" + sharedMoveObject +
                     '}';
         }
@@ -138,7 +138,7 @@ public interface InputObjectKind {
 
             @Override
             public String toString() {
-                return "SharedMoveObjectProperties{" +
+                return "InputObjectKind.SharedMoveObjectProperties{" +
                         "id='" + id + '\'' +
                         ", initialSharedVersion=" + initialSharedVersion +
                         '}';

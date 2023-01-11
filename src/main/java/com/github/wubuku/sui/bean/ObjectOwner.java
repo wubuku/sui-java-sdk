@@ -44,7 +44,7 @@ public interface ObjectOwner {
 
         @Override
         public String toString() {
-            return "AddressOwner{" +
+            return "ObjectOwner.AddressOwner{" +
                     "addressOwner='" + addressOwner + '\'' +
                     '}';
         }
@@ -71,7 +71,7 @@ public interface ObjectOwner {
 
         @Override
         public String toString() {
-            return "ObjectOwner_{" +
+            return "ObjectOwner.ObjectOwner_{" +
                     "objectOwner='" + objectOwner + '\'' +
                     '}';
         }
@@ -98,7 +98,7 @@ public interface ObjectOwner {
 
         @Override
         public String toString() {
-            return "Shared{" +
+            return "ObjectOwner.Shared{" +
                     "shared=" + shared +
                     '}';
         }
@@ -124,7 +124,7 @@ public interface ObjectOwner {
 
             @Override
             public String toString() {
-                return "SharedProperties{" +
+                return "ObjectOwner.Shared.SharedProperties{" +
                         "initialSharedVersion=" + initialSharedVersion +
                         '}';
             }
@@ -137,7 +137,7 @@ public interface ObjectOwner {
 
         @Override
         public String toString() {
-            return "Immutable{}";
+            return "ObjectOwner.Immutable{}";
         }
     }
 

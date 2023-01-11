@@ -37,7 +37,7 @@ public interface SuiJsonValue {
 
         @Override
         public java.lang.String toString() {
-            return "Boolean{" +
+            return "SuiJsonValue.Boolean{" +
                     "value=" + value +
                     '}';
         }
@@ -63,7 +63,7 @@ public interface SuiJsonValue {
 
         @Override
         public java.lang.String toString() {
-            return "Number{" +
+            return "SuiJsonValue.Number{" +
                     "value=" + value +
                     '}';
         }
@@ -93,7 +93,7 @@ public interface SuiJsonValue {
 
         @Override
         public java.lang.String toString() {
-            return "U64{" +
+            return "SuiJsonValue.U64{" +
                     "value=" + value +
                     '}';
         }
@@ -119,7 +119,7 @@ public interface SuiJsonValue {
 
         @Override
         public java.lang.String toString() {
-            return "String{" +
+            return "SuiJsonValue.String{" +
                     "value='" + value + '\'' +
                     '}';
         }
@@ -145,7 +145,7 @@ public interface SuiJsonValue {
 
         @Override
         public java.lang.String toString() {
-            return "Array{" +
+            return "SuiJsonValue.Array{" +
                     "values=" + Arrays.toString(values) +
                     '}';
         }
