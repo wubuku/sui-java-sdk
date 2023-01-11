@@ -150,13 +150,29 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetObjectOwnedByObject_1() throws MalformedURLException, JsonProcessingException {
+    void testGetObjectsOwnedByObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         List<SuiObjectInfo> objectsOwnedByObject = client.getObjectsOwnedByObject(
                 "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10"
         );
         System.out.println(objectsOwnedByObject);
         System.out.println(objectMapper.writeValueAsString(objectsOwnedByObject));
+    }
+
+    @Test
+    void testGetDynamicFields_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        DynamicFieldPage dynamicFieldPage = client.getDynamicFields(
+                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10",
+                null, null
+        );
+        System.out.println(dynamicFieldPage);
+        System.out.println(objectMapper.writeValueAsString(dynamicFieldPage));
+        dynamicFieldPage.getData().forEach(dynamicField -> {
+            System.out.println(dynamicField.getType());
+            System.out.println(dynamicField.getName());
+            System.out.println(dynamicField.getObjectId());
+        });
     }
 
     @Test
@@ -168,6 +184,22 @@ public class SuiJsonRpcClientTests {
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetDynamicFieldObject() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String parentObjectId = "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10";
+        String name = "0x1::string::String {bytes: vector[48u8, 49u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8]}";
+        // ------------------
+        GetObjectDataResponse getObjectDataResponse = client.getDynamicFieldObject(parentObjectId, name);
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+        // ------------------
+        GetMoveObjectDataResponse<TestOrder.OrderItemField> getMoveObjectDataResponse = client
+                .getDynamicFieldMoveObject(parentObjectId, name, TestOrder.OrderItemField.class);
+        System.out.println(getMoveObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getMoveObjectDataResponse));
     }
 
 

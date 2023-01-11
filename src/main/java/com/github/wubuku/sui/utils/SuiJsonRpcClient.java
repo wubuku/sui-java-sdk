@@ -205,6 +205,32 @@ public class SuiJsonRpcClient {
         }
     }
 
+    /**
+     * Return the list of dynamic field objects owned by an object.
+     *
+     * @param parentObjectId The ID of the parent object
+     * @param cursor         Optional paging cursor
+     * @param limit          Maximum item returned per page, default to [QUERY_MAX_RESULT_LIMIT] if not specified.
+     */
+    public DynamicFieldPage getDynamicFields(
+            String parentObjectId, String cursor, Integer limit
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(parentObjectId);
+        params.add(cursor);
+        params.add(limit);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getDynamicFields", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<DynamicFieldPage> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    DynamicFieldPage.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public GetRawObjectDataResponse getRawObject(String objectId) {
         List<Object> params = new ArrayList<>();
         params.add(objectId);

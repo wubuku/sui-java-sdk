@@ -1,6 +1,6 @@
-# sui-java-sdk
+# Sui Java SDK
 
-This is an Sui Java SDK.
+This is a [Sui](https://sui.io) Java SDK. 
 
 ## How to use
 
@@ -109,3 +109,6 @@ public class SuiJsonRpcClientTests {
 }
 ```
 
+### More examples
+
+See unit tests in directory `src/test/java/com/github/wubuku/sui`.

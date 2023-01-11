@@ -47,7 +47,7 @@ public class Table extends MoveObject<Table.Fields> {
 
         @Override
         public String toString() {
-            return "Fields{" +
+            return "Table.Fields{" +
                     "id=" + id +
                     ", size=" + size +
                     '}';
