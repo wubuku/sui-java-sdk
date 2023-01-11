@@ -875,6 +875,19 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public BigInteger getLatestCheckpointSequenceNumber() {
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getLatestCheckpointSequenceNumber",
+                Collections.emptyList(), System.currentTimeMillis());
+        try {
+            JSONRPC2Response<BigInteger> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    BigInteger.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public CheckpointContents getCheckpointContentsBySequenceNumber(Long sequenceNumber) {
         List<Object> params = new ArrayList<>();
         params.add(sequenceNumber);

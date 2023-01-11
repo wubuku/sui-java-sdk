@@ -702,8 +702,15 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(result));
     }
 
+    //@Test
+    void testGetLatestCheckpointSequenceNumber_1() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        BigInteger result = client.getLatestCheckpointSequenceNumber();
+        System.out.println(result);
+    }
+
     @Test
-    void testGetCheckpointContentsBySequenceNumber() throws MalformedURLException, JsonProcessingException {
+    void testGetCheckpointContentsBySequenceNumber_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         CheckpointContents result = client.getCheckpointContentsBySequenceNumber(1L);
         System.out.println(result);
