@@ -3,6 +3,7 @@ package com.github.wubuku.sui.bean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * From Rust definition:
@@ -146,6 +147,13 @@ public class SuiSystemState {
 
         public ValidatorReportRecords(Entry<String, VecSet<String>>[] contents) {
             super(contents);
+        }
+
+        @Override
+        public String toString() {
+            return "SuiSystemState.ValidatorReportRecords{" +
+                    "contents=" + Arrays.toString(getContents()) +
+                    '}';
         }
     }
 }

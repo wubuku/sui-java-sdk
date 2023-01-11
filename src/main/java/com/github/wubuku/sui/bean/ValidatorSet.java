@@ -126,5 +126,12 @@ public class ValidatorSet {
         public PendingDelegationSwitches(Entry<ValidatorPair, PendingWithdrawEntry[]>[] contents) {
             super(contents);
         }
+
+        @Override
+        public String toString() {
+            return "ValidatorSet.PendingDelegationSwitches{" +
+                    "contents=" + Arrays.toString(getContents()) +
+                    '}';
+        }
     }
 }

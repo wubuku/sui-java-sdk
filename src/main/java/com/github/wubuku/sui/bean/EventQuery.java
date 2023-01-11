@@ -131,7 +131,7 @@ public interface EventQuery {
 
             @Override
             public String toString() {
-                return "MoveModuleProperties{" +
+                return "EventQuery.MoveModule.MoveModuleProperties{" +
                         "package_='" + package_ + '\'' +
                         ", module='" + module + '\'' +
                         '}';
@@ -348,7 +348,7 @@ public interface EventQuery {
 
             @Override
             public String toString() {
-                return "EventQuery.TimeRangeProperties{" +
+                return "EventQuery.TimeRange.TimeRangeProperties{" +
                         "startTime=" + startTime +
                         ", endTime=" + endTime +
                         '}';

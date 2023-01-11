@@ -45,7 +45,7 @@ public interface SuiExecuteTransactionResponse {
 
         @Override
         public String toString() {
-            return "ImmediateReturn{" +
+            return "SuiExecuteTransactionResponse.ImmediateReturn{" +
                     "immediateReturn=" + immediateReturn +
                     '}';
         }
@@ -71,7 +71,7 @@ public interface SuiExecuteTransactionResponse {
 
             @Override
             public String toString() {
-                return "ImmediateReturn{" +
+                return "SuiExecuteTransactionResponse.ImmediateReturn.ImmediateReturnProperties{" +
                         "tx_digest='" + txDigest + '\'' +
                         '}';
             }
@@ -99,7 +99,7 @@ public interface SuiExecuteTransactionResponse {
 
         @Override
         public String toString() {
-            return "TxCert{" +
+            return "SuiExecuteTransactionResponse.TxCert{" +
                     "txCert=" + txCert +
                     '}';
         }
@@ -125,7 +125,7 @@ public interface SuiExecuteTransactionResponse {
 
             @Override
             public String toString() {
-                return "TxCertProperties{" +
+                return "SuiExecuteTransactionResponse.TxCert.TxCertProperties{" +
                         "certificate=" + certificate +
                         '}';
             }
@@ -153,7 +153,7 @@ public interface SuiExecuteTransactionResponse {
 
         @Override
         public String toString() {
-            return "EffectsCert{" +
+            return "SuiExecuteTransactionResponse.EffectsCert{" +
                     "effectsCert=" + effectsCert +
                     '}';
         }
@@ -196,7 +196,7 @@ public interface SuiExecuteTransactionResponse {
 
             @Override
             public String toString() {
-                return "EffectsCertProperties{" +
+                return "SuiExecuteTransactionResponse.EffectsCert.EffectsCertProperties{" +
                         "certificate=" + certificate +
                         ", effects=" + effects +
                         ", confirmedLocalExecution=" + confirmedLocalExecution +

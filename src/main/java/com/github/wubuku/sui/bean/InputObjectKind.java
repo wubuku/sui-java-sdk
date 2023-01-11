@@ -138,7 +138,7 @@ public interface InputObjectKind {
 
             @Override
             public String toString() {
-                return "InputObjectKind.SharedMoveObjectProperties{" +
+                return "InputObjectKind.SharedMoveObject.SharedMoveObjectProperties{" +
                         "id='" + id + '\'' +
                         ", initialSharedVersion=" + initialSharedVersion +
                         '}';
