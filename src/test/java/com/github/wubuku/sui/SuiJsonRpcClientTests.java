@@ -34,8 +34,9 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(moveEvents));
     }
 
+
     //@Test
-    void testGetMoveEvents_2() throws MalformedURLException, JsonProcessingException {
+    void testGetEvents_2() throws MalformedURLException, JsonProcessingException {
         //String url = "https://fullnode.devnet.sui.io/";
         String url = "http://localhost:9000";
         String transactionDigest = "3LBcVgGGXvKzRoQeNGvZZv64d5fWLrYmW78h2pU4Fw7n";
@@ -47,15 +48,28 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(events));
     }
 
-    //@Test
+    @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
         String url = "https://fullnode.devnet.sui.io/";
+        String packageId = "0x7b07e7ba1f0902d589202277c65c59fc55f25085";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
+//        PaginatedEvents events_c = client.getEvents(
+//                new EventQuery.EventType(EventType.CHECKPOINT),
+//                null, 1, false);
+//        System.out.println(events_c);
+        if (true) return;
+        // -----------------------
         PaginatedEvents events = client.getEvents(
-                new EventQuery.MoveEvent("0xcf827c62221d338834091d8d4549861acfede3fb::product::ProductCreated"),
+                new EventQuery.MoveEvent(packageId + "::product::ProductCreated"),
                 null, 10, false);
         System.out.println(events);
         System.out.println(objectMapper.writeValueAsString(events));
+        // -----------------------
+        PaginatedMoveEvents<ProductCreated> paginatedMoveEvents = client.getMoveEvents(
+                packageId + "::product::ProductCreated",
+                null, 10, false, ProductCreated.class);
+        System.out.println(paginatedMoveEvents);
+        System.out.println(objectMapper.writeValueAsString(paginatedMoveEvents));
     }
 
     @Test
@@ -202,6 +216,16 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(getMoveObjectDataResponse));
     }
 
+    @Test
+    void testGetRawObject_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetRawObjectDataResponse getObjectDataResponse = client.getRawObject(
+                "0x1a8e812a50899e9356044b99b1195771082e9197"
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
 
 //    @Test
 //    void testGetDynamicFieldObject_1() throws MalformedURLException, JsonProcessingException {
@@ -213,17 +237,6 @@ public class SuiJsonRpcClientTests {
 //        System.out.println(getObjectDataResponse);
 //        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
 //    }
-
-
-    @Test
-    void testGetRawObject_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetRawObjectDataResponse getObjectDataResponse = client.getRawObject(
-                "0x1a8e812a50899e9356044b99b1195771082e9197"
-        );
-        System.out.println(getObjectDataResponse);
-        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
-    }
 
     @Test
     void tryGetPastObject_1() throws MalformedURLException, JsonProcessingException {
@@ -687,6 +700,31 @@ public class SuiJsonRpcClientTests {
         SuiSystemState result = client.getSuiSystemState();
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    @Test
+    void testGetCheckpointContentsBySequenceNumber() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        CheckpointContents result = client.getCheckpointContentsBySequenceNumber(1L);
+        System.out.println(result);
+        System.out.println(objectMapper.writeValueAsString(result));
+    }
+
+    public static class ProductCreated {
+        public String id;//: object::ID,
+        public String product_id;//: String,
+        public String name;//: String,
+        public BigInteger unit_price;//: u128,
+
+        @Override
+        public String toString() {
+            return "ProductCreated{" +
+                    "id='" + id + '\'' +
+                    ", product_id='" + product_id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", unit_price=" + unit_price +
+                    '}';
+        }
     }
 
 

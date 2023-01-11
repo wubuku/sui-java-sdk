@@ -875,4 +875,20 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public CheckpointContents getCheckpointContentsBySequenceNumber(Long sequenceNumber) {
+        List<Object> params = new ArrayList<>();
+        params.add(sequenceNumber);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getCheckpointContentsBySequenceNumber",
+                params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<CheckpointContents> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    CheckpointContents.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
