@@ -7,6 +7,8 @@ import com.github.wubuku.sui.utils.HexUtils;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import com.github.wubuku.sui.utils.TransactionUtils;
 import com.google.common.primitives.Bytes;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -53,13 +55,13 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
         String url = "https://fullnode.devnet.sui.io/";
-        String packageId = "0x7b07e7ba1f0902d589202277c65c59fc55f25085";
+        String packageId = "0xa24cb627d4adf387862d3c8f96753c7796952745";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
 //        PaginatedEvents events_c = client.getEvents(
 //                new EventQuery.EventType(EventType.CHECKPOINT),
 //                null, 1, false);
 //        System.out.println(events_c);
-        if (true) return;
+        //if (true) return;
         // -----------------------
         PaginatedEvents events = client.getEvents(
                 new EventQuery.MoveEvent(packageId + "::product::ProductCreated"),
@@ -158,22 +160,60 @@ public class SuiJsonRpcClientTests {
     void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         GetMoveObjectDataResponse<TestOrder> getObjectDataResponse = client.getMoveObject(
-                "0x595e185525f2a9bb892dc634ba95a10f78010c1e",
+                //"0x595e185525f2a9bb892dc634ba95a10f78010c1e",
+                "0xa685fbff764afc86a9e9c3f1e75d2b745ff57d1d",
                 TestOrder.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+        TestOrder testOrder = getObjectDataResponse.getDetails().getData().getFields();
+        String testOrderItemTableId = testOrder.items.getFields().getId().getId();
+        System.out.println(testOrderItemTableId);
+
+        DynamicFieldPage testOrderItems = client.getDynamicFields(testOrderItemTableId, null, null);
+
+        for (DynamicFieldInfo testOrderItemFieldInfo : testOrderItems.getData()) {
+            System.out.println(testOrderItemFieldInfo);
+            String fieldName = testOrderItemFieldInfo.getName();
+            System.out.println("field name: " + fieldName);
+            String fieldObjectId = testOrderItemFieldInfo.getObjectId();
+            System.out.println("field object Id: " + fieldObjectId);
+            System.out.println("== get dynamic field object by parent_id and field_name ==");
+            GetMoveObjectDataResponse<TestOrder.OrderItemField> getOrderItemFieldObjectDataResponse = client
+                    .getDynamicFieldMoveObject(testOrderItemTableId, fieldName, TestOrder.OrderItemField.class);
+            System.out.println(getOrderItemFieldObjectDataResponse);
+            System.out.println(getOrderItemFieldObjectDataResponse.getDetails().getData().getFields().getId());
+            System.out.println("== get object by id. ==");
+            GetMoveObjectDataResponse<TestOrder.OrderItemField> getOrderItemFieldObjectDataResponse_2 = client.getMoveObject(fieldObjectId, TestOrder.OrderItemField.class);
+            System.out.println(getOrderItemFieldObjectDataResponse_2);
+            System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getName());
+            System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getId());
+            TestOrder.OrderItem orderItem = getOrderItemFieldObjectDataResponse_2.getDetails()
+                    .getData() // MoveObject<TestOrder.OrderItemField>
+                    .getFields() // TestOrder.OrderItemField
+                    .getValue() // MoveObject<TestOrder.OrderItem>
+                    .getFields() // TestOrder.OrderItem
+                    ;
+            System.out.println(orderItem);
+        }
+
+//        GetMoveObjectDataResponse<TestOrder.OrderItemField> getOrderItemsObjectDataResponse = client.getMoveObject(
+//                testOrderItemTableId.getId(),
+//                TestOrder.OrderItemField.class
+//        );
+//        System.out.println(getOrderItemsObjectDataResponse);
+//        System.out.println(objectMapper.writeValueAsString(getOrderItemsObjectDataResponse));
     }
 
-    @Test
-    void testGetObjectsOwnedByObject_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        List<SuiObjectInfo> objectsOwnedByObject = client.getObjectsOwnedByObject(
-                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10"
-        );
-        System.out.println(objectsOwnedByObject);
-        System.out.println(objectMapper.writeValueAsString(objectsOwnedByObject));
-    }
+//    @Test
+//    void testGetObjectsOwnedByObject_1() throws MalformedURLException, JsonProcessingException {
+//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+//        List<SuiObjectInfo> objectsOwnedByObject = client.getObjectsOwnedByObject(
+//                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10"
+//        );
+//        System.out.println(objectsOwnedByObject);
+//        System.out.println(objectMapper.writeValueAsString(objectsOwnedByObject));
+//    }
 
     @Test
     void testGetDynamicFields_1() throws MalformedURLException, JsonProcessingException {
@@ -301,6 +341,19 @@ public class SuiJsonRpcClientTests {
                 "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa"
         );
         System.out.println(balanceList);
+    }
+
+    //@Test
+    void testPrivateKeyToPublicKey() {
+        String privateKeyHex = "";//fill in private key
+        byte[] privateKeyBytes = HexUtils.hexToByteArray(privateKeyHex);
+        Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(privateKeyBytes);
+        Ed25519PublicKeyParameters publicKeyParameters = privateKeyParameters.generatePublicKey();
+        byte[] publicKeyBytes = publicKeyParameters.getEncoded();
+        String publicKeyHex = HexUtils.byteArrayToHex(publicKeyBytes);
+        System.out.println(publicKeyHex);//cd283a91930533987b1d2429db1b0453d03e5b188d00298a4bb6415f6cbf414e
+        String publicKeyBase64 = Base64.getEncoder().encodeToString(publicKeyBytes);
+        System.out.println(publicKeyBase64);//zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=
     }
 
     @Test

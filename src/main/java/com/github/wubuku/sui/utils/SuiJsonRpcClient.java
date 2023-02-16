@@ -133,14 +133,14 @@ public class SuiJsonRpcClient {
         return getObjects("sui_getObjectsOwnedByAddress", params);
     }
 
-    /**
-     * @param objectId the ID of the owner object
-     */
-    public List<SuiObjectInfo> getObjectsOwnedByObject(String objectId) {
-        List<Object> params = new ArrayList<>();
-        params.add(objectId);
-        return getObjects("sui_getObjectsOwnedByObject", params);
-    }
+//    /**
+//     * @param objectId the ID of the owner object
+//     */
+//    public List<SuiObjectInfo> getObjectsOwnedByObject(String objectId) {
+//        List<Object> params = new ArrayList<>();
+//        params.add(objectId);
+//        return getObjects("sui_getObjectsOwnedByObject", params);
+//    }
 
     private List<SuiObjectInfo> getObjects(String method, List<Object> params) {
         JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params,
