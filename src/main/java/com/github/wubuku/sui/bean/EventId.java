@@ -1,33 +1,35 @@
 package com.github.wubuku.sui.bean;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type EventId = {
- * txSeq: number,
- * eventSeq: number,
+ * #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+ * #[serde(rename_all = "camelCase")]
+ * pub struct EventID {
+ *     pub tx_digest: TransactionDigest,
+ *     pub event_seq: i64,
  * }
  * </pre>
  */
 public class EventId {
-    private Long txSeq;
+    private String txDigest;
     private Long eventSeq;
 
     public EventId() {
     }
 
-    public EventId(Long txSeq, Long eventSeq) {
-        this.txSeq = txSeq;
+    public EventId(String txDigest, Long eventSeq) {
+        this.txDigest = txDigest;
         this.eventSeq = eventSeq;
     }
 
-    public Long getTxSeq() {
-        return txSeq;
+    public String getTxDigest() {
+        return txDigest;
     }
 
-    public void setTxSeq(Long txSeq) {
-        this.txSeq = txSeq;
+    public void setTxDigest(String txDigest) {
+        this.txDigest = txDigest;
     }
 
     public Long getEventSeq() {
@@ -41,7 +43,7 @@ public class EventId {
     @Override
     public String toString() {
         return "EventId{" +
-                "txSeq=" + txSeq +
+                "txDigest='" + txDigest + '\'' +
                 ", eventSeq=" + eventSeq +
                 '}';
     }
