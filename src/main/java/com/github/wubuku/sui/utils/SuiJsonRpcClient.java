@@ -666,25 +666,19 @@ public class SuiJsonRpcClient {
 
     /**
      * @param txBytes     BCS serialized transaction data bytes without its type tag, as base-64 encoded string.
-     * @param sigScheme   Flag of the signature scheme that is used.
-     * @param signature   Signature committed to the intent message of the transaction data, as base-64 encoded string.
-     * @param pubKey      Signer's public key, as base-64 encoded string.
+     * @param signature   `flag || signature || pubkey` bytes, as base-64 encoded string, signature is committed to the intent message of the transaction data, as base-64 encoded string.
      * @param requestType The request type.
      */
-    public SuiExecuteTransactionResponse executeTransaction(
+    public SuiExecuteTransactionResponse executeTransactionSerializedSig(
             String txBytes,
-            String sigScheme,
             String signature,
-            String pubKey,
             String requestType
     ) {
         List<Object> params = new ArrayList<>();
         params.add(txBytes);
-        params.add(sigScheme);
         params.add(signature);
-        params.add(pubKey);
         params.add(requestType);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_executeTransaction", params,
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_executeTransactionSerializedSig", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<SuiExecuteTransactionResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,

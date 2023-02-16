@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * @param <D>         Details Type
@@ -57,7 +58,7 @@ public abstract class GetObjectDataResponseDetailsDeserializer<
              */
             String digest = null;
             String objectId = null;
-            Long version = null;
+            BigInteger version = null;
             while (null != fieldName) {
                 if ("data".equals(fieldName)) {
                     jsonParser.nextToken();
@@ -82,7 +83,7 @@ public abstract class GetObjectDataResponseDetailsDeserializer<
                     objectId = jsonParser.getValueAsString();
                 } else if ("version".equals(fieldName)) {
                     jsonParser.nextToken();
-                    version = jsonParser.getLongValue();
+                    version = jsonParser.getBigIntegerValue();
                 } else {
                     throw new InvalidFormatException(jsonParser, "GetObjectDataResponseDetailsDeserializer.deserialize() error.",
                             jsonParser.currentToken(), Object.class);
@@ -116,7 +117,7 @@ public abstract class GetObjectDataResponseDetailsDeserializer<
                                         Long storageRebate,
                                         OBJ_REF reference);
 
-    protected abstract OBJ_REF newSuiObjectRef(String digest, String objectId, Long version);
+    protected abstract OBJ_REF newSuiObjectRef(String digest, String objectId, BigInteger version);
 
     protected abstract Class<OBJ_REF> getSuiObjectRefClass();
 

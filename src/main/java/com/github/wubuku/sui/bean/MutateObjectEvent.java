@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.math.BigInteger;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -20,7 +22,7 @@ public class MutateObjectEvent {
     private String sender;
     private String objectType;
     private String objectId;
-    private Long version;
+    private BigInteger version;
 
     public String getPackageId() {
         return packageId;
@@ -62,11 +64,11 @@ public class MutateObjectEvent {
         this.objectId = objectId;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 

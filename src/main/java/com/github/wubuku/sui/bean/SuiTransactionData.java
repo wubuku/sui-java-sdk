@@ -6,28 +6,25 @@ import java.util.Arrays;
  * From TypeScript definition:
  * <p>
  * <pre>
- * export type SuiTransactionData = {
- *   transactions: SuiTransactionKind[];
- *   sender: SuiAddress;
- *   gasPayment: SuiObjectRef;
- *   gasBudget: number;
- * };
+ * #[derive(Debug, Deserialize, Serialize, JsonSchema, Clone)]
+ * #[serde(rename = "TransactionData", rename_all = "camelCase")]
+ * pub struct SuiTransactionData {
+ *     pub transactions: Vec<SuiTransactionKind>,
+ *     pub sender: SuiAddress,
+ *     pub gas_payment: SuiObjectRef,
+ *     pub gas_price: u64,
+ *     pub gas_budget: u64,
+ * }
  * </pre>
  */
 public class SuiTransactionData {
     private SuiTransactionKind[] transactions;
     private String sender;
     private SuiObjectRef gasPayment;
+    private Long gasPrice;
     private Long gasBudget;
 
     public SuiTransactionData() {
-    }
-
-    public SuiTransactionData(SuiTransactionKind[] transactions, String sender, SuiObjectRef gasPayment, Long gasBudget) {
-        this.transactions = transactions;
-        this.sender = sender;
-        this.gasPayment = gasPayment;
-        this.gasBudget = gasBudget;
     }
 
     public SuiTransactionKind[] getTransactions() {
@@ -62,12 +59,21 @@ public class SuiTransactionData {
         this.gasBudget = gasBudget;
     }
 
+    public Long getGasPrice() {
+        return gasPrice;
+    }
+
+    public void setGasPrice(Long gasPrice) {
+        this.gasPrice = gasPrice;
+    }
+
     @Override
     public String toString() {
         return "SuiTransactionData{" +
                 "transactions=" + Arrays.toString(transactions) +
                 ", sender='" + sender + '\'' +
                 ", gasPayment=" + gasPayment +
+                ", gasPrice=" + gasPrice +
                 ", gasBudget=" + gasBudget +
                 '}';
     }

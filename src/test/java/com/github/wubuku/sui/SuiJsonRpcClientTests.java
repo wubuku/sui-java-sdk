@@ -6,7 +6,9 @@ import com.github.wubuku.sui.bean.*;
 import com.github.wubuku.sui.utils.HexUtils;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import com.github.wubuku.sui.utils.TransactionUtils;
+import com.google.common.primitives.Bytes;
 import org.junit.jupiter.api.Test;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -303,16 +305,18 @@ public class SuiJsonRpcClientTests {
 
     @Test
     void testExecuteMoveCall_1() throws MalformedURLException, JsonProcessingException {
-        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         TransactionBytes encodeResult = encodeATestMoveCallTransaction(client, signerAddress);
         System.out.println(encodeResult);
         //System.out.println(objectMapper.writeValueAsString(result));
         String txBytes = encodeResult.getTxBytes();
-        String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
         String sigScheme = SignatureScheme.ED25519;
+
         String privateKeyHex = "";//todo fill in the private key here
+        String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+
         SuiExecuteTransactionResponse response = executeTransaction(client, txBytes,
                 publicKeyBase64, sigScheme, HexUtils.hexToByteArray(privateKeyHex));
         System.out.println(response);
@@ -333,14 +337,24 @@ public class SuiJsonRpcClientTests {
                                                              String txBytes,
                                                              String publicKeyBase64, String sigScheme,
                                                              byte[] privateKey) {
-        byte[] signature = TransactionUtils.ed25519SignTransactionBytes(privateKey, txBytes);
-        String signatureBase64 = Base64.getEncoder().encodeToString(signature);
+        byte sigSchemeByte;
+        if (SignatureScheme.ED25519.equals(sigScheme)) {
+            sigSchemeByte = 0;
+        } else {
+            throw new NotImplementedException();
+        }
+        byte[] publicKey = Base64.getDecoder().decode(publicKeyBase64);
+        //`flag || signature || pubkey` bytes,
+        byte[] signature = Bytes.concat(
+                new byte[]{sigSchemeByte},
+                TransactionUtils.ed25519SignTransactionBytes(privateKey, txBytes),
+                publicKey
+        );
         String requestType = ExecuteTransactionRequestType.WAIT_FOR_EFFECTS_CERT;
 
-        SuiExecuteTransactionResponse response = client.executeTransaction(
+        SuiExecuteTransactionResponse response = client.executeTransactionSerializedSig(
                 txBytes,
-                sigScheme, signatureBase64,
-                publicKeyBase64,
+                Base64.getEncoder().encodeToString(signature),
                 requestType
         );
         return response;

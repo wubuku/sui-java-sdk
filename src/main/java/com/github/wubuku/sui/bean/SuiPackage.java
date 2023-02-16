@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.math.BigInteger;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -14,12 +16,12 @@ package com.github.wubuku.sui.bean;
 public class SuiPackage {
     private String digest;
     private String objectId;
-    private Long version;
+    private BigInteger version;
 
     public SuiPackage() {
     }
 
-    public SuiPackage(String digest, String objectId, Long version) {
+    public SuiPackage(String digest, String objectId, BigInteger version) {
         this.digest = digest;
         this.objectId = objectId;
         this.version = version;
@@ -41,11 +43,11 @@ public class SuiPackage {
         this.objectId = objectId;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 

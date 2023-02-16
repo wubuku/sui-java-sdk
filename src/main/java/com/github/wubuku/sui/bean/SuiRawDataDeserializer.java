@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Map;
 
 public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
@@ -27,7 +28,7 @@ public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
             // SuiRawData.SuiMoveObject fields
             String type = null;
             Boolean has_public_transfer = null;
-            Long version = null;
+            BigInteger version = null;
             String bcsBytes = null;
             // SuiRawData.SuiMovePackage fields
             String id = null;
@@ -44,7 +45,7 @@ public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
                     has_public_transfer = jsonParser.getBooleanValue();
                 } else if ("version".equals(fieldName)) {
                     jsonParser.nextToken();
-                    version = jsonParser.getLongValue();
+                    version = jsonParser.getBigIntegerValue();
                 } else if ("bcs_bytes".equals(fieldName)) {
                     jsonParser.nextToken();
                     bcsBytes = jsonParser.getText();

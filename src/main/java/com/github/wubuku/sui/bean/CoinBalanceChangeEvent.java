@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.math.BigInteger;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -25,8 +27,8 @@ public class CoinBalanceChangeEvent {
     private BalanceChangeType changeType;
     private String coinType;
     private String coinObjectId;
-    private Long version;
-    private Long amount;
+    private BigInteger version;
+    private BigInteger amount;
 
     public String getPackageId() {
         return packageId;
@@ -84,19 +86,19 @@ public class CoinBalanceChangeEvent {
         this.coinObjectId = coinObjectId;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 
-    public Long getAmount() {
+    public BigInteger getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigInteger amount) {
         this.amount = amount;
     }
 

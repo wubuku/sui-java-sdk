@@ -2,6 +2,8 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigInteger;
+
 /**
  * From Rust definition:
  * <p>
@@ -24,14 +26,14 @@ public class SuiRawMoveObject {
     private String type;
     @JsonProperty("has_public_transfer")
     private Boolean hasPublicTransfer;
-    private Long version;
+    private BigInteger version;
     @JsonProperty("bcs_bytes")
     private String bcsBytes;
 
     public SuiRawMoveObject() {
     }
 
-    public SuiRawMoveObject(String type, Boolean hasPublicTransfer, Long version, String bcsBytes) {
+    public SuiRawMoveObject(String type, Boolean hasPublicTransfer, BigInteger version, String bcsBytes) {
         this.type = type;
         this.hasPublicTransfer = hasPublicTransfer;
         this.version = version;
@@ -54,11 +56,11 @@ public class SuiRawMoveObject {
         this.hasPublicTransfer = hasPublicTransfer;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 

@@ -6,27 +6,23 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type EpochId = number;
- *
- * export type AuthorityQuorumSignInfo = {
- *   epoch: EpochId;
- *   signature: GenericAuthoritySignature;
- * };
+ * pub struct SuiAuthorityStrongQuorumSignInfo {
+ *     pub epoch: EpochId,
+ *     pub signature: AggregateAuthoritySignatureAsBytes,
+ *     #[schemars(with = "Base64")]
+ *     #[serde_as(as = "SuiBitmap")]
+ *     pub signers_map: RoaringBitmap,
+ * }
  * </pre>
  */
-public class AuthorityQuorumSignInfo {
+public class SuiAuthorityStrongQuorumSignInfo {
     private BigInteger epoch;
-    private GenericAuthoritySignature signature;
-
+    private String signature;
     @JsonProperty("signers_map")
     private int[] signersMap;
-
-    public AuthorityQuorumSignInfo() {
-    }
-
 
     public BigInteger getEpoch() {
         return epoch;
@@ -36,11 +32,11 @@ public class AuthorityQuorumSignInfo {
         this.epoch = epoch;
     }
 
-    public GenericAuthoritySignature getSignature() {
+    public String getSignature() {
         return signature;
     }
 
-    public void setSignature(GenericAuthoritySignature signature) {
+    public void setSignature(String signature) {
         this.signature = signature;
     }
 
@@ -54,9 +50,9 @@ public class AuthorityQuorumSignInfo {
 
     @Override
     public String toString() {
-        return "AuthorityQuorumSignInfo{" +
+        return "SuiAuthorityStrongQuorumSignInfo{" +
                 "epoch=" + epoch +
-                ", signature=" + signature +
+                ", signature='" + signature + '\'' +
                 ", signersMap=" + Arrays.toString(signersMap) +
                 '}';
     }

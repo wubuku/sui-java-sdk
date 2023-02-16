@@ -204,7 +204,11 @@ public class JSONRPC2Session {
                 if (response.body() == null) {
                     throw new JSONRPC2SessionException("Response body is null.");
                 }
-                return bodyConvertor.apply(Objects.requireNonNull(response.body()).string());
+                String respBody = response.body().string();
+                System.out.println(respBody);
+                return bodyConvertor.apply(respBody);
+                //todo
+                //return bodyConvertor.apply(Objects.requireNonNull(response.body()).string());
             }
         } catch (IOException ioException) {
             throw new JSONRPC2SessionException("Send JSON RPC IO error.", ioException);

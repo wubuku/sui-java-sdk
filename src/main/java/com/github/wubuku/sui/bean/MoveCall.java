@@ -5,21 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type MoveCall = {
- *   package: SuiObjectRef;
- *   module: string;
- *   function: string;
- *   typeArguments?: string[];
- *   arguments?: SuiJsonValue[];
- * };
+ * #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
+ * #[serde(rename = "MoveCall", rename_all = "camelCase")]
+ * pub struct SuiMoveCall {
+ *     pub package: ObjectID,
+ *     pub module: String,
+ *     pub function: String,
+ *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
+ *     pub type_arguments: Vec<String>,
+ *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
+ *     pub arguments: Vec<SuiJsonValue>,
+ * }
  * </pre>
  */
 public class MoveCall {
     @JsonProperty("package")
-    private SuiObjectRef package_;
+    private String package_;
     private String module;
     private String function;
     private String[] typeArguments;
@@ -28,7 +32,7 @@ public class MoveCall {
     public MoveCall() {
     }
 
-    public MoveCall(SuiObjectRef package_, String module, String function, String[] typeArguments, SuiJsonValue[] arguments) {
+    public MoveCall(String package_, String module, String function, String[] typeArguments, SuiJsonValue[] arguments) {
         this.package_ = package_;
         this.module = module;
         this.function = function;
@@ -36,11 +40,11 @@ public class MoveCall {
         this.arguments = arguments;
     }
 
-    public SuiObjectRef getPackage_() {
+    public String getPackage_() {
         return package_;
     }
 
-    public void setPackage_(SuiObjectRef package_) {
+    public void setPackage_(String package_) {
         this.package_ = package_;
     }
 

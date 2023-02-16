@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.math.BigInteger;
+
 /**
  * From Rust definition:
  * <p>
@@ -21,13 +23,13 @@ public class DynamicFieldInfo {
     private String type;
     private String objectType;
     private String objectId;
-    private Long version;
+    private BigInteger version;
     private String digest;
 
     public DynamicFieldInfo() {
     }
 
-    public DynamicFieldInfo(String name, String type, String objectType, String objectId, Long version, String digest) {
+    public DynamicFieldInfo(String name, String type, String objectType, String objectId, BigInteger version, String digest) {
         this.name = name;
         this.type = type;
         this.objectType = objectType;
@@ -68,11 +70,11 @@ public class DynamicFieldInfo {
         this.objectId = objectId;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 

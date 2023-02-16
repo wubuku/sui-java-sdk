@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -128,7 +129,7 @@ public class GetPastObjectDataResponse {
             public ObjectDeleted() {
             }
 
-            public ObjectDeleted(String digest, String objectId, Long version) {
+            public ObjectDeleted(String digest, String objectId, BigInteger version) {
                 super(digest, objectId, version);
             }
 
@@ -265,7 +266,7 @@ public class GetPastObjectDataResponse {
                  */
                 String digest = null;
                 String objectId = null;
-                Long version = null;
+                BigInteger version = null;
                 /*
                  *     VersionTooHigh {
                  *         object_id: ObjectID,
@@ -300,7 +301,7 @@ public class GetPastObjectDataResponse {
                         objectId = jsonParser.getValueAsString();
                     } else if ("version".equals(fieldName)) {
                         jsonParser.nextToken();
-                        version = jsonParser.getLongValue();
+                        version = jsonParser.getBigIntegerValue();
                     } else if ("object_id".equals(fieldName)) {
                         jsonParser.nextToken();
                         versionTooHighObjectId = jsonParser.getValueAsString();

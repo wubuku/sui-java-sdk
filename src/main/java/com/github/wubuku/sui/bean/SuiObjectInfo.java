@@ -1,5 +1,7 @@
 package com.github.wubuku.sui.bean;
 
+import java.math.BigInteger;
+
 /**
  * From TypeScript definition:
  * <p>
@@ -19,7 +21,7 @@ public class SuiObjectInfo extends SuiObjectRef {
     public SuiObjectInfo() {
     }
 
-    public SuiObjectInfo(String digest, String objectId, Long version, String type, ObjectOwner owner, String previousTransaction) {
+    public SuiObjectInfo(String digest, String objectId, BigInteger version, String type, ObjectOwner owner, String previousTransaction) {
         super(digest, objectId, version);
         this.type = type;
         this.owner = owner;

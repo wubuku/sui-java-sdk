@@ -78,6 +78,205 @@ public class JsonRpcTests {
     }
 
     @Test
+    void testJsonDeserialize_5() throws JsonProcessingException {
+        String json = "{\n" +
+                "  \"jsonrpc\": \"2.0\",\n" +
+                "  \"result\": {\n" +
+                "    \"certificate\": {\n" +
+                "      \"transactionDigest\": \"5nG9ccRDUJgGJLjKnVHEw1iveSFpRjbfJ9xYsYjvbe29\",\n" +
+                "      \"data\": {\n" +
+                "        \"transactions\": [\n" +
+                "          {\n" +
+                "            \"Call\": {\n" +
+                "              \"package\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "              \"module\": \"devnet_nft\",\n" +
+                "              \"function\": \"mint\",\n" +
+                "              \"arguments\": [\n" +
+                "                \"Test NFT\",\n" +
+                "                \"...\",\n" +
+                "                \"http://test.org/test-nft.png\"\n" +
+                "              ]\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ],\n" +
+                "        \"sender\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\",\n" +
+                "        \"gasPayment\": {\n" +
+                "          \"objectId\": \"0x8b875484692a8ef5cf31955a0697a1bf7bedd784\",\n" +
+                "          \"version\": 3406,\n" +
+                "          \"digest\": \"95At2BGYZC2Z/1sUnBKTMUWQUFS8JKgxU8HcZKTPCdY=\"\n" +
+                "        },\n" +
+                "        \"gasPrice\": 1,\n" +
+                "        \"gasBudget\": 1000000\n" +
+                "      },\n" +
+                "      \"txSignature\": \"AJLkLdoeqS1+lcRAMXW17Ck7fSRLRckhDr0n3j+F4nKIvYRoripKEMsyjl+H2LiyI+PiXExTlkOvAymyTKaeqwDNKDqRkwUzmHsdJCnbGwRT0D5bGI0AKYpLtkFfbL9BTg==\",\n" +
+                "      \"authSignInfo\": {\n" +
+                "        \"epoch\": 7,\n" +
+                "        \"signature\": \"AbbuF/8+dgCxWHRaN4i31KYg4Lb1HHVkgpBOzx9FBGSKoJfKgv0caqDdl8MjqsfC+g==\",\n" +
+                "        \"signers_map\": [\n" +
+                "          58,\n" +
+                "          48,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          1,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          2,\n" +
+                "          0,\n" +
+                "          16,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          0,\n" +
+                "          1,\n" +
+                "          0,\n" +
+                "          3,\n" +
+                "          0\n" +
+                "        ]\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"effects\": {\n" +
+                "      \"transactionEffectsDigest\": \"GgeNmiv5FXUtihfyKJfuMNf6a4vDFYhXcdBbzYP5wxba\",\n" +
+                "      \"effects\": {\n" +
+                "        \"status\": {\n" +
+                "          \"status\": \"success\"\n" +
+                "        },\n" +
+                "        \"gasUsed\": {\n" +
+                "          \"computationCost\": 323,\n" +
+                "          \"storageCost\": 33,\n" +
+                "          \"storageRebate\": 16\n" +
+                "        },\n" +
+                "        \"transactionDigest\": \"5nG9ccRDUJgGJLjKnVHEw1iveSFpRjbfJ9xYsYjvbe29\",\n" +
+                "        \"created\": [\n" +
+                "          {\n" +
+                "            \"owner\": {\n" +
+                "              \"AddressOwner\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\"\n" +
+                "            },\n" +
+                "            \"reference\": {\n" +
+                "              \"objectId\": \"0xf84b2c51e9982d9eae7cc57e43f50a8bd5289f15\",\n" +
+                "              \"version\": 3407,\n" +
+                "              \"digest\": \"2NUoRxMNv9tk0NCeCbK2MQDJ3Y5yvvElNbFeuqm/5B0=\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ],\n" +
+                "        \"mutated\": [\n" +
+                "          {\n" +
+                "            \"owner\": {\n" +
+                "              \"AddressOwner\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\"\n" +
+                "            },\n" +
+                "            \"reference\": {\n" +
+                "              \"objectId\": \"0x8b875484692a8ef5cf31955a0697a1bf7bedd784\",\n" +
+                "              \"version\": 3407,\n" +
+                "              \"digest\": \"eOWhAcpG0l8I46jKiqnc1gtwpn2QuxVdaqUbQcv2kb4=\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ],\n" +
+                "        \"gasObject\": {\n" +
+                "          \"owner\": {\n" +
+                "            \"AddressOwner\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\"\n" +
+                "          },\n" +
+                "          \"reference\": {\n" +
+                "            \"objectId\": \"0x8b875484692a8ef5cf31955a0697a1bf7bedd784\",\n" +
+                "            \"version\": 3407,\n" +
+                "            \"digest\": \"eOWhAcpG0l8I46jKiqnc1gtwpn2QuxVdaqUbQcv2kb4=\"\n" +
+                "          }\n" +
+                "        },\n" +
+                "        \"events\": [\n" +
+                "          {\n" +
+                "            \"coinBalanceChange\": {\n" +
+                "              \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "              \"transactionModule\": \"gas\",\n" +
+                "              \"sender\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\",\n" +
+                "              \"changeType\": \"Gas\",\n" +
+                "              \"owner\": {\n" +
+                "                \"AddressOwner\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\"\n" +
+                "              },\n" +
+                "              \"coinType\": \"0x2::sui::SUI\",\n" +
+                "              \"coinObjectId\": \"0x8b875484692a8ef5cf31955a0697a1bf7bedd784\",\n" +
+                "              \"version\": 3406,\n" +
+                "              \"amount\": -340\n" +
+                "            }\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"newObject\": {\n" +
+                "              \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "              \"transactionModule\": \"devnet_nft\",\n" +
+                "              \"sender\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\",\n" +
+                "              \"recipient\": {\n" +
+                "                \"AddressOwner\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\"\n" +
+                "              },\n" +
+                "              \"objectType\": \"0x2::devnet_nft::DevNetNFT\",\n" +
+                "              \"objectId\": \"0xf84b2c51e9982d9eae7cc57e43f50a8bd5289f15\",\n" +
+                "              \"version\": 3407\n" +
+                "            }\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"moveEvent\": {\n" +
+                "              \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
+                "              \"transactionModule\": \"devnet_nft\",\n" +
+                "              \"sender\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\",\n" +
+                "              \"type\": \"0x2::devnet_nft::MintNFTEvent\",\n" +
+                "              \"fields\": {\n" +
+                "                \"creator\": \"0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa\",\n" +
+                "                \"name\": \"Test NFT\",\n" +
+                "                \"object_id\": \"0xf84b2c51e9982d9eae7cc57e43f50a8bd5289f15\"\n" +
+                "              },\n" +
+                "              \"bcs\": \"+EssUemYLZ6ufMV+Q/UKi9UonxU8LPNaDU0p3Z0fY0Om6v4DExv6+ghUZXN0IE5GVA==\"\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ],\n" +
+                "        \"dependencies\": [\n" +
+                "          \"2L7TPpAyxjPxgF1qLG4G5AHZHQqbs6AUC3N61W3oupQT\",\n" +
+                "          \"GJpQNSjRnB5wVB5ZvSp7C3qNXgNS7JUQrxxps88E6X68\"\n" +
+                "        ]\n" +
+                "      },\n" +
+                "      \"finalityInfo\": {\n" +
+                "        \"certified\": {\n" +
+                "          \"epoch\": 7,\n" +
+                "          \"signature\": \"AbbuhSNcVrY5wAA+Aq8rkDInITWFt2s2ZaFblJ2RAZEn4+M5mnNd/BvgWi09AIiVxw==\",\n" +
+                "          \"signers_map\": [\n" +
+                "            58,\n" +
+                "            48,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            1,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            2,\n" +
+                "            0,\n" +
+                "            16,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            0,\n" +
+                "            1,\n" +
+                "            0,\n" +
+                "            2,\n" +
+                "            0,\n" +
+                "            3,\n" +
+                "            0\n" +
+                "          ]\n" +
+                "        }\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"confirmed_local_execution\": false\n" +
+                "  },\n" +
+                "  \"id\": 1676457748121\n" +
+                "}";
+        ObjectMapper om = objectMapper;
+        JSONRPC2Response<SuiExecuteTransactionResponse> suiExeTxnRespRpcResp = om.readValue(json,
+                om.getTypeFactory().constructParametricType(JSONRPC2Response.class,
+                        SuiExecuteTransactionResponse.class)
+        );
+        System.out.println(suiExeTxnRespRpcResp);
+    }
+
+    @Test
     void testJsonDeserialize_4() throws JsonProcessingException {
         String json = "{\n" +
                 "  \"id\": 1,\n" +

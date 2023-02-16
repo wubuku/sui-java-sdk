@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * From TypeScript definition:
@@ -86,7 +87,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
             public SuiObjectRef() {
             }
 
-            public SuiObjectRef(String digest, String objectId, Long version) {
+            public SuiObjectRef(String digest, String objectId, BigInteger version) {
                 super(digest, objectId, version);
             }
         }
@@ -109,7 +110,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
         }
 
         @Override
-        protected Details.SuiObjectRef newSuiObjectRef(String digest, String objectId, Long version) {
+        protected Details.SuiObjectRef newSuiObjectRef(String digest, String objectId, BigInteger version) {
             return new Details.SuiObjectRef(digest, objectId, version);
         }
 

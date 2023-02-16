@@ -3,31 +3,36 @@ package com.github.wubuku.sui.bean;
 import java.math.BigInteger;
 
 /**
- * From Rust definition:
+ * From TypeScript definition:
  * <p>
  * <pre>
- * #[derive(Serialize, Deserialize, Debug, JsonSchema)]
- * #[serde(rename_all = "camelCase")]
- * pub struct Coin {
- *     pub coin_type: String,
- *     pub coin_object_id: ObjectID,
- *     pub version: SequenceNumber,
- *     pub digest: ObjectDigest,
- *     pub balance: u64,
- * }
+ * export const CoinStruct = object({
+ *     coinType: string(),
+ *     coinObjectId: ObjectId,
+ *     version: number(),
+ *     digest: TransactionDigest,
+ *     balance: number(),
+ *     lockedUntilEpoch: nullable(number()),
+ *     // TODO: remove optional when it is supported from all deployed networks
+ *     previousTransaction: optional(TransactionDigest),
+ * });
  * </pre>
  */
 public class Coin {
     private String coinType;
     private String coinObjectId;
-    private Long version;
+    private BigInteger version;
     private String digest;
     private BigInteger balance;
+
+    private BigInteger lockedUntilEpoch;
+
+    private String previousTransaction;
 
     public Coin() {
     }
 
-    public Coin(String coinType, String coinObjectId, Long version, String digest, BigInteger balance) {
+    public Coin(String coinType, String coinObjectId, BigInteger version, String digest, BigInteger balance) {
         this.coinType = coinType;
         this.coinObjectId = coinObjectId;
         this.version = version;
@@ -51,11 +56,11 @@ public class Coin {
         this.coinObjectId = coinObjectId;
     }
 
-    public Long getVersion() {
+    public BigInteger getVersion() {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(BigInteger version) {
         this.version = version;
     }
 
@@ -75,6 +80,22 @@ public class Coin {
         this.balance = balance;
     }
 
+    public BigInteger getLockedUntilEpoch() {
+        return lockedUntilEpoch;
+    }
+
+    public void setLockedUntilEpoch(BigInteger lockedUntilEpoch) {
+        this.lockedUntilEpoch = lockedUntilEpoch;
+    }
+
+    public String getPreviousTransaction() {
+        return previousTransaction;
+    }
+
+    public void setPreviousTransaction(String previousTransaction) {
+        this.previousTransaction = previousTransaction;
+    }
+
     @Override
     public String toString() {
         return "Coin{" +
@@ -83,6 +104,8 @@ public class Coin {
                 ", version=" + version +
                 ", digest='" + digest + '\'' +
                 ", balance=" + balance +
+                ", lockedUntilEpoch=" + lockedUntilEpoch +
+                ", previousTransaction='" + previousTransaction + '\'' +
                 '}';
     }
 }

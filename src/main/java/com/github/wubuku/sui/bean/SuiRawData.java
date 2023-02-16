@@ -2,6 +2,7 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ public interface SuiRawData {
             this.dataType = dataType;
         }
 
-        public SuiMoveObject(String type, Boolean hasPublicTransfer, Long version, String bcsBytes, ObjectType dataType) {
+        public SuiMoveObject(String type, Boolean hasPublicTransfer, BigInteger version, String bcsBytes, ObjectType dataType) {
             super(type, hasPublicTransfer, version, bcsBytes);
             this.dataType = dataType;
         }

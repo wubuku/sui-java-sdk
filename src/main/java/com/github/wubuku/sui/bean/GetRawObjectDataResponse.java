@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 @JsonDeserialize(using = GetRawObjectDataResponseDeserializer.class)
 public class GetRawObjectDataResponse extends AbstractGetObjectDataResponse<GetRawObjectDataResponse.Details> {
@@ -76,7 +77,7 @@ public class GetRawObjectDataResponse extends AbstractGetObjectDataResponse<GetR
             public SuiObjectRef() {
             }
 
-            public SuiObjectRef(String digest, String objectId, Long version) {
+            public SuiObjectRef(String digest, String objectId, BigInteger version) {
                 super(digest, objectId, version);
             }
         }
@@ -99,7 +100,7 @@ public class GetRawObjectDataResponse extends AbstractGetObjectDataResponse<GetR
         }
 
         @Override
-        protected Details.SuiObjectRef newSuiObjectRef(String digest, String objectId, Long version) {
+        protected Details.SuiObjectRef newSuiObjectRef(String digest, String objectId, BigInteger version) {
             return new Details.SuiObjectRef(digest, objectId, version);
         }
 
