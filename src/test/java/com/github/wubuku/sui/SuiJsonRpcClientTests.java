@@ -3,6 +3,7 @@ package com.github.wubuku.sui;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.*;
+import com.github.wubuku.sui.tests.DaySummary;
 import com.github.wubuku.sui.utils.HexUtils;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import com.github.wubuku.sui.utils.TransactionUtils;
@@ -237,6 +238,18 @@ public class SuiJsonRpcClientTests {
         GetMoveObjectDataResponse<TestOrder.OrderItemField> getObjectDataResponse = client.getMoveObject(
                 "0x90c40b57ba0f4cdf060f6b387229e0de232c407a",
                 TestOrder.OrderItemField.class
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+
+    @Test
+    void testGetMoveObject_3() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetMoveObjectDataResponse<DaySummary> getObjectDataResponse = client.getMoveObject(
+                "0x99bd2a5ea4e99800a6a7676b07cc119569c6a976",
+                DaySummary.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
