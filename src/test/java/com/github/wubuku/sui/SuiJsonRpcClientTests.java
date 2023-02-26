@@ -117,7 +117,8 @@ public class SuiJsonRpcClientTests {
             System.out.println(publish);
             packageIdRef.set(publish.getPublish().getPackageId());
         });
-        System.out.println(packageIdRef.get());
+        System.out.println("--------");
+        System.out.println("package Id: " + packageIdRef.get());
         String packageId = packageIdRef.get();
 
         String[] idGeneratorDataObjTypes = ContractConstants.getIdGeneratorDataObjectTypes(packageId);
@@ -131,8 +132,9 @@ public class SuiJsonRpcClientTests {
 //                System.out.println(newObject.getNewObject().getObjectType());
 //                System.out.println(newObject.getNewObject().getObjectId());
                 if (Arrays.stream(idGeneratorDataObjTypes).anyMatch(t -> t.equals(newObject.getNewObject().getObjectType()))) {
-                    System.out.println("object type: " + newObject.getNewObject().getObjectType());
-                    System.out.println("object type: " + newObject.getNewObject().getObjectId());
+                    System.out.println("--------");
+                    System.out.print("new object Id: " + newObject.getNewObject().getObjectId());
+                    System.out.println(", type: " + newObject.getNewObject().getObjectType());
                 }
             }
         });
@@ -204,42 +206,48 @@ public class SuiJsonRpcClientTests {
     void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         GetMoveObjectDataResponse<Order> getObjectDataResponse = client.getMoveObject(
-                //"0x595e185525f2a9bb892dc634ba95a10f78010c1e",
-                "0xa685fbff764afc86a9e9c3f1e75d2b745ff57d1d",
+                "0x8134656922ebdfdd67a4e6a3da444d53c997c196",
                 Order.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
-        Order testOrder = getObjectDataResponse.getDetails().getData().getFields();
-        String testOrderItemTableId = testOrder.items.getFields().getId().getId();
+        Order order = getObjectDataResponse.getDetails().getData().getFields();
+        String testOrderItemTableId = order.items.getFields().getId().getId();
         System.out.println(testOrderItemTableId);
 
-        DynamicFieldPage testOrderItems = client.getDynamicFields(testOrderItemTableId, null, null);
-
-        for (DynamicFieldInfo testOrderItemFieldInfo : testOrderItems.getData()) {
-            System.out.println(testOrderItemFieldInfo);
-            String fieldName = testOrderItemFieldInfo.getName();
-            System.out.println("field name: " + fieldName);
-            String fieldObjectId = testOrderItemFieldInfo.getObjectId();
-            System.out.println("field object Id: " + fieldObjectId);
-            System.out.println("== get dynamic field object by parent_id and field_name ==");
-            GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse = client
-                    .getDynamicFieldMoveObject(testOrderItemTableId, fieldName, OrderItemDynamicField.class);
-            System.out.println(getOrderItemFieldObjectDataResponse);
-            System.out.println(getOrderItemFieldObjectDataResponse.getDetails().getData().getFields().getId());
-            System.out.println("== get object by id. ==");
-            GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse_2 = client.getMoveObject(fieldObjectId, OrderItemDynamicField.class);
-            System.out.println(getOrderItemFieldObjectDataResponse_2);
-            System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getName());
-            System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getId());
-            OrderItem orderItem = getOrderItemFieldObjectDataResponse_2
-                    .getDetails()   // GetMoveObjectDataResponse.Details
-                    .getData()      // MoveObject<OrderItemDynamicField>
-                    .getFields()    // OrderItemDynamicField
-                    .getValue()     // MoveObject<OrderItem>
-                    .getFields()    // OrderItem
-                    ;
-            System.out.println(orderItem);
+        String cursor = null;
+        while (true) {
+            DynamicFieldPage orderItemPage = client.getDynamicFields(testOrderItemTableId, cursor, null);
+            for (DynamicFieldInfo testOrderItemFieldInfo : orderItemPage.getData()) {
+                System.out.println(testOrderItemFieldInfo);
+                String fieldName = testOrderItemFieldInfo.getName();
+                System.out.println("field name: " + fieldName);
+                String fieldObjectId = testOrderItemFieldInfo.getObjectId();
+                System.out.println("field object Id: " + fieldObjectId);
+                System.out.println("== get dynamic field object by parent_id and field_name ==");
+                GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse = client
+                        .getDynamicFieldMoveObject(testOrderItemTableId, fieldName, OrderItemDynamicField.class);
+                System.out.println(getOrderItemFieldObjectDataResponse);
+                System.out.println(getOrderItemFieldObjectDataResponse.getDetails().getData().getFields().getId());
+                System.out.println("== get object by id. ==");
+                GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse_2 = client.getMoveObject(fieldObjectId, OrderItemDynamicField.class);
+                System.out.println(getOrderItemFieldObjectDataResponse_2);
+                System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getName());
+                System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getId());
+                OrderItem orderItem = getOrderItemFieldObjectDataResponse_2
+                        .getDetails()   // GetMoveObjectDataResponse.Details
+                        .getData()      // MoveObject<OrderItemDynamicField>
+                        .getFields()    // OrderItemDynamicField
+                        .getValue()     // MoveObject<OrderItem>
+                        .getFields()    // OrderItem
+                        ;
+                System.out.println(orderItem);
+            }
+            cursor = orderItemPage.getNextCursor();
+            if (cursor == null) {
+                System.out.println("end of pages");
+                break;
+            }
         }
 
 //        GetMoveObjectDataResponse<TestOrder.OrderItemField> getOrderItemsObjectDataResponse = client.getMoveObject(
