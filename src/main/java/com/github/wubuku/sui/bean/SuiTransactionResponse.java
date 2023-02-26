@@ -2,52 +2,49 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigInteger;
+
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type SuiTransactionResponse = {
- *   certificate: CertifiedTransaction;
- *   effects: TransactionEffects;
- *   timestamp_ms: number | null;
- *   parsed_data: SuiParsedTransactionResponse | null;
- * };
+ * #[derive(Serialize, Deserialize, Debug, JsonSchema)]
+ * pub struct SuiTransactionResponse {
+ *     pub certificate: SuiCertifiedTransaction,
+ *     pub effects: SuiTransactionEffects,
+ *     pub timestamp_ms: Option<u64>,
+ *     /// The checkpoint number when this transaction was included and hence finalized.
+ *     /// This is only returned in the read api, not in the transaction execution api.
+ *     pub checkpoint: Option<CheckpointSequenceNumber>,
+ *     pub parsed_data: Option<SuiParsedTransactionResponse>,
+ * }
  * </pre>
  */
 public class SuiTransactionResponse {
-    private CertifiedTransaction certificate;
-    private TransactionEffects effects;
+    private SuiCertifiedTransaction certificate;
+    private SuiTransactionEffects effects;
     @JsonProperty("timestamp_ms")
     private Long timestampMS;
+    private BigInteger checkpoint;
     @JsonProperty("parsed_data")
     private SuiParsedTransactionResponse parsedData;
 
     public SuiTransactionResponse() {
     }
 
-    public SuiTransactionResponse(CertifiedTransaction certificate,
-                                  TransactionEffects effects,
-                                  Long timestampMS,
-                                  SuiParsedTransactionResponse parsedData) {
-        this.certificate = certificate;
-        this.effects = effects;
-        this.timestampMS = timestampMS;
-        this.parsedData = parsedData;
-    }
-
-    public CertifiedTransaction getCertificate() {
+    public SuiCertifiedTransaction getCertificate() {
         return certificate;
     }
 
-    public void setCertificate(CertifiedTransaction certificate) {
+    public void setCertificate(SuiCertifiedTransaction certificate) {
         this.certificate = certificate;
     }
 
-    public TransactionEffects getEffects() {
+    public SuiTransactionEffects getEffects() {
         return effects;
     }
 
-    public void setEffects(TransactionEffects effects) {
+    public void setEffects(SuiTransactionEffects effects) {
         this.effects = effects;
     }
 
@@ -57,6 +54,14 @@ public class SuiTransactionResponse {
 
     public void setTimestampMS(Long timestampMS) {
         this.timestampMS = timestampMS;
+    }
+
+    public BigInteger getCheckpoint() {
+        return checkpoint;
+    }
+
+    public void setCheckpoint(BigInteger checkpoint) {
+        this.checkpoint = checkpoint;
     }
 
     public SuiParsedTransactionResponse getParsedData() {
@@ -73,6 +78,7 @@ public class SuiTransactionResponse {
                 "certificate=" + certificate +
                 ", effects=" + effects +
                 ", timestampMS=" + timestampMS +
+                ", checkpoint=" + checkpoint +
                 ", parsedData=" + parsedData +
                 '}';
     }

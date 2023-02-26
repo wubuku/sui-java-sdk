@@ -5,11 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
 /**
+ * From Rust definition:
+ * <p>
+ * <pre>
  * #[derive(Eq, PartialEq, Clone, Debug, Serialize, Deserialize, JsonSchema)]
  * #[serde(rename = "TransactionEffects", rename_all = "camelCase")]
  * pub struct SuiTransactionEffects {
  *     // The status of the execution
  *     pub status: SuiExecutionStatus,
+ *     /// The epoch when this transaction was executed.
+ *     pub executed_epoch: EpochId,
  *     pub gas_used: SuiGasCostSummary,
  *     // The object references of the shared objects used in this transaction. Empty if no shared objects were used.
  *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -30,6 +35,9 @@ import java.util.Arrays;
  *     // Object Refs of objects now deleted (the old refs).
  *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
  *     pub deleted: Vec<SuiObjectRef>,
+ *     /// Object refs of objects previously wrapped in other objects but now deleted.
+ *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
+ *     pub unwrapped_then_deleted: Vec<SuiObjectRef>,
  *     // Object refs of objects now wrapped in other objects.
  *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
  *     pub wrapped: Vec<SuiObjectRef>,
@@ -43,9 +51,11 @@ import java.util.Arrays;
  *     #[serde(default, skip_serializing_if = "Vec::is_empty")]
  *     pub dependencies: Vec<TransactionDigest>,
  * }
+ * </pre>
  */
 public class SuiTransactionEffects {
     private SuiExecutionStatusEnvelope status;
+    private String executedEpoch;
     private SuiGasCostSummary gasUsed;
     private SuiObjectRef[] sharedObjects;
     private String transactionDigest;
@@ -65,6 +75,14 @@ public class SuiTransactionEffects {
 
     public void setStatus(SuiExecutionStatusEnvelope status) {
         this.status = status;
+    }
+
+    public String getExecutedEpoch() {
+        return executedEpoch;
+    }
+
+    public void setExecutedEpoch(String executedEpoch) {
+        this.executedEpoch = executedEpoch;
     }
 
     public SuiGasCostSummary getGasUsed() {
@@ -159,6 +177,7 @@ public class SuiTransactionEffects {
     public String toString() {
         return "SuiTransactionEffects{" +
                 "status=" + status +
+                ", executedEpoch='" + executedEpoch + '\'' +
                 ", gasUsed=" + gasUsed +
                 ", sharedObjects=" + Arrays.toString(sharedObjects) +
                 ", transactionDigest='" + transactionDigest + '\'' +

@@ -2,13 +2,13 @@ package com.github.wubuku.sui.bean;
 
 public class SuiCertifiedTransactionEffects { //extends LinkedHashMap<String, Object> {
     private String transactionEffectsDigest;
-    private TransactionEffects effects;
+    private SuiTransactionEffects effects;
     private AuthorityQuorumSignInfo authSignInfo;
 
     public SuiCertifiedTransactionEffects() {
     }
 
-    public SuiCertifiedTransactionEffects(String transactionEffectsDigest, TransactionEffects effects, AuthorityQuorumSignInfo authSignInfo) {
+    public SuiCertifiedTransactionEffects(String transactionEffectsDigest, SuiTransactionEffects effects, AuthorityQuorumSignInfo authSignInfo) {
         this.transactionEffectsDigest = transactionEffectsDigest;
         this.effects = effects;
         this.authSignInfo = authSignInfo;
@@ -22,11 +22,11 @@ public class SuiCertifiedTransactionEffects { //extends LinkedHashMap<String, Ob
         this.transactionEffectsDigest = transactionEffectsDigest;
     }
 
-    public TransactionEffects getEffects() {
+    public SuiTransactionEffects getEffects() {
         return effects;
     }
 
-    public void setEffects(TransactionEffects effects) {
+    public void setEffects(SuiTransactionEffects effects) {
         this.effects = effects;
     }
 

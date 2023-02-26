@@ -21,23 +21,23 @@ import java.util.List;
  * </pre>
  */
 public class DevInspectResults {
-    private TransactionEffects effects;
+    private SuiTransactionEffects effects;
     private Result<List<UnsignedIntAndSuiExecutionResultTuple>, String> results;
 
     public DevInspectResults() {
     }
 
-    public DevInspectResults(TransactionEffects effects, Result<List<UnsignedIntAndSuiExecutionResultTuple>,
+    public DevInspectResults(SuiTransactionEffects effects, Result<List<UnsignedIntAndSuiExecutionResultTuple>,
             String> results) {
         this.effects = effects;
         this.results = results;
     }
 
-    public TransactionEffects getEffects() {
+    public SuiTransactionEffects getEffects() {
         return effects;
     }
 
-    public void setEffects(TransactionEffects effects) {
+    public void setEffects(SuiTransactionEffects effects) {
         this.effects = effects;
     }
 

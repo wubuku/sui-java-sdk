@@ -2,6 +2,8 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  * From Rust definition:
  * <p>
@@ -11,8 +13,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * pub struct SuiCertifiedTransaction {
  *     pub transaction_digest: TransactionDigest,
  *     pub data: SuiTransactionData,
- *     /// tx_signature is signed by the transaction sender, committing to the intent message containing the transaction data and intent.
- *     pub tx_signature: Signature,
+ *     /// tx_signatures is a list of signatures signed by transaction participants,
+ *     /// committing to the intent message containing the transaction data and intent.
+ *     pub tx_signatures: Vec<GenericSignature>,
  *     /// authority signature information, if available, is signed by an authority, applied on `data`.
  *     pub auth_sign_info: SuiAuthorityStrongQuorumSignInfo,
  * }
@@ -21,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SuiCertifiedTransaction {
     private String transactionDigest;
     private SuiTransactionData data;
-    private String txSignature;
+    private String[] txSignatures;
     private SuiAuthorityStrongQuorumSignInfo authSignInfo;
 
     public String getTransactionDigest() {
@@ -40,13 +43,14 @@ public class SuiCertifiedTransaction {
         this.data = data;
     }
 
-    public String getTxSignature() {
-        return txSignature;
+    public String[] getTxSignatures() {
+        return txSignatures;
     }
 
-    public void setTxSignature(String txSignature) {
-        this.txSignature = txSignature;
+    public void setTxSignatures(String[] txSignatures) {
+        this.txSignatures = txSignatures;
     }
+
 
     public SuiAuthorityStrongQuorumSignInfo getAuthSignInfo() {
         return authSignInfo;
@@ -61,7 +65,7 @@ public class SuiCertifiedTransaction {
         return "SuiCertifiedTransaction{" +
                 "transactionDigest='" + transactionDigest + '\'' +
                 ", data=" + data +
-                ", txSignature='" + txSignature + '\'' +
+                ", txSignatures=" + Arrays.toString(txSignatures) +
                 ", authSignInfo=" + authSignInfo +
                 '}';
     }

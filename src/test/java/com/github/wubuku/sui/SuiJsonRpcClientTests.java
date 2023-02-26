@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SuiJsonRpcClientTests {
 
@@ -103,10 +104,39 @@ public class SuiJsonRpcClientTests {
     void testGetTransaction_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiTransactionResponse suiTransactionResponse = client.getTransaction(
-                "6dGPGAvezUjEPjNitEaFwzzJwJQxcyJhfrZd8NpXbR4A"
+                //"6dGPGAvezUjEPjNitEaFwzzJwJQxcyJhfrZd8NpXbR4A"
+                "77uHzSv5EbX4Xg3HcRkhCs9D2kmocSMKjxZ1zGnS1AZC"
         );
-        System.out.println(suiTransactionResponse);
+        //System.out.println(suiTransactionResponse);
         System.out.println(objectMapper.writeValueAsString(suiTransactionResponse));
+        AtomicReference<String> packageIdRef = new AtomicReference<>();
+        Arrays.stream(suiTransactionResponse.getEffects().getEvents()).filter(
+                event -> event instanceof SuiEvent.Publish
+        ).findFirst().ifPresent(event -> {
+            SuiEvent.Publish publish = (SuiEvent.Publish) event;
+            System.out.println(publish);
+            packageIdRef.set(publish.getPublish().getPackageId());
+        });
+        System.out.println(packageIdRef.get());
+        String packageId = packageIdRef.get();
+
+        String[] idGeneratorDataObjTypes = ContractConstants.getIdGeneratorDataObjectTypes(packageId);
+        //System.out.println(idGeneratorDataObjTypes.length);
+        Arrays.stream(suiTransactionResponse.getEffects().getEvents()).filter(
+                event -> event instanceof SuiEvent.NewObject
+        ).forEach(event -> {
+            SuiEvent.NewObject newObject = (SuiEvent.NewObject) event;
+            //System.out.println(newObject);
+            if (newObject.getNewObject().getPackageId().equals(packageId)) {
+//                System.out.println(newObject.getNewObject().getObjectType());
+//                System.out.println(newObject.getNewObject().getObjectId());
+                if (Arrays.stream(idGeneratorDataObjTypes).anyMatch(t -> t.equals(newObject.getNewObject().getObjectType()))) {
+                    System.out.println("object type: " + newObject.getNewObject().getObjectType());
+                    System.out.println("object type: " + newObject.getNewObject().getObjectId());
+                }
+            }
+        });
+
     }
 
     @Test
@@ -202,11 +232,12 @@ public class SuiJsonRpcClientTests {
             System.out.println(getOrderItemFieldObjectDataResponse_2);
             System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getName());
             System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getId());
-            OrderItem orderItem = getOrderItemFieldObjectDataResponse_2.getDetails()
-                    .getData() // MoveObject<TestOrder.OrderItemField>
-                    .getFields() // TestOrder.OrderItemField
-                    .getValue() // MoveObject<TestOrder.OrderItem>
-                    .getFields() // TestOrder.OrderItem
+            OrderItem orderItem = getOrderItemFieldObjectDataResponse_2
+                    .getDetails()   // GetMoveObjectDataResponse.Details
+                    .getData()      // MoveObject<OrderItemDynamicField>
+                    .getFields()    // OrderItemDynamicField
+                    .getValue()     // MoveObject<OrderItem>
+                    .getFields()    // OrderItem
                     ;
             System.out.println(orderItem);
         }
@@ -520,7 +551,7 @@ public class SuiJsonRpcClientTests {
         String coinObjectId = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId});
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
         TransactionBytes transactionBytes = client.splitCoin(signerAddress, coinObjectId, amounts, gasObjectId, 100000L);
-        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }
 
@@ -533,7 +564,7 @@ public class SuiJsonRpcClientTests {
         String coinObjectId_1 = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId});
         String coinObjectId_2 = selectSuiCoinObjectBut(client, signerAddress, new String[]{gasObjectId, coinObjectId_1});
         TransactionBytes transactionBytes = client.mergeCoins(signerAddress, coinObjectId_1, coinObjectId_2, gasObjectId, 100000L);
-        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }
 
@@ -548,7 +579,7 @@ public class SuiJsonRpcClientTests {
         String recipient = signer;
         long gasBudget = 100000;
         TransactionBytes transactionBytes = client.payAllSui(signer, inputCoins, recipient, gasBudget);
-        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }
 
@@ -566,7 +597,7 @@ public class SuiJsonRpcClientTests {
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
         long gasBudget = 100000;
         TransactionBytes transactionBytes = client.pay(signer, inputCoins, recipients, amounts, gasObjectId, gasBudget);
-        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }
 
@@ -583,7 +614,7 @@ public class SuiJsonRpcClientTests {
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
         long gasBudget = 100000;
         TransactionBytes transactionBytes = client.paySui(signer, inputCoins, recipients, amounts, gasBudget);
-        TransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
     }
 
@@ -591,7 +622,7 @@ public class SuiJsonRpcClientTests {
     void testDryRunTransaction_1() throws MalformedURLException, JsonProcessingException {
         String txBytes = "AQECAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAACAsl58oZElxuAIo2GjCz+IBOEMg7t5UGPjc/+T2xv7uzgtsb2NrZWRfY29pbglsb2NrX2NvaW4BBwAAAAAAAAAAAAAAAAAAAAAAAAACA3N1aQNTVUkAAwEAL7WBWtgXCvMuHZ1+DWUmwBP8lzcBAAAAAAAAACArk/jbO5ZDr9GpkvlJdaXr9DtEILIXCX3FXCiiley2AgAUPCzzWg1NKd2dH2NDpur+AxMb+voACACgck4YCQAAPCzzWg1NKd2dH2NDpur+AxMb+vopTBJZhARVd5UWWwyi5EdpvQbJUwgAAAAAAAAAIHPmBAVvqy2ZINnuDjPcjyuCCbNWixbmw35oU/EqF03uAQAAAAAAAABAQg8AAAAAAA==";
         SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
-        TransactionEffects transactionEffects = client.dryRunTransaction(txBytes);
+        SuiTransactionEffects transactionEffects = client.dryRunTransaction(txBytes);
         System.out.println(transactionEffects);
         System.out.println(objectMapper.writeValueAsString(transactionEffects));
     }
