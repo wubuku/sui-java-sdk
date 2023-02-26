@@ -19,6 +19,10 @@ public class DaySummary {
 
     private int[] metadata;
 
+    private String[] arrayData;
+
+    private int[] optionalData;
+
     public UID getId() {
         return id;
     }
@@ -59,14 +63,32 @@ public class DaySummary {
         this.metadata = metadata;
     }
 
+    public String[] getArrayData() {
+        return arrayData;
+    }
+
+    public void setArrayData(String[] arrayData) {
+        this.arrayData = arrayData;
+    }
+
+    public int[] getOptionalData() {
+        return optionalData;
+    }
+
+    public void setOptionalData(int[] optionalData) {
+        this.optionalData = optionalData;
+    }
+
     @Override
     public String toString() {
         return "DaySummary{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", day=" + day +
                 ", version=" + version +
                 ", description='" + description + '\'' +
                 ", metadata=" + Arrays.toString(metadata) +
+                ", arrayData=" + Arrays.toString(arrayData) +
+                ", optionalData=" + Arrays.toString(optionalData) +
                 '}';
     }
 }
