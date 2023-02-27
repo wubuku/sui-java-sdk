@@ -211,7 +211,7 @@ public class SuiJsonRpcClientTests {
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
         Order order = getObjectDataResponse.getDetails().getData().getFields();
-        String testOrderItemTableId = order.items.getFields().getId().getId();
+        String testOrderItemTableId = order.getItems().getFields().getId().getId();
         System.out.println(testOrderItemTableId);
 
         String cursor = null;
@@ -294,7 +294,6 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
-
     @Test
     void testGetMoveObject_3() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
@@ -302,6 +301,17 @@ public class SuiJsonRpcClientTests {
                 //"0x99bd2a5ea4e99800a6a7676b07cc119569c6a976",
                 "0x7b29d96344f145aa9b50bc02befdcb018ee26eae",
                 DaySummary.class
+        );
+        System.out.println(getObjectDataResponse);
+        System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
+    }
+
+    @Test
+    void testGetMoveObject_4() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        GetMoveObjectDataResponse<DomainName> getObjectDataResponse = client.getMoveObject(
+                "0x8bfd9d58baf907954f392660ffbba1e59011caaa",
+                DomainName.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));

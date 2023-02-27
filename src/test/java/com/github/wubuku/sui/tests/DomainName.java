@@ -13,15 +13,15 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
-public class Order {
+public class DomainName {
 
     private UID id;
 
+    private DomainNameId domainNameId;
+
     private Long version;
 
-    private BigInteger totalAmount;
-
-    private Table items;
+    private BigInteger expirationDate;
 
     public UID getId() {
         return id;
@@ -29,6 +29,14 @@ public class Order {
 
     public void setId(UID id) {
         this.id = id;
+    }
+
+    public DomainNameId getDomainNameId() {
+        return domainNameId;
+    }
+
+    public void setDomainNameId(DomainNameId domainNameId) {
+        this.domainNameId = domainNameId;
     }
 
     public Long getVersion() {
@@ -39,29 +47,21 @@ public class Order {
         this.version = version;
     }
 
-    public BigInteger getTotalAmount() {
-        return totalAmount;
+    public BigInteger getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setTotalAmount(BigInteger totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Table getItems() {
-        return items;
-    }
-
-    public void setItems(Table items) {
-        this.items = items;
+    public void setExpirationDate(BigInteger expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "DomainName{" +
                 "id=" + id +
+                ", domainNameId=" + domainNameId +
                 ", version=" + version +
-                ", totalAmount=" + totalAmount +
-                ", items=" + items +
+                ", expirationDate=" + expirationDate +
                 '}';
     }
 }
