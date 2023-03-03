@@ -9,11 +9,25 @@ This is a [Sui](https://sui.io) Java SDK.
 Add the following dependency to the project's `pom.xml` file.
 
 ```xml
-<dependency>
-    <groupId>com.github.wubuku</groupId>
-    <artifactId>sui-java-sdk</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
+<dependencies>
+    <!-- ... -->
+    <dependency>
+        <groupId>com.github.wubuku</groupId>
+        <artifactId>sui-java-sdk</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <!-- ... -->
+</dependencies>
+
+<repositories>
+    <!-- ... -->
+    <repository>
+        <id>sui-java-sdk-github</id>
+        <name>sui-java-sdk-bot</name>
+        <url>https://maven.pkg.github.com/wubuku/sui-java-sdk</url>
+    </repository>
+    <!-- ... -->
+</repositories>
 ```
 
 Add the following code to maven's `settings.xml` file.
@@ -23,13 +37,17 @@ Add the following code to maven's `settings.xml` file.
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <!-- ... -->
     <servers>
+        <!-- ... -->
         <server>
             <id>sui-java-sdk-github</id>
             <username>sui-java-sdk-bot</username>
             <password>&#103;hp_3WHxC5s37YYb3KO3Y3Sn7qMv1K2rCy28tWLk</password>
         </server>
+        <!-- ... -->
     </servers>
+    <!-- ... -->
 </settings>
 ```
 
