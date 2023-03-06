@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SuiJsonRpcClientTests {
 
     static final String SUI_COIN_TYPE = "0x2::sui::SUI";
+    static final long DEFAULT_MAX_GAS_BUDGE = 1000000;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -498,7 +499,7 @@ public class SuiJsonRpcClientTests {
                 new SuiJsonValue.String_("..."),
                 new SuiJsonValue.String_("http://test.org/test-nft.png")
         };
-        long gasBudget = 1000000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         String gasPayment = selectGasPayment(client, signerAddress, gasBudget);
         TransactionBytes result = client.moveCall(signerAddress,
                 packageObjectId, module, function,
@@ -546,7 +547,7 @@ public class SuiJsonRpcClientTests {
                 new SuiJsonValue.String_("http://test.com/test-nft.png")
         };
         String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
-        long gasBudget = 1000000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         RPCTransactionRequestParams transactionRequestParams = new RPCTransactionRequestParams.MoveCallRequestParams(
                 new MoveCallParams(packageObjectId, module, function, typeArguments, arguments)
         );
@@ -595,7 +596,7 @@ public class SuiJsonRpcClientTests {
 
         String[] inputCoins = new String[]{coinObjectId_1, coinObjectId_2};
         String recipient = signer;
-        long gasBudget = 100000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         TransactionBytes transactionBytes = client.payAllSui(signer, inputCoins, recipient, gasBudget);
         SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
@@ -613,7 +614,7 @@ public class SuiJsonRpcClientTests {
         String recipient_2 = signer;
         String[] recipients = new String[]{recipient_1, recipient_2};
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
-        long gasBudget = 100000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         TransactionBytes transactionBytes = client.pay(signer, inputCoins, recipients, amounts, gasObjectId, gasBudget);
         SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
@@ -630,7 +631,7 @@ public class SuiJsonRpcClientTests {
         String recipient_2 = signer;
         String[] recipients = new String[]{recipient_1, recipient_2};
         BigInteger[] amounts = new BigInteger[]{BigInteger.valueOf(1), BigInteger.valueOf(2)};
-        long gasBudget = 100000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         TransactionBytes transactionBytes = client.paySui(signer, inputCoins, recipients, amounts, gasBudget);
         SuiTransactionEffects transactionEffects = client.dryRunTransaction(transactionBytes.getTxBytes());
         System.out.println(transactionEffects);
@@ -677,7 +678,7 @@ public class SuiJsonRpcClientTests {
                 new SuiJsonValue.Number(10000000000000L)
         };
         String gasPayment = "0x294c12598404557795165b0ca2e44769bd06c953";
-        long gasBudget = 1000000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         TransactionBytes result = client.moveCall(signerAddress,
                 packageObjectId, module, function,
                 typeArguments, arguments,
@@ -693,13 +694,37 @@ public class SuiJsonRpcClientTests {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("http://localhost:9000");
         String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         String suiObjectId = "0x4ce8778751c9efc6ced31d5005afabaab870c1de";
-        long gasBudget = 1000000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
         String recipient = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
         long amount = 1L;
         TransactionBytes result = client.transferSui(signerAddress, suiObjectId, gasBudget, recipient, amount);
         System.out.println(result);
         System.out.println(objectMapper.writeValueAsString(result));
         System.out.println(result.getTxBytes());
+    }
+
+    @Test
+    void testTransferObject_1() throws MalformedURLException, JsonProcessingException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        String signerAddress = "0x3c2cf35a0d4d29dd9d1f6343a6eafe03131bfafa";
+        String objectId = "0x8134656922ebdfdd67a4e6a3da444d53c997c196";
+        String gasObjectId = "0xbe8139d6d384d15dafd0b78274b983655ec045f4";
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
+        String recipient = "0x29e076107fc5a7c5f7c179d4e5547674fb0a0a8e";//to self?
+        TransactionBytes encodeResult = client.transferObject(signerAddress, objectId, gasObjectId, gasBudget, recipient);
+        System.out.println(encodeResult);
+//        System.out.println(objectMapper.writeValueAsString(encodeResult));
+//        System.out.println(encodeResult.getTxBytes());
+
+        String txBytes = encodeResult.getTxBytes();
+        String sigScheme = SignatureScheme.ED25519;
+
+        String privateKeyHex = "";//todo fill in the private key here
+        String publicKeyBase64 = "zSg6kZMFM5h7HSQp2xsEU9A+WxiNACmKS7ZBX2y/QU4=";
+
+        SuiExecuteTransactionResponse response = executeTransaction(client, txBytes,
+                publicKeyBase64, sigScheme, HexUtils.hexToByteArray(privateKeyHex));
+        System.out.println(response);
     }
 
     @Test
@@ -720,7 +745,7 @@ public class SuiJsonRpcClientTests {
                 new SuiJsonValue.U64(10000L)
         };
         String gasPayment = "0x4ce8778751c9efc6ced31d5005afabaab870c1de";
-        long gasBudget = 1000000;
+        long gasBudget = DEFAULT_MAX_GAS_BUDGE;
 
         RPCTransactionRequestParams transactionRequestParams = new RPCTransactionRequestParams.MoveCallRequestParams(
                 new MoveCallParams(packageObjectId, module, function, typeArguments, arguments)

@@ -565,6 +565,38 @@ public class SuiJsonRpcClient {
     }
 
     /**
+     * @param signer    the transaction signer's Sui address
+     * @param objectId  the ID of the object to be transferred
+     * @param gas       gas object to be used in this transaction, node will pick one from the signer's possession if not provided
+     * @param gasBudget the gas budget, the transaction will fail if the gas cost exceed the budget
+     * @param recipient the recipient's Sui address
+     */
+    public TransactionBytes transferObject(
+            String signer,
+            String objectId,
+            String gas,
+            long gasBudget,
+            String recipient
+    ) {
+        List<Object> params = new ArrayList<>();
+        params.add(signer);
+        params.add(objectId);
+        params.add(gas);
+        params.add(gasBudget);
+        params.add(recipient);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_transferObject", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<TransactionBytes> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    TransactionBytes.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
      *
      * @param signer      the transaction signer's Sui address
