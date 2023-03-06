@@ -192,13 +192,25 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetMoveEvents_4() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        String packageId = "0xefbcec2bb4054b1378bfd7c29d5b5d3995fa92f7";
-        PaginatedMoveEvents<DaySummaryCreated> events_1 = client.getMoveEvents(
-                packageId + "::day_summary::DaySummaryCreated",
-                null, 10, false, DaySummaryCreated.class);
-        System.out.println(events_1);
-        if (events_1.getData() != null && !events_1.getData().isEmpty()) {
-            System.out.println(events_1.getData().get(0).getEvent().getMoveEvent().getFields().getId());
+        String packageId = "0x4c9edf32a36c6369ac859336672642b7c3140252";
+        EventId cursor = null;
+        int counter = 0;
+        while (true) {
+            int limit = 1;
+            PaginatedMoveEvents<DaySummaryCreated> events_1 = client.getMoveEvents(
+                    packageId + "::day_summary::DaySummaryCreated",
+                    cursor, limit, false, DaySummaryCreated.class);
+            System.out.println(events_1);
+            if (events_1.getData() != null && !events_1.getData().isEmpty()) {
+                System.out.println(events_1.getData().get(0).getEvent().getMoveEvent().getFields().getId());
+                System.out.println("Next cursor: " + events_1.getNextCursor());
+            }
+            counter++;
+            System.out.println("counter: " + counter);
+            cursor = events_1.getNextCursor();
+            if (cursor == null) {
+                break;
+            }
         }
     }
 
