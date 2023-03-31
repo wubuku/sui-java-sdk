@@ -104,15 +104,15 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public <F> PaginatedMoveEvents<F> getMoveEvents(String moveEvent,
-                                                    EventId cursor, int limit, boolean descendingOrder,
-                                                    Class<F> moveEventFieldsType) {
+    public <F> PaginatedMoveEvents<F> queryMoveEvents(String moveEvent,
+                                                      EventId cursor, int limit, boolean descendingOrder,
+                                                      Class<F> moveEventFieldsType) {
         List<Object> params = new ArrayList<>();
-        params.add(new EventQuery.MoveEvent(moveEvent));
+        params.add(new SuiEventFilter.MoveEventType(moveEvent));
         params.add(cursor);
         params.add(limit);
         params.add(descendingOrder);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getEvents", params,
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_queryEvents", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<PaginatedMoveEvents<F>> jsonrpc2Response = getJSONRPC2Session()
@@ -124,13 +124,13 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public PaginatedEvents getEvents(EventQuery query, EventId cursor, int limit, boolean descendingOrder) {
+    public PaginatedEvents queryEvents(SuiEventFilter query, EventId cursor, int limit, boolean descendingOrder) {
         List<Object> params = new ArrayList<>();
         params.add(query);
         params.add(cursor);
         params.add(limit);
         params.add(descendingOrder);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getEvents", params,
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_queryEvents", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<PaginatedEvents> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,

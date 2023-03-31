@@ -12,22 +12,22 @@ package com.github.wubuku.sui.bean;
  * };
  * </pre>
  */
-public class SuiEventEnvelope extends AbstractSuiEventEnvelope<SuiEvent> {
-
+public class SuiEventEnvelope extends AbstractSuiEventEnvelope<Object> {
+    //todo rename to SuiEvent???
     public SuiEventEnvelope() {
-    }
-
-    public SuiEventEnvelope(Long timestamp, String txDigest, EventId id, SuiEvent event) {
-        super(timestamp, txDigest, id, event);
     }
 
     @Override
     public String toString() {
         return "SuiEventEnvelope{" +
-                "timestamp=" + getTimestamp() +
-                ", txDigest='" + getTxDigest() + '\'' +
-                ", id=" + getId() +
-                ", event=" + getEvent() +
+                "id=" + getId() +
+                ", packageId='" + getPackageId() + '\'' +
+                ", transactionModule='" + getTransactionModule() + '\'' +
+                ", sender='" + getSender() + '\'' +
+                ", type='" + getType() + '\'' +
+                ", bcs='" + getBcs() + '\'' +
+                ", timestampMs=" + getTimestampMs() +
+                ", parsedJson=" + getParsedJson() +
                 '}';
     }
 }

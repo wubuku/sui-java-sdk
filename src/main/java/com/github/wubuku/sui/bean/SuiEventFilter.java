@@ -5,24 +5,111 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * // mirrors sui_json_rpc_types::SuiEventFilter
- * export type SuiEventFilter =
- *   | { Package: ObjectId }
- *   | { Module: string }
- *   | { MoveEventType: string }
- *   | { MoveEventField: MoveEventField }
- *   | { SenderAddress: SuiAddress }
- *   | { EventType: EventType }
- *   | { All: SuiEventFilter[] }
- *   | { Any: SuiEventFilter[] }
- *   | { And: [SuiEventFilter, SuiEventFilter] }
- *   | { Or: [SuiEventFilter, SuiEventFilter] };
- * </pre>
+ * #[serde_as]
+ * #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
+ * pub enum EventFilter {
+ *     /// Query by sender address.
+ *     Sender(SuiAddress),
+ *     /// Return events emitted by the given transaction.
+ *     Transaction(
+ *         ///digest of the transaction, as base-64 encoded string
+ *         TransactionDigest,
+ *     ),
+ *     /// Return events emitted in a specified Package.
+ *     Package(ObjectID),
+ *     /// Return events emitted in a specified Move module.
+ *     MoveModule {
+ *         /// the Move package ID
+ *         package: ObjectID,
+ *         /// the module name
+ *         #[schemars(with = "String")]
+ *         #[serde_as(as = "DisplayFromStr")]
+ *         module: Identifier,
+ *     },
+ *     /// Return events with the given move event struct name
+ *     MoveEventType(
+ *         #[schemars(with = "String")]
+ *         #[serde_as(as = "SuiStructTag")]
+ *         StructTag,
+ *     ),
+ *     MoveEventField {
+ *         path: String,
+ *         value: Value,
+ *     },
+ *     /// Return events emitted in [start_time, end_time] interval
+ *     #[serde(rename_all = "camelCase")]
+ *     TimeRange {
+ *         /// left endpoint of time interval, milliseconds since epoch, inclusive
+ *         start_time: u64,
+ *         /// right endpoint of time interval, milliseconds since epoch, exclusive
+ *         end_time: u64,
+ *     },
+ *
+ *     All(Vec<EventFilter>),
+ *     Any(Vec<EventFilter>),
+ *     And(Box<EventFilter>, Box<EventFilter>),
+ *     Or(Box<EventFilter>, Box<EventFilter>),
+ * }
  */
 public interface SuiEventFilter {
+
+    class Sender implements SuiEventFilter {
+        @JsonProperty("Sender")
+        private String sender;
+
+        public Sender() {
+        }
+
+        public Sender(String senderAddress) {
+            this.sender = senderAddress;
+        }
+
+        public String getSender() {
+            return sender;
+        }
+
+        public void setSender(String sender) {
+            this.sender = sender;
+        }
+
+        @Override
+        public String toString() {
+            return "SuiEventFilter.Sender{" +
+                    "sender='" + sender + '\'' +
+                    '}';
+        }
+    }
+
+    class Transaction implements SuiEventFilter {
+        @JsonProperty("Transaction")
+        private String transaction;
+
+        public Transaction() {
+        }
+
+        public Transaction(String transaction) {
+            this.transaction = transaction;
+        }
+
+        public String getTransaction() {
+            return transaction;
+        }
+
+        public void setTransaction(String transaction) {
+            this.transaction = transaction;
+        }
+
+        @Override
+        public String toString() {
+            return "Transaction{" +
+                    "transaction='" + transaction + '\'' +
+                    '}';
+        }
+    }
+
     class Package implements SuiEventFilter {
         @JsonProperty("Package")
         private String package_;
@@ -50,29 +137,29 @@ public interface SuiEventFilter {
         }
     }
 
-    class Module implements SuiEventFilter {
+    class MoveModule implements SuiEventFilter {
         @JsonProperty("Module")
-        private String module;
+        private String[] packageAndModule;
 
-        public Module() {
+        public MoveModule() {
         }
 
-        public Module(String module) {
-            this.module = module;
+        public MoveModule(String package_, String module) {
+            this.packageAndModule = new String[]{package_, module};
         }
 
-        public String getModule() {
-            return module;
+        public String[] getPackageAndModule() {
+            return packageAndModule;
         }
 
-        public void setModule(String module) {
-            this.module = module;
+        public void setPackageAndModule(String[] packageAndModule) {
+            this.packageAndModule = packageAndModule;
         }
 
         @Override
         public String toString() {
             return "SuiEventFilter.Module{" +
-                    "module=" + module +
+                    "module=" + Arrays.toString(packageAndModule) +
                     '}';
         }
     }
@@ -131,57 +218,70 @@ public interface SuiEventFilter {
         }
     }
 
-    class SenderAddress implements SuiEventFilter {
-        @JsonProperty("SenderAddress")
-        private String senderAddress;
 
-        public SenderAddress() {
+    class TimeRange implements SuiEventFilter {
+        @JsonProperty("TimeRange")
+        private TimeRange.TimeRangeProperties timeRange;
+
+        public TimeRange() {
         }
 
-        public SenderAddress(String senderAddress) {
-            this.senderAddress = senderAddress;
+        public TimeRange(Long startTime, Long endTime) {
+            this.timeRange = new TimeRange.TimeRangeProperties(startTime, endTime);
         }
 
-        public String getSenderAddress() {
-            return senderAddress;
+        public TimeRange.TimeRangeProperties getTimeRange() {
+            return timeRange;
         }
 
-        public void setSenderAddress(String senderAddress) {
-            this.senderAddress = senderAddress;
-        }
-
-        @Override
-        public String toString() {
-            return "SuiEventFilter.Sender{" +
-                    "sender='" + senderAddress + '\'' +
-                    '}';
-        }
-    }
-
-    class EventType implements SuiEventFilter {
-        @JsonProperty("EventType")
-        private String eventType;
-
-        public EventType() {
-        }
-
-        public EventType(String eventType) {
-            this.eventType = eventType;
-        }
-
-        public String getEventType() {
-            return eventType;
-        }
-
-        public void setEventType(String eventType) {
-            this.eventType = eventType;
+        public void setTimeRange(TimeRange.TimeRangeProperties timeRange) {
+            this.timeRange = timeRange;
         }
 
         @Override
         public String toString() {
-            return "SuiEventFilter.EventType{" +
-                    "eventType='" + eventType + '\'' +
+            return "SuiEventFilter.TimeRange{" +
+                    "timeRange=" + timeRange +
                     '}';
+        }
+
+        public static class TimeRangeProperties {
+            @JsonProperty("start_time")
+            private Long startTime;
+            @JsonProperty("end_time")
+            private Long endTime;
+
+            public TimeRangeProperties() {
+            }
+
+            public TimeRangeProperties(Long startTime, Long endTime) {
+                this.startTime = startTime;
+                this.endTime = endTime;
+            }
+
+            public long getStartTime() {
+                return startTime;
+            }
+
+            public void setStartTime(Long startTime) {
+                this.startTime = startTime;
+            }
+
+            public long getEndTime() {
+                return endTime;
+            }
+
+            public void setEndTime(Long endTime) {
+                this.endTime = endTime;
+            }
+
+            @Override
+            public String toString() {
+                return "SuiEventFilter.TimeRange.TimeRangeProperties{" +
+                        "startTime=" + startTime +
+                        ", endTime=" + endTime +
+                        '}';
+            }
         }
     }
 
@@ -250,6 +350,10 @@ public interface SuiEventFilter {
             this.and = and;
         }
 
+        public And(SuiEventFilter item1, SuiEventFilter item2) {
+            this.and = new SuiEventFilter[]{item1, item2};
+        }
+
         public SuiEventFilter[] getAnd() {
             return and;
         }
@@ -277,6 +381,10 @@ public interface SuiEventFilter {
             this.or = or;
         }
 
+        public Or(SuiEventFilter item1, SuiEventFilter item2) {
+            this.or = new SuiEventFilter[]{item1, item2};
+        }
+
         public SuiEventFilter[] getOr() {
             return or;
         }
@@ -292,4 +400,32 @@ public interface SuiEventFilter {
                     '}';
         }
     }
+
 }
+
+//    class EventType implements SuiEventFilter {
+//        @JsonProperty("EventType")
+//        private String eventType;
+//
+//        public EventType() {
+//        }
+//
+//        public EventType(String eventType) {
+//            this.eventType = eventType;
+//        }
+//
+//        public String getEventType() {
+//            return eventType;
+//        }
+//
+//        public void setEventType(String eventType) {
+//            this.eventType = eventType;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "SuiEventFilter.EventType{" +
+//                    "eventType='" + eventType + '\'' +
+//                    '}';
+//        }
+//    }

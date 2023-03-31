@@ -22,6 +22,7 @@ import java.math.BigInteger;
  */
 @JsonDeserialize(using = SuiEventDeserializer.class)
 public interface SuiEvent {
+    //todo delete this interface?
 
     /**
      * @param <F> the type of 'fields' of MoveEvent.

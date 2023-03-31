@@ -34,7 +34,7 @@ public class SuiJsonRpcClientTests {
         //String url = "http://localhost:9000";
         String url = "https://fullnode.devnet.sui.io/";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
-        PaginatedMoveEvents<JsonRpcTests.MintNFTEvent> moveEvents = client.getMoveEvents(
+        PaginatedMoveEvents<JsonRpcTests.MintNFTEvent> moveEvents = client.queryMoveEvents(
                 "0x2::devnet_nft::MintNFTEvent",
                 null, 2, true, JsonRpcTests.MintNFTEvent.class);
         System.out.println(moveEvents);
@@ -42,14 +42,14 @@ public class SuiJsonRpcClientTests {
     }
 
 
-    //@Test
-    void testGetEvents_2() throws MalformedURLException, JsonProcessingException {
-        //String url = "https://fullnode.devnet.sui.io/";
-        String url = "http://localhost:9000";
-        String transactionDigest = "3LBcVgGGXvKzRoQeNGvZZv64d5fWLrYmW78h2pU4Fw7n";
+    @Test
+    void testGetEventsByTransactionDigest_2() throws MalformedURLException, JsonProcessingException {
+        String url = "https://fullnode.devnet.sui.io/";
+        //String url = "http://localhost:9000";
+        String transactionDigest = "85jYzsibHpaxRLwtWyGKxioFHBDFeLuELokpZYkhwwXn";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
-        PaginatedEvents events = client.getEvents(
-                new EventQuery.Transaction(transactionDigest),
+        PaginatedEvents events = client.queryEvents(
+                new SuiEventFilter.Transaction(transactionDigest),
                 null, 10, false);
         System.out.println(events);
         System.out.println(objectMapper.writeValueAsString(events));
@@ -66,13 +66,13 @@ public class SuiJsonRpcClientTests {
 //        System.out.println(events_c);
         //if (true) return;
         // -----------------------
-        PaginatedEvents events = client.getEvents(
-                new EventQuery.MoveEvent(packageId + "::product::ProductCreated"),
+        PaginatedEvents events = client.queryEvents(
+                new SuiEventFilter.MoveEventType(packageId + "::product::ProductCreated"),
                 null, 10, false);
         System.out.println(events);
         System.out.println(objectMapper.writeValueAsString(events));
         // -----------------------
-        PaginatedMoveEvents<ProductCreated> paginatedMoveEvents = client.getMoveEvents(
+        PaginatedMoveEvents<ProductCreated> paginatedMoveEvents = client.queryMoveEvents(
                 packageId + "::product::ProductCreated",
                 null, 10, false, ProductCreated.class);
         System.out.println(paginatedMoveEvents);
@@ -185,43 +185,35 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetMoveEvents_3() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        String packageId = "0x7b07e7ba1f0902d589202277c65c59fc55f25085";
-        PaginatedMoveEvents<OnlyIdFields> events_1 = client.getMoveEvents(
+        String packageId = "0xb927a6dd8e00e2189c84234d1609f5a9f0e1853c6854b59f271afd2248fc5f68";
+        PaginatedMoveEvents<OnlyIdFields> events_1 = client.queryMoveEvents(
                 packageId + "::domain_name::DomainNameIdTableCreated",
                 null, 10, false, OnlyIdFields.class);
         System.out.println(events_1);
-        if (events_1.getData() != null && !events_1.getData().isEmpty()) {
-            System.out.println(events_1.getData().get(0).getEvent().getMoveEvent().getFields().getId());
-        }
-        PaginatedMoveEvents<OnlyIdFields> events_2 = client.getMoveEvents(
+
+        PaginatedMoveEvents<OnlyIdFields> events_2 = client.queryMoveEvents(
                 packageId + "::product::ProductIdGeneratorCreated",
                 null, 10, false, OnlyIdFields.class);
         System.out.println(events_2);
-        if (events_1.getData() != null && !events_1.getData().isEmpty()) {
-            System.out.println(events_2.getData().get(0).getEvent().getMoveEvent().getFields().getId());
-        }
     }
 
     @Test
     void testGetMoveEvents_4() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        String packageId = "0x4c9edf32a36c6369ac859336672642b7c3140252";
+        String packageId = "0xb927a6dd8e00e2189c84234d1609f5a9f0e1853c6854b59f271afd2248fc5f68";
         EventId cursor = null;
         int counter = 0;
         while (true) {
             int limit = 1;
-            PaginatedMoveEvents<DaySummaryCreated> events_1 = client.getMoveEvents(
+            PaginatedMoveEvents<DaySummaryCreated> events_1 = client.queryMoveEvents(
                     packageId + "::day_summary::DaySummaryCreated",
                     cursor, limit, false, DaySummaryCreated.class);
             System.out.println(events_1);
-            if (events_1.getData() != null && !events_1.getData().isEmpty()) {
-                System.out.println(events_1.getData().get(0).getEvent().getMoveEvent().getFields().getId());
-                System.out.println("Next cursor: " + events_1.getNextCursor());
-            }
+
             counter++;
             System.out.println("counter: " + counter);
             cursor = events_1.getNextCursor();
-            if (cursor == null) {
+            if (events_1.getHasNextPage() != null && events_1.getHasNextPage() || cursor == null) {
                 break;
             }
         }

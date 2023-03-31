@@ -443,37 +443,6 @@ public class JsonRpcTests {
     }
 
     @Test
-    void testJsonDeserialize_1() throws JsonProcessingException {
-        String json_1 = "{\n" +
-                "  \"event\": {\n" +
-                "    \"moveEvent\": {\n" +
-                "      \"bcs\": \"xZf38IrQNqH4nYmQybDhjQDNJtliUmwY0Ii3yFV9V97t6TYrkei00wlTdWlldCBORlQ=\",\n" +
-                "      \"fields\": {\n" +
-                "        \"creator\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
-                "        \"name\": \"Suiet NFT\",\n" +
-                "        \"object_id\": \"0xc597f7f08ad036a1f89d8990c9b0e18d00cd26d9\"\n" +
-                "      },\n" +
-                "      \"packageId\": \"0x0000000000000000000000000000000000000002\",\n" +
-                "      \"sender\": \"0x62526c18d088b7c8557d57deede9362b91e8b4d3\",\n" +
-                "      \"transactionModule\": \"devnet_nft\",\n" +
-                "      \"type\": \"0x2::devnet_nft::MintNFTEvent\"\n" +
-                "    }\n" +
-                "  },\n" +
-                "  \"id\": {\n" +
-                "    \"eventSeq\": 2,\n" +
-                "    \"txSeq\": 44\n" +
-                "  },\n" +
-                "  \"timestamp\": 1672366130490,\n" +
-                "  \"txDigest\": \"E9J1iVw2FrmdVwNqAtm4pyxdZQZZkai8oGDUS8d2PLmJ\"\n" +
-                "}";
-
-        SuiEventEnvelope suiEventEnvelope = objectMapper.readValue(json_1, SuiEventEnvelope.class);
-        System.out.println(suiEventEnvelope);
-        Assertions.assertEquals("E9J1iVw2FrmdVwNqAtm4pyxdZQZZkai8oGDUS8d2PLmJ",
-                suiEventEnvelope.getTxDigest());
-    }
-
-    @Test
     void testBase64() {
         String originalInput = "test input";
         String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
