@@ -1,21 +1,37 @@
 package com.github.wubuku.sui.bean;
 
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type TypeTag =
- *   | { bool: null }
- *   | { u8: null }
- *   | { u64: null }
- *   | { u128: null }
- *   | { address: null }
- *   | { signer: null }
- *   | { vector: TypeTag }
- *   | { struct: StructTag }
- *   | { u16: null }
- *   | { u32: null }
- *   | { u256: null };
+ * #[derive(Serialize, Deserialize, Debug, PartialEq, Hash, Eq, Clone, PartialOrd, Ord)]
+ * pub enum TypeTag {
+ *     // alias for compatibility with old json serialized data.
+ *     #[serde(rename = "bool", alias = "Bool")]
+ *     Bool,
+ *     #[serde(rename = "u8", alias = "U8")]
+ *     U8,
+ *     #[serde(rename = "u64", alias = "U64")]
+ *     U64,
+ *     #[serde(rename = "u128", alias = "U128")]
+ *     U128,
+ *     #[serde(rename = "address", alias = "Address")]
+ *     Address,
+ *     #[serde(rename = "signer", alias = "Signer")]
+ *     Signer,
+ *     #[serde(rename = "vector", alias = "Vector")]
+ *     Vector(Box<TypeTag>),
+ *     #[serde(rename = "struct", alias = "Struct")]
+ *     Struct(Box<StructTag>),
+ *
+ *     // NOTE: Added in bytecode version v6, do not reorder!
+ *     #[serde(rename = "u16", alias = "U16")]
+ *     U16,
+ *     #[serde(rename = "u32", alias = "U32")]
+ *     U32,
+ *     #[serde(rename = "u256", alias = "U256")]
+ *     U256,
+ * }
  * </pre>
  */
 public interface TypeTag {

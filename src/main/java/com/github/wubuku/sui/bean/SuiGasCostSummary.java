@@ -9,9 +9,10 @@ import java.math.BigInteger;
  * #[derive(Eq, PartialEq, Clone, Debug, Serialize, Deserialize, JsonSchema)]
  * #[serde(rename = "GasCostSummary", rename_all = "camelCase")]
  * pub struct SuiGasCostSummary {
- *     pub computation_cost: u64,
- *     pub storage_cost: u64,
- *     pub storage_rebate: u64,
+ *     pub computation_cost: BigInt,
+ *     pub storage_cost: BigInt,
+ *     pub storage_rebate: BigInt,
+ *     pub non_refundable_storage_fee: BigInt,
  * }
  * </pre>
  */
@@ -19,6 +20,8 @@ public class SuiGasCostSummary {
     private BigInteger computationCost;
     private BigInteger storageCost;
     private BigInteger storageRebate;
+
+    private BigInteger nonRefundableStorageFee;
 
     public BigInteger getComputationCost() {
         return computationCost;
@@ -44,12 +47,21 @@ public class SuiGasCostSummary {
         this.storageRebate = storageRebate;
     }
 
+    public BigInteger getNonRefundableStorageFee() {
+        return nonRefundableStorageFee;
+    }
+
+    public void setNonRefundableStorageFee(BigInteger nonRefundableStorageFee) {
+        this.nonRefundableStorageFee = nonRefundableStorageFee;
+    }
+
     @Override
     public String toString() {
         return "SuiGasCostSummary{" +
                 "computationCost=" + computationCost +
                 ", storageCost=" + storageCost +
                 ", storageRebate=" + storageRebate +
+                ", nonRefundableStorageFee=" + nonRefundableStorageFee +
                 '}';
     }
 }

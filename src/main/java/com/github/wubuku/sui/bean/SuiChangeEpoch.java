@@ -2,39 +2,68 @@ package com.github.wubuku.sui.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigInteger;
+
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type SuiChangeEpoch = {
- *   epoch: EpochId;
- *   storage_charge: number;
- *   computation_charge: number;
- * };
+ * #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema, PartialEq, Eq)]
+ * pub struct SuiChangeEpoch {
+ *     pub epoch: SuiEpochId,
+ *     pub storage_charge: u64,
+ *     pub computation_charge: u64,
+ *     pub storage_rebate: u64,
+ *     pub epoch_start_timestamp_ms: u64,
+ * }
  * </pre>
  */
 public class SuiChangeEpoch {
-    private Long epoch;
+    private BigInteger epoch;
     @JsonProperty("storage_charge")
     private Long storageCharge;
     @JsonProperty("computation_charge")
     private Long computationCharge;
 
+    @JsonProperty("storage_rebate")
+    private Long storageRebate;
+
+    @JsonProperty("epoch_start_timestamp_ms")
+    private Long epochStartTimestampMs;
+
     public SuiChangeEpoch() {
     }
 
-    public SuiChangeEpoch(Long epoch, Long storageCharge, Long computationCharge) {
+    public SuiChangeEpoch(BigInteger epoch, Long storageCharge, Long computationCharge, Long storageRebate, Long epochStartTimestampMs) {
         this.epoch = epoch;
         this.storageCharge = storageCharge;
         this.computationCharge = computationCharge;
+        this.storageRebate = storageRebate;
+        this.epochStartTimestampMs = epochStartTimestampMs;
     }
 
-    public Long getEpoch() {
+    public BigInteger getEpoch() {
         return epoch;
     }
 
-    public void setEpoch(Long epoch) {
+    public void setEpoch(BigInteger epoch) {
         this.epoch = epoch;
+    }
+
+    public Long getStorageRebate() {
+        return storageRebate;
+    }
+
+    public void setStorageRebate(Long storageRebate) {
+        this.storageRebate = storageRebate;
+    }
+
+    public Long getEpochStartTimestampMs() {
+        return epochStartTimestampMs;
+    }
+
+    public void setEpochStartTimestampMs(Long epochStartTimestampMs) {
+        this.epochStartTimestampMs = epochStartTimestampMs;
     }
 
     public Long getStorageCharge() {
@@ -59,6 +88,8 @@ public class SuiChangeEpoch {
                 "epoch=" + epoch +
                 ", storageCharge=" + storageCharge +
                 ", computationCharge=" + computationCharge +
+                ", storageRebate=" + storageRebate +
+                ", epochStartTimestampMs=" + epochStartTimestampMs +
                 '}';
     }
 }

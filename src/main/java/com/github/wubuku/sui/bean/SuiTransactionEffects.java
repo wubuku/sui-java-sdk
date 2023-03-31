@@ -1,7 +1,5 @@
 package com.github.wubuku.sui.bean;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Arrays;
 
 /**
@@ -192,22 +190,4 @@ public class SuiTransactionEffects {
                 '}';
     }
 
-    public static class SuiExecutionStatusEnvelope {
-        private SuiExecutionStatus status;
-
-        public SuiExecutionStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(SuiExecutionStatus status) {
-            this.status = status;
-        }
-
-        @Override
-        public String toString() {
-            return "SuiExecutionStatusEnvelope{" +
-                    "status=" + status +
-                    '}';
-        }
-    }
 }

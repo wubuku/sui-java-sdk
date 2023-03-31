@@ -4,10 +4,10 @@ package com.github.wubuku.sui.bean;
  * From Rust definition:
  * <p>
  * <pre>
- * #[derive(Debug, Deserialize, Serialize, JsonSchema, Clone)]
+ * #[derive(Debug, Deserialize, Serialize, JsonSchema, Clone, PartialEq, Eq)]
  * #[serde(rename = "GasData", rename_all = "camelCase")]
  * pub struct SuiGasData {
- *     pub payment: SuiObjectRef,
+ *     pub payment: Vec<SuiObjectRef>,
  *     pub owner: SuiAddress,
  *     pub price: u64,
  *     pub budget: u64,
@@ -15,7 +15,7 @@ package com.github.wubuku.sui.bean;
  * </pre>
  */
 public class SuiGasData {
-    private SuiObjectRef payment;
+    private SuiObjectRef[] payment;
     private String owner;
     private Long price;
     private Long budget;
@@ -23,11 +23,11 @@ public class SuiGasData {
     public SuiGasData() {
     }
 
-    public SuiObjectRef getPayment() {
+    public SuiObjectRef[] getPayment() {
         return payment;
     }
 
-    public void setPayment(SuiObjectRef payment) {
+    public void setPayment(SuiObjectRef[] payment) {
         this.payment = payment;
     }
 

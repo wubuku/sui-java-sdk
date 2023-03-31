@@ -24,7 +24,7 @@ public class SuiTransactionResponse {
     private SuiCertifiedTransaction certificate;
     private SuiTransactionEffects effects;
     @JsonProperty("timestamp_ms")
-    private Long timestampMS;
+    private Long timestampMs;
     private BigInteger checkpoint;
     @JsonProperty("parsed_data")
     private SuiParsedTransactionResponse parsedData;
@@ -48,12 +48,12 @@ public class SuiTransactionResponse {
         this.effects = effects;
     }
 
-    public Long getTimestampMS() {
-        return timestampMS;
+    public Long getTimestampMs() {
+        return timestampMs;
     }
 
-    public void setTimestampMS(Long timestampMS) {
-        this.timestampMS = timestampMS;
+    public void setTimestampMs(Long timestampMs) {
+        this.timestampMs = timestampMs;
     }
 
     public BigInteger getCheckpoint() {
@@ -77,7 +77,7 @@ public class SuiTransactionResponse {
         return "SuiTransactionResponse{" +
                 "certificate=" + certificate +
                 ", effects=" + effects +
-                ", timestampMS=" + timestampMS +
+                ", timestampMs=" + timestampMs +
                 ", checkpoint=" + checkpoint +
                 ", parsedData=" + parsedData +
                 '}';

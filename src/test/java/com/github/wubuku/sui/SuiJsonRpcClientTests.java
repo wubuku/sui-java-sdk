@@ -102,39 +102,52 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetTransaction_1() throws MalformedURLException, JsonProcessingException {
+    void getTransactionBlock_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        SuiTransactionResponse suiTransactionResponse = client.getTransaction(
-                "9omdX43d7aSy676bLSCRCmicHpYQjbvrFkzMg9Qa1U7k"
+        SuiTransactionBlockResponse suiTransactionBlockResponse = client.getTransactionBlock(
+                "6ja18UYT7t3DZ8xixcWhGBm5VaPTBdTF5RicDeNS8dtp",
+                new SuiTransactionBlockResponseOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                )
         );
         //System.out.println(suiTransactionResponse);
-        System.out.println(objectMapper.writeValueAsString(suiTransactionResponse));
+        System.out.println(objectMapper.writeValueAsString(suiTransactionBlockResponse));
         AtomicReference<String> packageIdRef = new AtomicReference<>();
-        Arrays.stream(suiTransactionResponse.getEffects().getEvents()).filter(
-                event -> event instanceof SuiEvent.Publish
+        SuiTransactionBlockEffects.SuiTransactionBlockEffectsV1 effects = (SuiTransactionBlockEffects.SuiTransactionBlockEffectsV1) suiTransactionBlockResponse.getEffects();
+        SuiTransactionBlockEvents events = suiTransactionBlockResponse.getEvents();
+        ObjectChange[] objectChanges = suiTransactionBlockResponse.getObjectChanges();
+        Arrays.stream(objectChanges).filter(
+                event -> event instanceof ObjectChange.Published
         ).findFirst().ifPresent(event -> {
-            SuiEvent.Publish publish = (SuiEvent.Publish) event;
+            ObjectChange.Published publish = (ObjectChange.Published) event;
             System.out.println(publish);
-            packageIdRef.set(publish.getPublish().getPackageId());
+            packageIdRef.set(publish.getPackageId());
         });
+
         System.out.println("--------");
         System.out.println("package Id: " + packageIdRef.get());
         String packageId = packageIdRef.get();
 
         String[] idGeneratorDataObjTypes = ContractConstants.getIdGeneratorDataObjectTypes(packageId);
         //System.out.println(idGeneratorDataObjTypes.length);
-        Arrays.stream(suiTransactionResponse.getEffects().getEvents()).filter(
-                event -> event instanceof SuiEvent.NewObject
+        Arrays.stream(objectChanges).filter(
+                event -> event instanceof ObjectChange.Created
         ).forEach(event -> {
-            SuiEvent.NewObject newObject = (SuiEvent.NewObject) event;
+            ObjectChange.Created newObject = (ObjectChange.Created) event;
             //System.out.println(newObject);
-            if (newObject.getNewObject().getPackageId().equals(packageId)) {
+            int i = newObject.getObjectType().indexOf("::");
+            if (newObject.getObjectType().substring(0, i).equals(packageId)) {
 //                System.out.println(newObject.getNewObject().getObjectType());
 //                System.out.println(newObject.getNewObject().getObjectId());
-                if (Arrays.stream(idGeneratorDataObjTypes).anyMatch(t -> t.equals(newObject.getNewObject().getObjectType()))) {
+                if (Arrays.stream(idGeneratorDataObjTypes).anyMatch(t -> t.equals(newObject.getObjectType()))) {
                     System.out.println("--------");
-                    System.out.print("new object Id: " + newObject.getNewObject().getObjectId());
-                    System.out.println(", type: " + newObject.getNewObject().getObjectType());
+                    System.out.print("new object Id: " + newObject.getObjectId());
+                    System.out.println(", type: " + newObject.getObjectType());
                 }
             }
         });
