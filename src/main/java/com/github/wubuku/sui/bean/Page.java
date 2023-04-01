@@ -32,6 +32,12 @@ public class Page<T, C> {
         this.nextCursor = nextCursor;
     }
 
+    public static boolean hasNextPage(Page page) {
+        return page != null && (
+                page.getHasNextPage() != null && page.getHasNextPage() && page.nextCursor != null
+        );
+    }
+
     public List<T> getData() {
         return data;
     }

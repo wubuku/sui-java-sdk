@@ -6,10 +6,14 @@ import java.math.BigInteger;
  * From Rust definition:
  * <p>
  * <pre>
- * #[derive(Clone, Serialize, Deserialize, JsonSchema, Ord, PartialOrd, Eq, PartialEq, Debug)]
+ * #[serde_as]
+ * #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
  * #[serde(rename_all = "camelCase")]
  * pub struct DynamicFieldInfo {
- *     pub name: String,
+ *     pub name: DynamicFieldName,
+ *     #[schemars(with = "Base58")]
+ *     #[serde_as(as = "Readable<Base58, _>")]
+ *     pub bcs_name: Vec<u8>,
  *     pub type_: DynamicFieldType,
  *     pub object_type: String,
  *     pub object_id: ObjectID,
@@ -19,7 +23,8 @@ import java.math.BigInteger;
  * </pre>
  */
 public class DynamicFieldInfo {
-    private String name;
+    private DynamicFieldName name;
+    private String bcsName;
     private String type;
     private String objectType;
     private String objectId;
@@ -29,21 +34,20 @@ public class DynamicFieldInfo {
     public DynamicFieldInfo() {
     }
 
-    public DynamicFieldInfo(String name, String type, String objectType, String objectId, BigInteger version, String digest) {
-        this.name = name;
-        this.type = type;
-        this.objectType = objectType;
-        this.objectId = objectId;
-        this.version = version;
-        this.digest = digest;
-    }
-
-    public String getName() {
+    public DynamicFieldName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(DynamicFieldName name) {
         this.name = name;
+    }
+
+    public String getBcsName() {
+        return bcsName;
+    }
+
+    public void setBcsName(String bcsName) {
+        this.bcsName = bcsName;
     }
 
     public String getType() {
@@ -89,7 +93,8 @@ public class DynamicFieldInfo {
     @Override
     public String toString() {
         return "DynamicFieldInfo{" +
-                "name='" + name + '\'' +
+                "name=" + name +
+                ", bcsName='" + bcsName + '\'' +
                 ", type='" + type + '\'' +
                 ", objectType='" + objectType + '\'' +
                 ", objectId='" + objectId + '\'' +

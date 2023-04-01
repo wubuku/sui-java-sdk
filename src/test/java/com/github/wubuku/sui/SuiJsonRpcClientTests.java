@@ -232,17 +232,17 @@ public class SuiJsonRpcClientTests {
             counter++;
             System.out.println("counter: " + counter);
             cursor = events_1.getNextCursor();
-            if (events_1.getHasNextPage() != null && events_1.getHasNextPage() || cursor == null) {
+            if (!Page.hasNextPage(events_1)) {
                 break;
             }
         }
     }
 
     @Test
-    void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
+    void testGetMoveObject_getDynamicFields_getDynamicFieldMoveObject_D() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiMoveObjectResponse<Order> getObjectDataResponse = client.getMoveObject(
-                "0x8134656922ebdfdd67a4e6a3da444d53c997c196",
+                "0x50dc4c763b4f3df257a4557345bced2097bd0e32ad4200493527bcfdd1192546",
                 new SuiObjectDataOptions(
                         true,
                         true,
@@ -265,7 +265,7 @@ public class SuiJsonRpcClientTests {
             DynamicFieldPage orderItemPage = client.getDynamicFields(testOrderItemTableId, cursor, null);
             for (DynamicFieldInfo testOrderItemFieldInfo : orderItemPage.getData()) {
                 System.out.println(testOrderItemFieldInfo);
-                String fieldName = testOrderItemFieldInfo.getName();
+                DynamicFieldName fieldName = testOrderItemFieldInfo.getName();
                 System.out.println("field name: " + fieldName);
                 String fieldObjectId = testOrderItemFieldInfo.getObjectId();
                 System.out.println("field object Id: " + fieldObjectId);
@@ -299,7 +299,8 @@ public class SuiJsonRpcClientTests {
                 System.out.println(orderItem);
             }
             cursor = orderItemPage.getNextCursor();
-            if (cursor == null) {
+            System.out.println("cursor: " + cursor);
+            if (!Page.hasNextPage(orderItemPage)) {
                 System.out.println("end of pages");
                 break;
             }
@@ -403,7 +404,7 @@ public class SuiJsonRpcClientTests {
     void testGetDynamicFieldObject() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String parentObjectId = "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10";
-        String name = "0x1::string::String {bytes: vector[48u8, 49u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8]}";
+        DynamicFieldName name = null;//todo "0x1::string::String {bytes: vector[48u8, 49u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8]}";
         // ------------------
         SuiObjectResponse getObjectDataResponse = client.getDynamicFieldObject(parentObjectId, name);
         System.out.println(getObjectDataResponse);

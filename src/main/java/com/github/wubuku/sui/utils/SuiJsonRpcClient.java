@@ -214,7 +214,7 @@ public class SuiJsonRpcClient {
      * @return
      */
     public SuiObjectResponse getDynamicFieldObject(String parentObjectId,
-                                                   Object name // DynamicFieldName
+                                                   DynamicFieldName name
     ) {
         List<Object> params = new ArrayList<>();
         params.add(parentObjectId);
@@ -232,16 +232,15 @@ public class SuiJsonRpcClient {
 
 
     public <T> SuiMoveObjectResponse<T> getDynamicFieldMoveObject(String parentObjectId,
-                                                                  Object name, // DynamicFieldName
+                                                                  DynamicFieldName name,
                                                                   Class<T> objectType) {
-        // have been changed to 'suix_getDynamicFieldObject'
         List<Object> params = new ArrayList<>();
         params.add(parentObjectId);
         params.add(name);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getDynamicFieldObject", params, System.currentTimeMillis());
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_getDynamicFieldObject", params, System.currentTimeMillis());
         try {
             JSONRPC2Response<SuiMoveObjectResponse<T>> jsonrpc2Response = jsonrpc2Session
-                    .sendAndGetParametricTypeResult(jsonrpc2Request, GetMoveObjectDataResponse.class, objectType);
+                    .sendAndGetParametricTypeResult(jsonrpc2Request, SuiMoveObjectResponse.class, objectType);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
@@ -263,7 +262,7 @@ public class SuiJsonRpcClient {
         params.add(parentObjectId);
         params.add(cursor);
         params.add(limit);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getDynamicFields", params,
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_getDynamicFields", params,
                 System.currentTimeMillis());
         try {
             JSONRPC2Response<DynamicFieldPage> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
