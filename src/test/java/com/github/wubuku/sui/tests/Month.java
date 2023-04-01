@@ -7,48 +7,51 @@ package com.github.wubuku.sui.tests;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.github.wubuku.sui.bean.*;
 
-@JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
-public class Month {
-    private Year year;
+public class Month extends MoveObject<Month.MonthFields> {
 
-    private Integer number;
+    @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
+    public static class MonthFields {
+        private Year year;
 
-    private Boolean isLeap;
+        private Integer number;
+
+        private Boolean isLeap;
 
 
-    public Year getYear() {
-        return year;
+        public Year getYear() {
+            return year;
+        }
+
+        public void setYear(Year year) {
+            this.year = year;
+        }
+
+        public Integer getNumber() {
+            return number;
+        }
+
+        public void setNumber(Integer number) {
+            this.number = number;
+        }
+
+        public Boolean getIsLeap() {
+            return isLeap;
+        }
+
+        public void setIsLeap(Boolean isLeap) {
+            this.isLeap = isLeap;
+        }
+
+        @Override
+        public String toString() {
+            return "MonthFields{" +
+                    "year=" + year +
+                    ", number=" + number +
+                    ", isLeap=" + isLeap +
+                    '}';
+        }
     }
-
-    public void setYear(Year year) {
-        this.year = year;
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public Boolean getIsLeap() {
-        return isLeap;
-    }
-
-    public void setIsLeap(Boolean isLeap) {
-        this.isLeap = isLeap;
-    }
-
-    @Override
-    public String toString() {
-        return "Month{" +
-                "year=" + year +
-                ", number=" + number +
-                ", isLeap=" + isLeap +
-                '}';
-    }
-
 }
 

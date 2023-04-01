@@ -1,7 +1,5 @@
 package com.github.wubuku.sui.bean;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * From TypeScript definition:
  * <p>
@@ -20,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SuiMoveObject<T> {
     private String type;
     private T fields;
-    @JsonProperty("has_public_transfer")
+    //@JsonProperty("has_public_transfer")
     private Boolean hasPublicTransfer;
 
     public SuiMoveObject() {

@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
-public class ObjectTypeSerializer extends JsonSerializer<ObjectType> {
+public class SuiDataTypeSerializer extends JsonSerializer<SuiDataType> {
     @Override
-    public void serialize(ObjectType value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(SuiDataType value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeString(value.getCode());
     }
 }

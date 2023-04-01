@@ -19,12 +19,12 @@ package com.github.wubuku.sui.bean;
  *     };
  * </pre>
  */
-public class SuiObject extends AbstractSuiObject<SuiData> {
+public class SuiObject extends AbstractSuiObject<SuiParsedData> {
 
     public SuiObject() {
     }
 
-    public SuiObject(SuiData data,
+    public SuiObject(SuiParsedData data,
                      ObjectOwner owner,
                      String previousTransaction,
                      Long storageRebate,

@@ -23,21 +23,21 @@ public class GetMoveObjectDataResponse<T> extends AbstractGetObjectDataResponse<
     }
 
     public static class MoveObject<T> extends com.github.wubuku.sui.bean.SuiMoveObject<T> {
-        private ObjectType dataType;
+        private SuiDataType dataType;
 
         public MoveObject() {
         }
 
-        public MoveObject(String type, T fields, Boolean hasPublicTransfer, ObjectType dataType) {
+        public MoveObject(String type, T fields, Boolean hasPublicTransfer, SuiDataType dataType) {
             super(type, fields, hasPublicTransfer);
             this.dataType = dataType;
         }
 
-        public ObjectType getDataType() {
+        public SuiDataType getDataType() {
             return dataType;
         }
 
-        public void setDataType(ObjectType dataType) {
+        public void setDataType(SuiDataType dataType) {
             this.dataType = dataType;
         }
 

@@ -171,24 +171,15 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public GetObjectDataResponse getObject(String objectId) {
+    public <T> SuiMoveObjectResponse<T> getMoveObject(String objectId, SuiObjectDataOptions options, Class<T> objectType) {
+        options.setShowContent(true);// set showContent to true to get the parsed JSON content
         List<Object> params = new ArrayList<>();
         params.add(objectId);
-        return getObject("sui_getObject", params);
-    }
-
-    public GetObjectDataResponse getDynamicFieldObject(String parentObjectId, String name) {
-        List<Object> params = new ArrayList<>();
-        params.add(parentObjectId);
-        params.add(name);
-        return getObject("sui_getDynamicFieldObject", params);
-    }
-
-    private GetObjectDataResponse getObject(String method, List<Object> params) {
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());
+        params.add(options);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getObject", params, System.currentTimeMillis());
         try {
-            JSONRPC2Response<GetObjectDataResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
-                    GetObjectDataResponse.class);
+            JSONRPC2Response<SuiMoveObjectResponse<T>> jsonrpc2Response = jsonrpc2Session
+                    .sendAndGetParametricTypeResult(jsonrpc2Request, SuiMoveObjectResponse.class, objectType);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();
         } catch (JSONRPC2SessionException e) {
@@ -196,23 +187,60 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public <T> GetMoveObjectDataResponse<T> getMoveObject(String objectId, Class<T> objectType) {
+    public SuiObjectResponse getObject(String objectId, SuiObjectDataOptions options) {
         List<Object> params = new ArrayList<>();
         params.add(objectId);
-        return getMoveObject("sui_getObject", params, objectType);
+        params.add(options);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getObject", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiObjectResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiObjectResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public <T> GetMoveObjectDataResponse<T> getDynamicFieldMoveObject(String parentObjectId, String field, Class<T> objectType) {
+    /**
+     * suix_getDynamicFieldObject
+     * <p>
+     * Extended API.
+     * Return the dynamic field object information for a specified object
+     * <p>
+     *
+     * @param parentObjectId
+     * @param name
+     * @return
+     */
+    public SuiObjectResponse getDynamicFieldObject(String parentObjectId,
+                                                   Object name // DynamicFieldName
+    ) {
         List<Object> params = new ArrayList<>();
         params.add(parentObjectId);
-        params.add(field);
-        return getMoveObject("sui_getDynamicFieldObject", params, objectType);
+        params.add(name);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_getDynamicFieldObject", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiObjectResponse> jsonrpc2Response = jsonrpc2Session.send(jsonrpc2Request,
+                    SuiObjectResponse.class);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private <T> GetMoveObjectDataResponse<T> getMoveObject(String method, List<Object> params, Class<T> objectType) {
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params, System.currentTimeMillis());
+
+    public <T> SuiMoveObjectResponse<T> getDynamicFieldMoveObject(String parentObjectId,
+                                                                  Object name, // DynamicFieldName
+                                                                  Class<T> objectType) {
+        // have been changed to 'suix_getDynamicFieldObject'
+        List<Object> params = new ArrayList<>();
+        params.add(parentObjectId);
+        params.add(name);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getDynamicFieldObject", params, System.currentTimeMillis());
         try {
-            JSONRPC2Response<GetMoveObjectDataResponse<T>> jsonrpc2Response = jsonrpc2Session
+            JSONRPC2Response<SuiMoveObjectResponse<T>> jsonrpc2Response = jsonrpc2Session
                     .sendAndGetParametricTypeResult(jsonrpc2Request, GetMoveObjectDataResponse.class, objectType);
             assertSuccess(jsonrpc2Response);
             return jsonrpc2Response.getResult();

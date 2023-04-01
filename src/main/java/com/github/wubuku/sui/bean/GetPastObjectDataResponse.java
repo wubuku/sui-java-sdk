@@ -84,7 +84,7 @@ public class GetPastObjectDataResponse {
             public VersionFound() {
             }
 
-            public VersionFound(SuiData data, ObjectOwner owner,
+            public VersionFound(SuiParsedData data, ObjectOwner owner,
                                 String previousTransaction, Long storageRebate,
                                 SuiObjectRef reference) {
                 super(data, owner, previousTransaction, storageRebate, reference);
@@ -250,7 +250,7 @@ public class GetPastObjectDataResponse {
                  *     };
                  * </pre>
                  */
-                SuiData data = null;
+                SuiParsedData data = null;
                 ObjectOwner owner = null;
                 String previousTransaction = null;
                 Long storageRebate = null;
@@ -280,7 +280,7 @@ public class GetPastObjectDataResponse {
                 while (null != fieldName) {
                     if ("data".equals(fieldName)) {
                         jsonParser.nextToken();
-                        data = jsonParser.readValueAs(SuiData.class);
+                        data = jsonParser.readValueAs(SuiParsedData.class);
                     } else if ("owner".equals(fieldName)) {
                         jsonParser.nextToken();
                         owner = jsonParser.readValueAs(ObjectOwner.class);

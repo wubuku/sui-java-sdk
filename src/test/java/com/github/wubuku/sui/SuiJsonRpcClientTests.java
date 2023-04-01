@@ -165,18 +165,37 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetObjectDataResponse getObjectDataResponse = client.getObject(
-                "0x1a8e812a50899e9356044b99b1195771082e9197"
+        SuiObjectResponse getObjectDataResponse = client.getObject(
+                "0x1a8e812a50899e9356044b99b1195771082e9197",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                )
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
     @Test
-    void testGetObject_2() throws MalformedURLException, JsonProcessingException {
+    void testGetObject_D() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetObjectDataResponse getObjectDataResponse = client.getObject(
-                "0x595e185525f2a9bb892dc634ba95a10f78010c1e"
+        SuiObjectResponse getObjectDataResponse = client.getObject(
+                //"0x2ba77c985dd19c5570ce95c6ec07c51be202a3819860a507a51d4d573f85ee81",
+                "0x617fa230018fa51185dfa4cfca28a444a997d0e40026f81927ea6f52148de03d",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                )
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
@@ -198,7 +217,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetMoveEvents_4() throws MalformedURLException {
+    void testGetMoveEvents_D() throws MalformedURLException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         String packageId = "0xb927a6dd8e00e2189c84234d1609f5a9f0e1853c6854b59f271afd2248fc5f68";
         EventId cursor = null;
@@ -222,13 +241,22 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetMoveObject_1() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetMoveObjectDataResponse<Order> getObjectDataResponse = client.getMoveObject(
+        SuiMoveObjectResponse<Order> getObjectDataResponse = client.getMoveObject(
                 "0x8134656922ebdfdd67a4e6a3da444d53c997c196",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                ),
                 Order.class
         );
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
-        Order order = getObjectDataResponse.getDetails().getData().getFields();
+        Order order = getObjectDataResponse.getData().getContent().getFields();
         String testOrderItemTableId = order.getItems().getFields().getId().getId();
         System.out.println(testOrderItemTableId);
 
@@ -242,22 +270,32 @@ public class SuiJsonRpcClientTests {
                 String fieldObjectId = testOrderItemFieldInfo.getObjectId();
                 System.out.println("field object Id: " + fieldObjectId);
                 System.out.println("== get dynamic field object by parent_id and field_name ==");
-                GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse = client
+                SuiMoveObjectResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse = client
                         .getDynamicFieldMoveObject(testOrderItemTableId, fieldName, OrderItemDynamicField.class);
                 System.out.println(getOrderItemFieldObjectDataResponse);
-                System.out.println(getOrderItemFieldObjectDataResponse.getDetails().getData().getFields().getId());
+                System.out.println(getOrderItemFieldObjectDataResponse.getData().getContent().getFields().getId());
                 System.out.println("== get object by id. ==");
-                GetMoveObjectDataResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse_2 = client.getMoveObject(fieldObjectId, OrderItemDynamicField.class);
+                SuiMoveObjectResponse<OrderItemDynamicField> getOrderItemFieldObjectDataResponse_2
+                        = client.getMoveObject(fieldObjectId,
+                        new SuiObjectDataOptions(
+                                true,
+                                true,
+                                true,
+                                true,
+                                true,
+                                true,
+                                true
+                        ),
+                        OrderItemDynamicField.class);
                 System.out.println(getOrderItemFieldObjectDataResponse_2);
-                System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getName());
-                System.out.println(getOrderItemFieldObjectDataResponse_2.getDetails().getData().getFields().getId());
+                System.out.println(getOrderItemFieldObjectDataResponse_2.getData().getContent().getFields().getName());
+                System.out.println(getOrderItemFieldObjectDataResponse_2.getData().getContent().getFields().getId());
                 OrderItem orderItem = getOrderItemFieldObjectDataResponse_2
-                        .getDetails()   // GetMoveObjectDataResponse.Details
-                        .getData()      // MoveObject<OrderItemDynamicField>
-                        .getFields()    // OrderItemDynamicField
-                        .getValue()     // MoveObject<OrderItem>
-                        .getFields()    // OrderItem
-                        ;
+                        .getData()
+                        .getContent()
+                        .getFields()
+                        .getValue()
+                        .getFields();
                 System.out.println(orderItem);
             }
             cursor = orderItemPage.getNextCursor();
@@ -304,8 +342,17 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetMoveObject_2() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetMoveObjectDataResponse<OrderItemDynamicField> getObjectDataResponse = client.getMoveObject(
+        SuiMoveObjectResponse<OrderItemDynamicField> getObjectDataResponse = client.getMoveObject(
                 "0x90c40b57ba0f4cdf060f6b387229e0de232c407a",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                ),
                 OrderItemDynamicField.class
         );
         System.out.println(getObjectDataResponse);
@@ -313,11 +360,19 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetMoveObject_3() throws MalformedURLException, JsonProcessingException {
+    void testGetMoveObject_D() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetMoveObjectDataResponse<DaySummary> getObjectDataResponse = client.getMoveObject(
-                //"0x99bd2a5ea4e99800a6a7676b07cc119569c6a976",
-                "0x7b29d96344f145aa9b50bc02befdcb018ee26eae",
+        SuiMoveObjectResponse<DaySummary> getObjectDataResponse = client.getMoveObject(
+                "0x617fa230018fa51185dfa4cfca28a444a997d0e40026f81927ea6f52148de03d",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                ),
                 DaySummary.class
         );
         System.out.println(getObjectDataResponse);
@@ -327,8 +382,17 @@ public class SuiJsonRpcClientTests {
     @Test
     void testGetMoveObject_4() throws MalformedURLException, JsonProcessingException {
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        GetMoveObjectDataResponse<DomainName> getObjectDataResponse = client.getMoveObject(
+        SuiMoveObjectResponse<DomainName> getObjectDataResponse = client.getMoveObject(
                 "0x8bfd9d58baf907954f392660ffbba1e59011caaa",
+                new SuiObjectDataOptions(
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true
+                ),
                 DomainName.class
         );
         System.out.println(getObjectDataResponse);
@@ -341,11 +405,11 @@ public class SuiJsonRpcClientTests {
         String parentObjectId = "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10";
         String name = "0x1::string::String {bytes: vector[48u8, 49u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8, 48u8]}";
         // ------------------
-        GetObjectDataResponse getObjectDataResponse = client.getDynamicFieldObject(parentObjectId, name);
+        SuiObjectResponse getObjectDataResponse = client.getDynamicFieldObject(parentObjectId, name);
         System.out.println(getObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
         // ------------------
-        GetMoveObjectDataResponse<OrderItemDynamicField> getMoveObjectDataResponse = client
+        SuiMoveObjectResponse<OrderItemDynamicField> getMoveObjectDataResponse = client
                 .getDynamicFieldMoveObject(parentObjectId, name, OrderItemDynamicField.class);
         System.out.println(getMoveObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getMoveObjectDataResponse));

@@ -24,7 +24,7 @@ public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
             throw new InvalidFormatException(jsonParser, "SuiRawDataDeserializer.deserialize() error.", currentToken, SuiRawData.class);
         } else if (JsonToken.START_OBJECT.equals(currentToken)) {
             String fieldName = jsonParser.nextFieldName();
-            ObjectType dataType = null;
+            SuiDataType dataType = null;
             // SuiRawData.SuiMoveObject fields
             String type = null;
             Boolean has_public_transfer = null;
@@ -36,28 +36,28 @@ public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
             while (null != fieldName) {
                 if ("dataType".equals(fieldName)) {
                     jsonParser.nextToken();
-                    dataType = jsonParser.readValueAs(ObjectType.class);
+                    dataType = jsonParser.readValueAs(SuiDataType.class);
                 } else if ("type".equals(fieldName)) {
                     jsonParser.nextToken();
                     type = jsonParser.getValueAsString();
-                } else if ("has_public_transfer".equals(fieldName)) {
+                } else if ("hasPublicTransfer".equals(fieldName)) {
                     jsonParser.nextToken();
                     has_public_transfer = jsonParser.getBooleanValue();
                 } else if ("version".equals(fieldName)) {
                     jsonParser.nextToken();
                     version = jsonParser.getBigIntegerValue();
-                } else if ("bcs_bytes".equals(fieldName)) {
+                } else if ("bcsBytes".equals(fieldName)) {
                     jsonParser.nextToken();
                     bcsBytes = jsonParser.getText();
                 } else if ("id".equals(fieldName)) {
                     jsonParser.nextToken();
                     id = jsonParser.getText();
-                } else if ("module_map".equals(fieldName)) {
+                } else if ("moduleMap".equals(fieldName)) {
                     jsonParser.nextToken();
                     moduleMap = jsonParser.readValueAs(new TypeReference<Map<String, String>>() {
                     });
                 } else {
-                    throw new InvalidFormatException(jsonParser, "SuiRawDataDeserializer.deserialize() error.", jsonParser.currentToken(), SuiRawData.class);
+                    throw new InvalidFormatException(jsonParser, "SuiRawDataDeserializer.deserialize() error. Unknown field name: " + fieldName, jsonParser.currentToken(), SuiRawData.class);
                 }
                 fieldName = jsonParser.nextFieldName();
             }
@@ -65,10 +65,10 @@ public class SuiRawDataDeserializer extends JsonDeserializer<SuiRawData> {
                 throw new InvalidFormatException(jsonParser, "SuiRawDataDeserializer.deserialize() error.", jsonParser.currentToken(), SuiRawData.class);
             }
             if (type != null) {
-                return new SuiRawData.SuiMoveObject(type, has_public_transfer, version, bcsBytes, dataType);
+                return new SuiRawData.MoveObject(type, has_public_transfer, version, bcsBytes, dataType);
             }
             if (id != null) {
-                return new SuiRawData.SuiMovePackage(id, moduleMap, dataType);
+                return new SuiRawData.Package(id, moduleMap, dataType);
             }
             throw new InvalidFormatException(jsonParser, "SuiRawDataDeserializer.deserialize() error.", jsonParser.currentToken(), SuiRawData.class);
         } else if (JsonToken.START_ARRAY.equals(currentToken)) {

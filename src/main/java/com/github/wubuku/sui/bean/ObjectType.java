@@ -1,30 +1,19 @@
 package com.github.wubuku.sui.bean;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 /**
- * From TypeScript definition:
+ * From Rust definition:
  * <p>
  * <pre>
- * export type ObjectType = 'moveObject' | 'package';
+ * /// Type of a Sui object
+ * #[derive(Clone, Serialize, Deserialize, Ord, PartialOrd, Eq, PartialEq, Debug)]
+ * pub enum ObjectType {
+ *     /// Move package containing one or more bytecode modules
+ *     Package,
+ *     /// A Move struct of the given type
+ *     Struct(MoveObjectType),
+ * }
  * </pre>
  */
-@JsonDeserialize(using = ObjectTypeDeserializer.class)
-@JsonSerialize(using = ObjectTypeSerializer.class)
-public enum ObjectType {
-    MOVE_OBJECT {
-        @Override
-        public String getCode() {
-            return "moveObject";
-        }
-    },
-    PACKAGE {
-        @Override
-        public String getCode() {
-            return "package";
-        }
-    };
-
-    public abstract String getCode();
+public interface ObjectType {
+    //todo
 }

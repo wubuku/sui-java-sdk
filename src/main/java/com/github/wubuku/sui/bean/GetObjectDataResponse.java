@@ -42,7 +42,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
             public SuiObject() {
             }
 
-            public SuiObject(SuiData data, ObjectOwner owner,
+            public SuiObject(SuiParsedData data, ObjectOwner owner,
                              String previousTransaction, Long storageRebate,
                              com.github.wubuku.sui.bean.SuiObjectRef reference) {
                 super(data, owner, previousTransaction, storageRebate, reference);
@@ -94,7 +94,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
     }
 
     public static class DetailsDeserializer extends GetObjectDataResponseDetailsDeserializer<
-            Details, Details.ObjectId, Details.SuiObject, Details.SuiObjectRef, SuiData> {
+            Details, Details.ObjectId, Details.SuiObject, Details.SuiObjectRef, SuiParsedData> {
 
         @Override
         protected Details.ObjectId newObjectId(String text) {
@@ -102,7 +102,7 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
         }
 
         @Override
-        protected Details.SuiObject newSuiObject(SuiData data, ObjectOwner owner,
+        protected Details.SuiObject newSuiObject(SuiParsedData data, ObjectOwner owner,
                                                  String previousTransaction,
                                                  Long storageRebate,
                                                  Details.SuiObjectRef reference) {
@@ -120,8 +120,8 @@ public class GetObjectDataResponse extends AbstractGetObjectDataResponse<GetObje
         }
 
         @Override
-        protected Class<SuiData> getSuiDataClass() {
-            return SuiData.class;
+        protected Class<SuiParsedData> getSuiDataClass() {
+            return SuiParsedData.class;
         }
     }
 }

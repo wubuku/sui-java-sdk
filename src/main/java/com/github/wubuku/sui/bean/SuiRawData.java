@@ -10,7 +10,7 @@ import java.util.Map;
  * <p>
  * <pre>
  * #[derive(Debug, Deserialize, Serialize, JsonSchema, Clone, Eq, PartialEq)]
- * #[serde(tag = "dataType", rename_all = "camelCase", rename = "Data")]
+ * #[serde(tag = "dataType", rename_all = "camelCase", rename = "RawData")]
  * pub enum SuiRawData {
  *     // Manually handle generic schema generation
  *     MoveObject(SuiRawMoveObject),
@@ -20,29 +20,29 @@ import java.util.Map;
  */
 @JsonDeserialize(using = SuiRawDataDeserializer.class)
 public interface SuiRawData {
-    ObjectType getDataType();
+    SuiDataType getDataType();
 
-    class SuiMoveObject extends com.github.wubuku.sui.bean.SuiRawMoveObject implements SuiRawData {
-        private ObjectType dataType;
+    class MoveObject extends com.github.wubuku.sui.bean.SuiRawMoveObject implements SuiRawData {
+        private SuiDataType dataType;
 
-        public SuiMoveObject() {
+        public MoveObject() {
         }
 
-        public SuiMoveObject(ObjectType dataType) {
+        public MoveObject(SuiDataType dataType) {
             this.dataType = dataType;
         }
 
-        public SuiMoveObject(String type, Boolean hasPublicTransfer, BigInteger version, String bcsBytes, ObjectType dataType) {
+        public MoveObject(String type, Boolean hasPublicTransfer, BigInteger version, String bcsBytes, SuiDataType dataType) {
             super(type, hasPublicTransfer, version, bcsBytes);
             this.dataType = dataType;
         }
 
         @Override
-        public ObjectType getDataType() {
+        public SuiDataType getDataType() {
             return dataType;
         }
 
-        public void setDataType(ObjectType dataType) {
+        public void setDataType(SuiDataType dataType) {
             this.dataType = dataType;
         }
 
@@ -58,24 +58,24 @@ public interface SuiRawData {
         }
     }
 
-    class SuiMovePackage extends com.github.wubuku.sui.bean.SuiRawMovePackage implements SuiRawData {
-        private ObjectType dataType;
+    class Package extends com.github.wubuku.sui.bean.SuiRawMovePackage implements SuiRawData {
+        private SuiDataType dataType;
 
-        public SuiMovePackage(ObjectType dataType) {
+        public Package(SuiDataType dataType) {
             this.dataType = dataType;
         }
 
-        public SuiMovePackage(String id, Map<String, String> moduleMap, ObjectType dataType) {
+        public Package(String id, Map<String, String> moduleMap, SuiDataType dataType) {
             super(id, moduleMap);
             this.dataType = dataType;
         }
 
         @Override
-        public ObjectType getDataType() {
+        public SuiDataType getDataType() {
             return dataType;
         }
 
-        public void setDataType(ObjectType dataType) {
+        public void setDataType(SuiDataType dataType) {
             this.dataType = dataType;
         }
 
