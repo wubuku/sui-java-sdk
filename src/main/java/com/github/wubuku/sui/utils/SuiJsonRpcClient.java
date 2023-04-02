@@ -51,21 +51,6 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public SuiTransactionResponse getTransaction(String digest) { //todo remove this method
-        List<Object> params = new ArrayList<>();
-        params.add(digest);
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getTransaction", params,
-                System.currentTimeMillis());
-        try {
-            JSONRPC2Response<SuiTransactionResponse> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,
-                    SuiTransactionResponse.class);
-            assertSuccess(jsonrpc2Response);
-            return jsonrpc2Response.getResult();
-        } catch (JSONRPC2SessionException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public TransactionsPage getTransactions(TransactionQuery query,
                                             String cursor,
                                             int limit,

@@ -11,7 +11,6 @@ import com.google.common.primitives.Bytes;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -552,7 +551,7 @@ public class SuiJsonRpcClientTests {
         if (SignatureScheme.ED25519.equals(sigScheme)) {
             sigSchemeByte = 0;
         } else {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
         byte[] publicKey = Base64.getDecoder().decode(publicKeyBase64);
         //`flag || signature || pubkey` bytes,
