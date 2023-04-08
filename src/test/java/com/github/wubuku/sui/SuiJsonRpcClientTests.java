@@ -105,7 +105,8 @@ public class SuiJsonRpcClientTests {
         //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
         SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.testnet.sui.io/");
         SuiTransactionBlockResponse suiTransactionBlockResponse = client.getTransactionBlock(
-                "5nvqAWujwq72FVbUtZp4mEFauRXsssQNGH2ny1KcAebp",
+                //"5nvqAWujwq72FVbUtZp4mEFauRXsssQNGH2ny1KcAebp", // a failed trx
+                "4mxSZCAkYwxhGQY79GDHQWFYoa8x3HQiQx4Azn9JbG8b",
                 new SuiTransactionBlockResponseOptions(
                         true,
                         true,
