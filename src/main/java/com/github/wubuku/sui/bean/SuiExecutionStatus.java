@@ -24,7 +24,8 @@ import java.io.IOException;
  */
 @JsonDeserialize(using = SuiExecutionStatusDeserializer.class)
 public interface SuiExecutionStatus {
-    @JsonSerialize(using = SuiExecutionStatusSerializer.class)
+    String getStatus();
+
     class Success implements SuiExecutionStatus {
         public static Success INSTANCE = new Success();
 
@@ -35,64 +36,41 @@ public interface SuiExecutionStatus {
         public String toString() {
             return "Success{}";
         }
-    }
 
-    class SuiExecutionStatusSerializer extends JsonSerializer<Success> {
         @Override
-        public void serialize(Success value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-            gen.writeString("success");
+        public String getStatus() {
+            return "success";
         }
     }
 
     class Failure implements SuiExecutionStatus {
-        private FailureProperties failure;
+        private String error;
 
         public Failure() {
         }
 
-        public Failure(FailureProperties failure) {
-            this.failure = failure;
+        public Failure(String error) {
+            this.error = error;
         }
 
-        public FailureProperties getFailure() {
-            return failure;
+        public String getError() {
+            return error;
         }
 
-        public void setFailure(FailureProperties failure) {
-            this.failure = failure;
+        public void setError(String error) {
+            this.error = error;
         }
 
         @Override
         public String toString() {
             return "Failure{" +
-                    "failure=" + failure +
+                    "error='" + error + '\'' +
                     '}';
         }
 
-        public static class FailureProperties {
-            private String error;
-
-            public FailureProperties() {
-            }
-
-            public FailureProperties(String error) {
-                this.error = error;
-            }
-
-            public String getError() {
-                return error;
-            }
-
-            public void setError(String error) {
-                this.error = error;
-            }
-
-            @Override
-            public String toString() {
-                return "FailureProperties{" +
-                        "error='" + error + '\'' +
-                        '}';
-            }
+        @Override
+        public String getStatus() {
+            return "failure";
         }
     }
 }

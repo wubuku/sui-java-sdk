@@ -102,9 +102,10 @@ public class SuiJsonRpcClientTests {
 
     @Test
     void getTransactionBlock_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        //SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.testnet.sui.io/");
         SuiTransactionBlockResponse suiTransactionBlockResponse = client.getTransactionBlock(
-                "6ja18UYT7t3DZ8xixcWhGBm5VaPTBdTF5RicDeNS8dtp",
+                "5nvqAWujwq72FVbUtZp4mEFauRXsssQNGH2ny1KcAebp",
                 new SuiTransactionBlockResponseOptions(
                         true,
                         true,

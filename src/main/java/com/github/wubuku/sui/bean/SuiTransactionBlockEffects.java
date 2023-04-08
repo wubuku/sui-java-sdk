@@ -88,7 +88,7 @@ public abstract class SuiTransactionBlockEffects {
      * </pre>
      */
     public static class SuiTransactionBlockEffectsV1 extends SuiTransactionBlockEffects {
-        private SuiExecutionStatusEnvelope status;
+        private SuiExecutionStatus status;
         private BigInteger executedEpoch;
         private SuiGasCostSummary gasUsed;
         private SuiTransactionBlockEffectsModifiedAtVersions[] modifiedAtVersions;
@@ -104,11 +104,11 @@ public abstract class SuiTransactionBlockEffects {
         private String eventsDigest;
         private String[] dependencies;
 
-        public SuiExecutionStatusEnvelope getStatus() {
+        public SuiExecutionStatus getStatus() {
             return status;
         }
 
-        public void setStatus(SuiExecutionStatusEnvelope status) {
+        public void setStatus(SuiExecutionStatus status) {
             this.status = status;
         }
 

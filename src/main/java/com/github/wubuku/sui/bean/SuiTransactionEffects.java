@@ -52,7 +52,7 @@ import java.util.Arrays;
  * </pre>
  */
 public class SuiTransactionEffects {
-    private SuiExecutionStatusEnvelope status;
+    private SuiExecutionStatus status;
     private String executedEpoch;
     private SuiGasCostSummary gasUsed;
     private SuiObjectRef[] sharedObjects;
@@ -67,11 +67,11 @@ public class SuiTransactionEffects {
     private String[] dependencies;
 
 
-    public SuiExecutionStatusEnvelope getStatus() {
+    public SuiExecutionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(SuiExecutionStatusEnvelope status) {
+    public void setStatus(SuiExecutionStatus status) {
         this.status = status;
     }
 
