@@ -14,12 +14,12 @@ package com.github.wubuku.sui.bean;
  */
 public class EventId {
     private String txDigest;
-    private Long eventSeq;
+    private String eventSeq;
 
     public EventId() {
     }
 
-    public EventId(String txDigest, Long eventSeq) {
+    public EventId(String txDigest, String eventSeq) {
         this.txDigest = txDigest;
         this.eventSeq = eventSeq;
     }
@@ -32,11 +32,11 @@ public class EventId {
         this.txDigest = txDigest;
     }
 
-    public Long getEventSeq() {
+    public String getEventSeq() {
         return eventSeq;
     }
 
-    public void setEventSeq(Long eventSeq) {
+    public void setEventSeq(String eventSeq) {
         this.eventSeq = eventSeq;
     }
 

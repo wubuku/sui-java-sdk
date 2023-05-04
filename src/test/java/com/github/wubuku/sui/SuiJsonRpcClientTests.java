@@ -56,8 +56,9 @@ public class SuiJsonRpcClientTests {
 
     @Test
     void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
-        String url = "https://fullnode.devnet.sui.io/";
-        String packageId = "0xa24cb627d4adf387862d3c8f96753c7796952745";
+        //String url = "https://fullnode.devnet.sui.io/";
+        String url = "https://fullnode.testnet.sui.io/";
+        String packageId = "0xa711c670d901adc74a345c3a032a2b513d73be5149e9645cdc5b68cfeed030a9";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
 //        PaginatedEvents events_c = client.getEvents(
 //                new EventQuery.EventType(EventType.CHECKPOINT),
@@ -65,9 +66,12 @@ public class SuiJsonRpcClientTests {
 //        System.out.println(events_c);
         //if (true) return;
         // -----------------------
+        EventId cursor = new EventId();
+        cursor.setTxDigest("GAhYg7M4GCGWnead5tR2gMQVYHijkxHebvn7LPwgMUJm");
+        cursor.setEventSeq("0");
         PaginatedEvents events = client.queryEvents(
                 new SuiEventFilter.MoveEventType(packageId + "::product::ProductCreated"),
-                null, 10, false);
+                cursor, 10, false);
         System.out.println(events);
         System.out.println(objectMapper.writeValueAsString(events));
         // -----------------------
