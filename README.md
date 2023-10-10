@@ -8,6 +8,8 @@ This is a [Sui](https://sui.io) Java SDK.
 
 Add the following dependency to the project's `pom.xml` file.
 
+Alternatively, you can import the dependency via https://jitpack.io (recommended).
+
 ```xml
 <dependencies>
     <!-- ... -->
