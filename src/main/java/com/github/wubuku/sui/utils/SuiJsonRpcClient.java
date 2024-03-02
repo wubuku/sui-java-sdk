@@ -172,6 +172,22 @@ public class SuiJsonRpcClient {
         }
     }
 
+    public <T> SuiMoveObjectResponse<T> getMoveObject(String objectId, SuiObjectDataOptions options, TypeReference<SuiMoveObjectResponse<T>> typeReference) {
+        options.setShowContent(true);// set showContent to true to get the parsed JSON content
+        List<Object> params = new ArrayList<>();
+        params.add(objectId);
+        params.add(options);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("sui_getObject", params, System.currentTimeMillis());
+        try {
+            JSONRPC2Response<SuiMoveObjectResponse<T>> jsonrpc2Response = jsonrpc2Session
+                    .send(jsonrpc2Request, typeReference);
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public SuiObjectResponse getObject(String objectId, SuiObjectDataOptions options) {
         List<Object> params = new ArrayList<>();
         params.add(objectId);

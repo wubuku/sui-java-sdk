@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wubuku.sui.bean.*;
 
-public class Day extends MoveObject<Day.DayFields> {
+public class Day extends MoveStruct<Day.DayFields> {
 
     @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
     public static class DayFields {

@@ -16,18 +16,16 @@ package com.github.wubuku.sui.bean;
  * }
  * </pre>
  */
-public class DynamicField<N, V> {
+public class StructValueDynamicField<N, T> extends AbstractDynamicField<N, MoveStruct<T>> {
     private UID id;
     private N name;
-    private MoveObject<V> value;
+    private MoveStruct<T> value;
 
-    public DynamicField() {
+    public StructValueDynamicField() {
     }
 
-    public DynamicField(UID id, N name, MoveObject<V> value) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
+    public StructValueDynamicField(UID id, N name, MoveStruct<T> value) {
+        super(id, name, value);
     }
 
     public UID getId() {
@@ -46,11 +44,11 @@ public class DynamicField<N, V> {
         this.name = name;
     }
 
-    public MoveObject<V> getValue() {
+    public MoveStruct<T> getValue() {
         return value;
     }
 
-    public void setValue(MoveObject<V> value) {
+    public void setValue(MoveStruct<T> value) {
         this.value = value;
     }
 

@@ -1,13 +1,13 @@
 package com.github.wubuku.sui.bean;
 
-public class MoveObject<T> {
+public class MoveStruct<T> {
     private String type;
     private T fields;
 
-    public MoveObject() {
+    public MoveStruct() {
     }
 
-    public MoveObject(String type, T fields) {
+    public MoveStruct(String type, T fields) {
         this.type = type;
         this.fields = fields;
     }

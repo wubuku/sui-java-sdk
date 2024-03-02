@@ -1,6 +1,7 @@
 package com.github.wubuku.sui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.wubuku.sui.bean.*;
 import com.github.wubuku.sui.tests.*;
@@ -419,6 +420,18 @@ public class SuiJsonRpcClientTests {
                 .getDynamicFieldMoveObject(parentObjectId, name, OrderItemDynamicField.class);
         System.out.println(getMoveObjectDataResponse);
         System.out.println(objectMapper.writeValueAsString(getMoveObjectDataResponse));
+    }
+
+    @Test
+    void testGetDynamicField() throws MalformedURLException {
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.testnet.sui.io/");
+        String objectIdOfDynamicField = "0xf244f3fec38cd8fd572104a45f10d502ddf2701cbcf8352a4ce7b6d670939158";
+        SuiMoveObjectResponse<SimpleDynamicField<String, BigInteger>> getMoveObjectResp = client.getMoveObject(objectIdOfDynamicField,
+                new SuiObjectDataOptions(true, true, true, true, true, true, true),
+                new TypeReference<SuiMoveObjectResponse<SimpleDynamicField<String, BigInteger>>>() {
+                }
+        );
+        System.out.println(getMoveObjectResp);
     }
 
     @Test

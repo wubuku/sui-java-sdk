@@ -1,6 +1,6 @@
 package com.github.wubuku.sui.bean;
 
-public class ObjectTable extends MoveObject<ObjectTable.Fields> {
+public class ObjectTable extends MoveStruct<ObjectTable.Fields> {
     public ObjectTable() {
     }
 
