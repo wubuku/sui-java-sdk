@@ -56,7 +56,7 @@ public class SuiObjectData <C> {
     private ObjectOwner owner;
     private String previousTransaction;
     private Long storageRebate;
-    private Map<String, String> display;
+    private Map<String, Object> display;
     private C content;
     private SuiRawData bcs;
 
@@ -116,11 +116,11 @@ public class SuiObjectData <C> {
         this.storageRebate = storageRebate;
     }
 
-    public Map<String, String> getDisplay() {
+    public Map<String, Object> getDisplay() {
         return display;
     }
 
-    public void setDisplay(Map<String, String> display) {
+    public void setDisplay(Map<String, Object> display) {
         this.display = display;
     }
 
