@@ -268,8 +268,8 @@ public class SuiJsonRpcClientTests {
 
         String cursor = null;
         while (true) {
-            DynamicFieldPage orderItemPage = client.getDynamicFields(testOrderItemTableId, cursor, null);
-            for (DynamicFieldInfo testOrderItemFieldInfo : orderItemPage.getData()) {
+            DynamicFieldPage<?> orderItemPage = client.getDynamicFields(testOrderItemTableId, cursor, null, Object.class);
+            for (DynamicFieldInfo<?> testOrderItemFieldInfo : orderItemPage.getData()) {
                 System.out.println(testOrderItemFieldInfo);
                 DynamicFieldName fieldName = testOrderItemFieldInfo.getName();
                 System.out.println("field name: " + fieldName);
@@ -332,10 +332,10 @@ public class SuiJsonRpcClientTests {
 
     @Test
     void testGetDynamicFields_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        DynamicFieldPage dynamicFieldPage = client.getDynamicFields(
-                "0xc8bfe731b7ef35fdab2c3ef99f09194e40627a10",
-                null, null
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.testnet.sui.io/");
+        DynamicFieldPage<?> dynamicFieldPage = client.getDynamicFields(
+                "0xfcd0ec6e39a71add89f8287d1a958a8fd47eea7638d63e1cd13d5b1ab596460b",
+                null, null, Object.class
         );
         System.out.println(dynamicFieldPage);
         System.out.println(objectMapper.writeValueAsString(dynamicFieldPage));

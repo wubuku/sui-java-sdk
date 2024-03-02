@@ -22,8 +22,8 @@ import java.math.BigInteger;
  * }
  * </pre>
  */
-public class DynamicFieldInfo {
-    private DynamicFieldName name;
+public class DynamicFieldInfo<NT> {
+    private DynamicFieldName<NT> name;
     private String bcsName;
     private String type;
     private String objectType;

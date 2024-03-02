@@ -2,11 +2,11 @@ package com.github.wubuku.sui.bean;
 
 import java.util.List;
 
-public class DynamicFieldPage extends Page<DynamicFieldInfo, String> {
+public class DynamicFieldPage<NT> extends Page<DynamicFieldInfo<NT>, String> {
     public DynamicFieldPage() {
     }
 
-    public DynamicFieldPage(List<DynamicFieldInfo> data, String nextCursor) {
+    public DynamicFieldPage(List<DynamicFieldInfo<NT>> data, String nextCursor) {
         super(data, nextCursor);
     }
 

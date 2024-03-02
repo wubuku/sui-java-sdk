@@ -19,9 +19,9 @@ package com.github.wubuku.sui.bean;
  * }
  * </pre>
  */
-public class DynamicFieldName {
+public class DynamicFieldName<T> {
     private String type;
-    private String value;
+    private T value;
 
     public DynamicFieldName() {
     }
@@ -34,11 +34,11 @@ public class DynamicFieldName {
         this.type = type;
     }
 
-    public String getValue() {
+    public T getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
