@@ -34,11 +34,11 @@ public class DynamicFieldInfo<NT> {
     public DynamicFieldInfo() {
     }
 
-    public DynamicFieldName getName() {
+    public DynamicFieldName<NT> getName() {
         return name;
     }
 
-    public void setName(DynamicFieldName name) {
+    public void setName(DynamicFieldName<NT> name) {
         this.name = name;
     }
 
