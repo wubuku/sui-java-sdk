@@ -128,12 +128,34 @@ public class SuiJsonRpcClient {
         }
     }
 
-    public List<SuiObjectInfo> getObjectsOwnedByAddress(String address) {
+    public ObjectsPage getOwnedObjects(String address,
+                                       SuiObjectResponseQuery query,
+                                       String cursor,
+                                       int limit) {
         List<Object> params = new ArrayList<>();
         params.add(address);
-        return getObjects("sui_getObjectsOwnedByAddress", params);
+        params.add(query);//params.add(new java.util.HashMap<String, Object>());
+        params.add(cursor);
+        params.add(limit);
+        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request("suix_getOwnedObjects", params,
+                System.currentTimeMillis());
+        try {
+            JSONRPC2Response<ObjectsPage> jsonrpc2Response = getJSONRPC2Session().send(jsonrpc2Request,
+                    new TypeReference<ObjectsPage>() {
+                    });
+            assertSuccess(jsonrpc2Response);
+            return jsonrpc2Response.getResult();
+        } catch (JSONRPC2SessionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+//    public List<SuiObjectInfo> getObjectsOwnedByAddress(String address) {
+//        List<Object> params = new ArrayList<>();
+//        params.add(address);
+//        return getObjects("sui_getObjectsOwnedByAddress", params);
+//    }
+//
 //    /**
 //     * @param objectId the ID of the owner object
 //     */
@@ -142,19 +164,19 @@ public class SuiJsonRpcClient {
 //        params.add(objectId);
 //        return getObjects("sui_getObjectsOwnedByObject", params);
 //    }
-
-    private List<SuiObjectInfo> getObjects(String method, List<Object> params) {
-        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params,
-                System.currentTimeMillis());
-        try {
-            JSONRPC2Response<List<SuiObjectInfo>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(
-                    jsonrpc2Request, SuiObjectInfo.class);
-            assertSuccess(jsonrpc2Response);
-            return jsonrpc2Response.getResult();
-        } catch (JSONRPC2SessionException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//
+//    private List<SuiObjectInfo> getObjects(String method, List<Object> params) {
+//        JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(method, params,
+//                System.currentTimeMillis());
+//        try {
+//            JSONRPC2Response<List<SuiObjectInfo>> jsonrpc2Response = jsonrpc2Session.sendAndGetListResult(
+//                    jsonrpc2Request, SuiObjectInfo.class);
+//            assertSuccess(jsonrpc2Response);
+//            return jsonrpc2Response.getResult();
+//        } catch (JSONRPC2SessionException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public <T> SuiMoveObjectResponse<T> getMoveObject(String objectId, SuiObjectDataOptions options, Class<T> objectType) {
         options.setShowContent(true);// set showContent to true to get the parsed JSON content

@@ -18,6 +18,7 @@ public class PaginatedMoveEvents<F> extends Page<SuiMoveEventEnvelope<F>, EventI
         return "PaginatedMoveEvents{" +
                 "data=" + getData() +
                 ", nextCursor=" + getNextCursor() +
+                ", hasNextPage=" + getHasNextPage() +
                 '}';
     }
 }

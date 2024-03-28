@@ -16,6 +16,7 @@ public class CoinPage extends Page<Coin, String> {
         return "CoinPage{" +
                 "data=" + getData() +
                 ", nextCursor=" + getNextCursor() +
+                ", hasNextPage=" + getHasNextPage() +
                 '}';
     }
 }

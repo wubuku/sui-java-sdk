@@ -15,6 +15,7 @@ public class PaginatedEvents extends Page<SuiEventEnvelope, EventId> {
         return "PaginatedEvents{" +
                 "data=" + getData() +
                 ", nextCursor=" + getNextCursor() +
+                ", hasNextPage=" + getHasNextPage() +
                 '}';
     }
 }

@@ -14,6 +14,7 @@ public class TransactionsPage extends Page<String, String> {
         return "TransactionsPage{" +
                 "data=" + getData() +
                 ", nextCursor=" + getNextCursor() +
+                ", hasNextPage=" + getHasNextPage() +
                 '}';
     }
 

@@ -41,6 +41,18 @@ public class SuiJsonRpcClientTests {
         System.out.println(objectMapper.writeValueAsString(moveEvents));
     }
 
+    @Test
+    void testGetOwnedObjects_1() throws MalformedURLException, JsonProcessingException {
+        String url = "https://fullnode.testnet.sui.io/";
+        SuiJsonRpcClient client = new SuiJsonRpcClient(url);
+        SuiObjectDataFilter filter = new SuiObjectDataFilter.StructType("0x4d6c3dd86aac1db8f2337fe78fb087ef5ea6812715edec09e4d9fa363872c261::liquidity_token::LiquidityToken");
+        SuiObjectResponseQuery query = new SuiObjectResponseQuery(filter, null);
+
+        ObjectsPage ownedObjects = client.getOwnedObjects("0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2",
+                query, null, 50);
+        System.out.println(ownedObjects);
+        System.out.println(objectMapper.writeValueAsString(ownedObjects));
+    }
 
     @Test
     void testGetEventsByTransactionDigest_2() throws MalformedURLException, JsonProcessingException {
@@ -160,13 +172,13 @@ public class SuiJsonRpcClientTests {
 
     }
 
-    @Test
-    void testGetObjectsOwnedByAddress_1() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
-        List<SuiObjectInfo> suiObjectInfoList = client.getObjectsOwnedByAddress("0xc890473abafb24a19e2f77e1d407fc1c468a71b4");
-        System.out.println(suiObjectInfoList);
-        System.out.println(objectMapper.writeValueAsString(suiObjectInfoList));
-    }
+//    @Test
+//    void testGetObjectsOwnedByAddress_1() throws MalformedURLException, JsonProcessingException {
+//        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+//        List<SuiObjectInfo> suiObjectInfoList = client.getOwnedObjects("0xc890473abafb24a19e2f77e1d407fc1c468a71b4");
+//        System.out.println(suiObjectInfoList);
+//        System.out.println(objectMapper.writeValueAsString(suiObjectInfoList));
+//    }
 
     @Test
     void testGetObject_1() throws MalformedURLException, JsonProcessingException {
