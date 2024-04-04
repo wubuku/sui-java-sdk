@@ -45,7 +45,8 @@ public class SuiJsonRpcClientTests {
     void testGetOwnedObjects_1() throws MalformedURLException, JsonProcessingException {
         String url = "https://fullnode.testnet.sui.io/";
         SuiJsonRpcClient client = new SuiJsonRpcClient(url);
-        SuiObjectDataFilter filter = new SuiObjectDataFilter.StructType("0x4d6c3dd86aac1db8f2337fe78fb087ef5ea6812715edec09e4d9fa363872c261::liquidity_token::LiquidityToken");
+        //SuiObjectDataFilter filter = new SuiObjectDataFilter.StructType("0x4d6c3dd86aac1db8f2337fe78fb087ef5ea6812715edec09e4d9fa363872c261::liquidity_token::LiquidityToken");
+        SuiObjectDataFilter filter = new SuiObjectDataFilter.StructType("0x507d2aacb7425085612e0d56131a57362729779bf3510c286b98568479314920::equipment::Equipment");
         SuiObjectResponseQuery query = new SuiObjectResponseQuery(filter, null);
 
         ObjectsPage ownedObjects = client.getOwnedObjects("0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2",
@@ -201,10 +202,9 @@ public class SuiJsonRpcClientTests {
 
     @Test
     void testGetObject_D() throws MalformedURLException, JsonProcessingException {
-        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.devnet.sui.io/");
+        SuiJsonRpcClient client = new SuiJsonRpcClient("https://fullnode.testnet.sui.io/");
         SuiObjectResponse getObjectDataResponse = client.getObject(
-                //"0x2ba77c985dd19c5570ce95c6ec07c51be202a3819860a507a51d4d573f85ee81",
-                "0x617fa230018fa51185dfa4cfca28a444a997d0e40026f81927ea6f52148de03d",
+                "0x535b4b20596d9454fabeded9a0c438c456f8fb8c862d530fcb2ca4731f9f90b5",
                 new SuiObjectDataOptions(
                         true,
                         true,
@@ -214,8 +214,9 @@ public class SuiJsonRpcClientTests {
                         true,
                         true
                 )
+                //null
         );
-        System.out.println(getObjectDataResponse);
+        System.out.println(getObjectDataResponse.getData().getContent().getClass());
         System.out.println(objectMapper.writeValueAsString(getObjectDataResponse));
     }
 
