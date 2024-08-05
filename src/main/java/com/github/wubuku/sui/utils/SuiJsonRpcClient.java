@@ -2,6 +2,7 @@ package com.github.wubuku.sui.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.wubuku.sui.bean.*;
+import okhttp3.OkHttpClient;
 import org.starcoin.jsonrpc.JSONRPC2Request;
 import org.starcoin.jsonrpc.JSONRPC2Response;
 import org.starcoin.jsonrpc.client.JSONRPC2Session;
@@ -21,6 +22,10 @@ public class SuiJsonRpcClient {
     /**
      * @param url The JSON RPC server URL.
      */
+    public SuiJsonRpcClient(String url, OkHttpClient httpClient) throws MalformedURLException {
+        this.jsonrpc2Session = new JSONRPC2Session(new URL(url), httpClient);
+    }
+
     public SuiJsonRpcClient(String url) throws MalformedURLException {
         this.jsonrpc2Session = new JSONRPC2Session(new URL(url));
     }

@@ -27,9 +27,7 @@ public class JSONRPC2Session {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final OkHttpClient defaultOkHttpClient = new OkHttpClient.Builder()
-            .readTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
-            .build();
+    private final OkHttpClient httpClient;
 
     /**
      * The server URL, which protocol must be HTTP or HTTPS.
@@ -38,7 +36,8 @@ public class JSONRPC2Session {
      */
     private URL url;
 
-    public JSONRPC2Session(final URL url) {
+    public JSONRPC2Session(final URL url, final OkHttpClient httpClient) {
+        this.httpClient = httpClient;
         if (!url.getProtocol().equalsIgnoreCase("http") &&
                 !url.getProtocol().equalsIgnoreCase("https"))
             throw new IllegalArgumentException("The URL protocol must be HTTP or HTTPS");
@@ -46,12 +45,19 @@ public class JSONRPC2Session {
         this.url = url;
     }
 
+    public JSONRPC2Session(final URL url) {
+        this(url, new OkHttpClient.Builder()
+                .readTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
+                .build()
+        );
+    }
+
     public ObjectMapper getObjectMapper() {
         return this.objectMapper;
     }
 
     protected OkHttpClient getOkHttpClient() {
-        return this.defaultOkHttpClient;
+        return this.httpClient;
     }
 
     /**
@@ -125,8 +131,8 @@ public class JSONRPC2Session {
     }
 
     public <K, V> JSONRPC2Response<Map<K, V>> sendAndGetMapResult(final JSONRPC2Request request,
-                                                              final Class<K> resultKeyType,
-                                                              final Class<V> resultValueType
+                                                                  final Class<K> resultKeyType,
+                                                                  final Class<V> resultValueType
     ) throws JSONRPC2SessionException {
         return send(request, (body) -> {
             try {
