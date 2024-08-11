@@ -56,7 +56,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetEventsByTransactionDigest_2() throws MalformedURLException, JsonProcessingException {
+    void testQueryEventsByTransactionDigest_2() throws MalformedURLException, JsonProcessingException {
         String url = "https://fullnode.devnet.sui.io/";
         //String url = "http://localhost:9000";
         String transactionDigest = "85jYzsibHpaxRLwtWyGKxioFHBDFeLuELokpZYkhwwXn";
@@ -69,7 +69,7 @@ public class SuiJsonRpcClientTests {
     }
 
     @Test
-    void testGetEvents_1() throws MalformedURLException, JsonProcessingException {
+    void testQueryEvents_1() throws MalformedURLException, JsonProcessingException {
         //String url = "https://fullnode.devnet.sui.io/";
         String url = "https://fullnode.testnet.sui.io/";
         String packageId = "0xa711c670d901adc74a345c3a032a2b513d73be5149e9645cdc5b68cfeed030a9";
@@ -94,6 +94,22 @@ public class SuiJsonRpcClientTests {
                 null, 10, false, ProductCreated.class);
         System.out.println(paginatedMoveEvents);
         System.out.println(objectMapper.writeValueAsString(paginatedMoveEvents));
+    }
+
+
+    @Test
+    void testQueryEvents_2() throws MalformedURLException, JsonProcessingException {
+        String url = "https://fullnode.testnet.sui.io/";
+        String packageId = "0x572c6186f229825cd2a9ba97ebb98705b3c188fa7277779b89fe99627b72ee66";
+        SuiJsonRpcClient client = new SuiJsonRpcClient(url);
+        EventId cursor = new EventId();
+        cursor.setTxDigest("8w5fb3RSjh28rCDMuMaFVBdTd8yUzMyMfVcBW4wAFQPH");
+        cursor.setEventSeq("1");
+        PaginatedEvents events = client.queryEvents(
+                new SuiEventFilter.MoveEventModule(packageId, "roster"),
+                cursor, 2, false);
+        System.out.println(events);
+        System.out.println(objectMapper.writeValueAsString(events));
     }
 
     @Test

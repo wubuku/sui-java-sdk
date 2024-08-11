@@ -8,6 +8,7 @@ import java.util.Arrays;
  * From Rust definition:
  * <p>
  * <pre>
+ *
  * #[serde_as]
  * #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema)]
  * pub enum EventFilter {
@@ -21,6 +22,9 @@ import java.util.Arrays;
  *     /// Return events emitted in a specified Package.
  *     Package(ObjectID),
  *     /// Return events emitted in a specified Move module.
+ *     /// If the event is defined in Module A but emitted in a tx with Module B,
+ *     /// query `MoveModule` by module B returns the event.
+ *     /// Query `MoveEventModule` by module A returns the event too.
  *     MoveModule {
  *         /// the Move package ID
  *         package: ObjectID,
@@ -29,12 +33,26 @@ import java.util.Arrays;
  *         #[serde_as(as = "DisplayFromStr")]
  *         module: Identifier,
  *     },
- *     /// Return events with the given move event struct name
+ *     /// Return events with the given Move event struct name (struct tag).
+ *     /// For example, if the event is defined in `0xabcd::MyModule`, and named
+ *     /// `Foo`, then the struct tag is `0xabcd::MyModule::Foo`.
  *     MoveEventType(
  *         #[schemars(with = "String")]
  *         #[serde_as(as = "SuiStructTag")]
  *         StructTag,
  *     ),
+ *     /// Return events with the given Move module name where the event struct is defined.
+ *     /// If the event is defined in Module A but emitted in a tx with Module B,
+ *     /// query `MoveEventModule` by module A returns the event.
+ *     /// Query `MoveModule` by module B returns the event too.
+ *     MoveEventModule {
+ *         /// the Move package ID
+ *         package: ObjectID,
+ *         /// the module name
+ *         #[schemars(with = "String")]
+ *         #[serde_as(as = "DisplayFromStr")]
+ *         module: Identifier,
+ *     },
  *     MoveEventField {
  *         path: String,
  *         value: Value,
@@ -43,8 +61,12 @@ import java.util.Arrays;
  *     #[serde(rename_all = "camelCase")]
  *     TimeRange {
  *         /// left endpoint of time interval, milliseconds since epoch, inclusive
+ *         #[schemars(with = "BigInt<u64>")]
+ *         #[serde_as(as = "BigInt<u64>")]
  *         start_time: u64,
  *         /// right endpoint of time interval, milliseconds since epoch, exclusive
+ *         #[schemars(with = "BigInt<u64>")]
+ *         #[serde_as(as = "BigInt<u64>")]
  *         end_time: u64,
  *     },
  *
@@ -138,28 +160,94 @@ public interface SuiEventFilter {
     }
 
     class MoveModule implements SuiEventFilter {
-        @JsonProperty("Module")
-        private String[] packageAndModule;
+        @JsonProperty("MoveModule")
+        private MoveModuleProperties moveModuleProperties;
 
         public MoveModule() {
         }
 
         public MoveModule(String package_, String module) {
-            this.packageAndModule = new String[]{package_, module};
+            this.moveModuleProperties = new MoveModuleProperties(package_, module);
         }
 
-        public String[] getPackageAndModule() {
-            return packageAndModule;
+        public MoveModuleProperties getMoveModuleProperties() {
+            return moveModuleProperties;
         }
 
-        public void setPackageAndModule(String[] packageAndModule) {
-            this.packageAndModule = packageAndModule;
+        public void setMoveModuleProperties(MoveModuleProperties moveModuleProperties) {
+            this.moveModuleProperties = moveModuleProperties;
         }
 
         @Override
         public String toString() {
-            return "SuiEventFilter.Module{" +
-                    "module=" + Arrays.toString(packageAndModule) +
+            return "SuiEventFilter.MoveModule{" +
+                    "moveModuleProperties=" + moveModuleProperties +
+                    '}';
+        }
+    }
+
+
+    class MoveEventModule implements SuiEventFilter {
+        @JsonProperty("MoveEventModule")
+        private MoveModuleProperties moveModuleProperties;
+
+        public MoveEventModule() {
+        }
+
+        public MoveEventModule(String package_, String module) {
+            this.moveModuleProperties = new MoveModuleProperties(package_, module);
+        }
+
+        public MoveModuleProperties getMoveModuleProperties() {
+            return moveModuleProperties;
+        }
+
+        public void setMoveModuleProperties(MoveModuleProperties moveModuleProperties) {
+            this.moveModuleProperties = moveModuleProperties;
+        }
+
+        @Override
+        public String toString() {
+            return "SuiEventFilter.MoveEventModule{" +
+                    "moveModuleProperties=" + moveModuleProperties +
+                    '}';
+        }
+    }
+
+    class MoveModuleProperties {
+        @JsonProperty("package")
+        private String package_;
+        @JsonProperty("module")
+        private String module;
+
+        public MoveModuleProperties() {
+        }
+
+        public MoveModuleProperties(String package_, String module) {
+            this.package_ = package_;
+            this.module = module;
+        }
+
+        public String getPackage_() {
+            return package_;
+        }
+
+        public void setPackage_(String package_) {
+            this.package_ = package_;
+        }
+
+        public String getModule() {
+            return module;
+        }
+
+        public void setModule(String module) {
+            this.module = module;
+        }
+
+        public String toString() {
+            return "MoveModuleProperties{" +
+                    "package_=" + package_ +
+                    ", module=" + module +
                     '}';
         }
     }
@@ -246,9 +334,9 @@ public interface SuiEventFilter {
         }
 
         public static class TimeRangeProperties {
-            @JsonProperty("start_time")
+            @JsonProperty("startTime")
             private Long startTime;
-            @JsonProperty("end_time")
+            @JsonProperty("endTime")
             private Long endTime;
 
             public TimeRangeProperties() {
@@ -347,6 +435,9 @@ public interface SuiEventFilter {
         }
 
         public And(SuiEventFilter[] and) {
+            if (and == null || and.length != 2) {
+                throw new IllegalArgumentException("'And' filter must have exactly 2 items");
+            }
             this.and = and;
         }
 
@@ -378,6 +469,9 @@ public interface SuiEventFilter {
         }
 
         public Or(SuiEventFilter[] or) {
+            if (or == null || or.length != 2) {
+                throw new IllegalArgumentException("'Or' filter must have exactly 2 items");
+            }
             this.or = or;
         }
 

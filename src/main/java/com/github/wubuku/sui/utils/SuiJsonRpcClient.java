@@ -115,6 +115,14 @@ public class SuiJsonRpcClient {
     }
 
     public PaginatedEvents queryEvents(SuiEventFilter query, EventId cursor, int limit, boolean descendingOrder) {
+        return queryEvents((Object) query, cursor, limit, descendingOrder);
+    }
+
+    public PaginatedEvents queryEvents(Map<String, Object> query, EventId cursor, int limit, boolean descendingOrder) {
+        return queryEvents((Object) query, cursor, limit, descendingOrder);
+    }
+
+    private PaginatedEvents queryEvents(Object query, EventId cursor, int limit, boolean descendingOrder) {
         List<Object> params = new ArrayList<>();
         params.add(query);
         params.add(cursor);
