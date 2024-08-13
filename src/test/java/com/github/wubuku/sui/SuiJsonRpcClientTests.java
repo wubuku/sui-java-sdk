@@ -11,6 +11,7 @@ import com.github.wubuku.sui.utils.TransactionUtils;
 import com.google.common.primitives.Bytes;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -28,6 +29,10 @@ public class SuiJsonRpcClientTests {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    @BeforeEach
+    public void setUp() {
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
+    }
 
     @Test
     void testGetMoveEvents_1() throws MalformedURLException, JsonProcessingException {

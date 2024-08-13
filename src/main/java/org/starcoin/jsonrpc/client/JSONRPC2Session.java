@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Sends requests and / or notifications to a specified JSON-RPC 2.0 server
@@ -25,10 +27,13 @@ import java.util.function.Function;
 public class JSONRPC2Session {
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSONRPC2Session.class);
+
+    private static final String JSON_RPC_CURL_FORMAT = "curl -X POST -H \"Content-Type: application/json\"" + " -d '%s' %s";
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final OkHttpClient httpClient;
-
     /**
      * The server URL, which protocol must be HTTP or HTTPS.
      *
@@ -80,7 +85,6 @@ public class JSONRPC2Session {
 
         this.url = url;
     }
-
 
     /**
      * Sends a JSON-RPC 2.0 request using HTTP POST and returns the server
@@ -197,8 +201,11 @@ public class JSONRPC2Session {
         bodyMap.put("id", request.getID() == null ? UUID.randomUUID().toString() : request.getID());
         bodyMap.put("params", request.getParams());
         try {
-            RequestBody body = RequestBody.create(getObjectMapper().writeValueAsString(bodyMap), JSON_MEDIA_TYPE);
-            //System.out.println(getObjectMapper().writeValueAsString(bodyMap));
+            String reqJson = getObjectMapper().writeValueAsString(bodyMap);
+            RequestBody body = RequestBody.create(reqJson, JSON_MEDIA_TYPE);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(String.format(JSON_RPC_CURL_FORMAT, reqJson, this.url));
+            }
             Request okRequest = new Request.Builder()
                     .post(body)
                     .url(this.url)
@@ -211,7 +218,9 @@ public class JSONRPC2Session {
                     throw new JSONRPC2SessionException("Response body is null.");
                 }
                 String respBody = Objects.requireNonNull(response.body()).string();
-                System.out.println(respBody); //todo remove this
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Response body: {}", respBody);
+                }
                 return bodyConvertor.apply(respBody);
             }
         } catch (IOException ioException) {
