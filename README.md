@@ -1,5 +1,7 @@
 # Sui Java SDK
 
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-Docs-blue?logo=read-the-docs)](https://deepwiki.com/wubuku/sui-java-sdk)
+
 This is a [Sui](https://sui.io) Java SDK. 
 
 ## How to use
